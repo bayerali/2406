@@ -1,70 +1,45 @@
-export type ColorName =
-  | "green"
-  | "blue"
-  | "orange"
-  | "red"
-  | "purple"
-  | "teal";
+export type BoardMode = "Primary" | "Secondary";
+
+export type TaskEventStatus = "open" | "done" | "blocked" | "skipped";
+export type NoteKind = "handover" | "warning" | "info";
+export type TaskStatus = TaskEvent["status"];
 
 export type ShiftType = "Frueh" | "Spaet" | "Nacht";
 
-export type Line = "SVP03" | "SVP05" | "SVP06" | "SVP09";
-
-export type CompletionStatus = "done" | "blocked" | "skipped";
-
-export type ShiftNoteKind = "handover" | "warning" | "info";
-
-export type BoardMode = "Primary" | "Secondary";
-
-export interface Activity {
+export type ShiftNote = {
   id: number;
-  name: string;
-  color: ColorName;
-  sortOrder: number;
-  parentId: number | null;
-  archived?: boolean;
-}
-
-export interface ShiftActivity {
-  id: number;
-  activityId: number;
-  nameSnapshot: string;
-  colorSnapshot: ColorName;
-  parentIdSnapshot: number | null;
-  sortOrderSnapshot: number;
-}
-
-export interface TaskEvent {
-  id: number;
-  shiftActivityId: number;
-  status: CompletionStatus;
-  timestamp: number;
-  note: string;
-  imageData: string | null;
-}
-
-export interface ShiftNote {
-  id: number;
+  kind: NoteKind;
   text: string;
   createdAt: number;
-  kind: ShiftNoteKind;
-}
+};
 
-export interface Shift {
+export type TaskEvent = {
+  id: number;
+  shiftActivityId: number;
+  status: TaskEventStatus;
+  note: string;
+  timestamp: number;
+};
+
+export type ShiftActivity = {
+  id: number;
+  activityIdSnapshot: number | null;
+  nameSnapshot: string;
+  parentIdSnapshot: number | null;
+  sortOrderSnapshot: number;
+};
+
+export type Shift = {
   id: number;
   date: string;
-  shiftType: ShiftType;
-  line: Line;
   operator: string;
-  createdAt: number;
+  line: string;
+  shiftType: ShiftType;
   shiftActivities: ShiftActivity[];
   taskEvents: TaskEvent[];
   notes: ShiftNote[];
-}
+};
 
-export interface DB {
-  version: 3;
-  nextId: number;
-  activities: Activity[];
+export type DB = {
   shifts: Shift[];
-}
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import type { ShiftActivity, TaskEvent } from "../../types";
+import type { ShiftActivity, TaskEvent, TaskStatus } from "../../types";
 import {
   formatTimestamp,
   isAutoParentDone,
@@ -12,7 +12,7 @@ type TaskCardProps = {
   history: TaskEvent[];
   noteDraft: string;
   onNoteChange: (value: string) => void;
-  onSaveStatus: (status: TaskEvent["status"]) => void;
+  onSaveStatus: (status: TaskStatus) => void;
 };
 
 export function TaskCard({

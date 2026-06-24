@@ -1,13 +1,7 @@
 import React from "react";
+import type { ParentStats } from "../../hooks/useExecutionBoard";
 
-type TaskProgressCardProps = {
-  total: number;
-  done: number;
-  blocked: number;
-  skipped: number;
-  open: number;
-  percent: number;
-};
+type TaskProgressCardProps = Readonly<ParentStats>;
 
 export function TaskProgressCard({
   total,

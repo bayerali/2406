@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import type { BoardMode, DB, ShiftActivity, TaskEvent } from "../types";
+import type {
+  BoardMode,
+  DB,
+  NoteKind,
+  Shift,
+  ShiftActivity,
+  TaskEvent,
+  TaskStatus,
+} from "../types";
 import {
   addShiftNoteDB,
   addTaskEventDB,
@@ -20,11 +28,49 @@ type UseExecutionBoardArgs = {
   shiftId: number;
 };
 
+export type ParentStats = {
+  total: number;
+  done: number;
+  blocked: number;
+  skipped: number;
+  open: number;
+  percent: number;
+};
+
+export type UseExecutionBoardResult = {
+  shift: Shift | null;
+  selectedMode: BoardMode;
+  setSelectedMode: React.Dispatch<React.SetStateAction<BoardMode>>;
+  selectedParentId: number | null;
+  setSelectedParentId: React.Dispatch<React.SetStateAction<number | null>>;
+  selectedParent: ShiftActivity | null;
+  availableModes: BoardMode[];
+  parentGroups: ShiftActivity[];
+  visibleTasks: ShiftActivity[];
+  latestEventByShiftActivityId: Map<number, TaskEvent | null>;
+  taskNoteDrafts: Record<number, string>;
+  setTaskNoteDraft: (activityId: number, value: string) => void;
+  noteText: string;
+  setNoteText: React.Dispatch<React.SetStateAction<string>>;
+  noteKind: NoteKind;
+  setNoteKind: React.Dispatch<React.SetStateAction<NoteKind>>;
+  totalLeafTasks: number;
+  doneCount: number;
+  blockedCount: number;
+  skippedCount: number;
+  openCount: number;
+  selectedParentStats: ParentStats;
+  boardThemeStyle: React.CSSProperties;
+  saveStatus: (activity: ShiftActivity, status: TaskStatus) => void;
+  getHistory: (activityId: number) => TaskEvent[];
+  addShiftNote: (event: React.FormEvent<HTMLFormElement>) => void;
+};
+
 export function useExecutionBoard({
   db,
   setDB,
   shiftId,
-}: UseExecutionBoardArgs) {
+}: UseExecutionBoardArgs): UseExecutionBoardResult {
   const shift = useMemo(
     () => db.shifts.find((entry) => entry.id === shiftId) ?? null,
     [db.shifts, shiftId]
@@ -36,9 +82,7 @@ export function useExecutionBoard({
     {}
   );
   const [noteText, setNoteText] = useState("");
-  const [noteKind, setNoteKind] = useState<"handover" | "warning" | "info">(
-    "handover"
-  );
+  const [noteKind, setNoteKind] = useState<NoteKind>("handover");
 
   const shiftActivities = shift?.shiftActivities ?? [];
   const shiftTaskEvents = shift?.taskEvents ?? [];
@@ -211,7 +255,7 @@ export function useExecutionBoard({
     0
   );
 
-  const selectedParentStats = useMemo(() => {
+  const selectedParentStats = useMemo<ParentStats>(() => {
     const total = visibleTasks.length;
     const done = visibleTasks.filter(
       (task) => latestEventByShiftActivityId.get(task.id)?.status === "done"
@@ -228,29 +272,29 @@ export function useExecutionBoard({
     return { total, done, blocked, skipped, open, percent };
   }, [visibleTasks, latestEventByShiftActivityId]);
 
-  const boardThemeStyle = useMemo(() => {
+  const boardThemeStyle = useMemo<React.CSSProperties>(() => {
     return getBoardTheme(selectedMode);
   }, [selectedMode]);
 
-  const saveStatus = (activity: ShiftActivity, status: TaskEvent["status"]) => {
+  const saveStatus = (activity: ShiftActivity, status: TaskStatus): void => {
     if (!shift) return;
     const note = (taskNoteDrafts[activity.id] ?? "").trim();
     setDB(addTaskEventDB(db, shift.id, activity.id, status, note));
   };
 
-  const setTaskNoteDraft = (activityId: number, value: string) => {
+  const setTaskNoteDraft = (activityId: number, value: string): void => {
     setTaskNoteDrafts((prev) => ({
       ...prev,
       [activityId]: value,
     }));
   };
 
-  const getHistory = (activityId: number) => {
+  const getHistory = (activityId: number): TaskEvent[] => {
     if (!shift) return [];
     return getTaskEventsForActivity(shift, activityId);
   };
 
-  const addShiftNote = (event: React.FormEvent) => {
+  const addShiftNote = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     if (!shift) return;
 

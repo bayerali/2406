@@ -128,7 +128,6 @@ export function ExecutionBoardPage({
                   <TaskCard
                     key={task.id}
                     task={task}
-                    shift={board.shift}
                     latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
                     history={board.getHistory(task.id)}
                     noteDraft={board.taskNoteDrafts[task.id] ?? ""}

@@ -2,8 +2,6 @@ export type BoardMode = "Primary" | "Secondary";
 
 export type TaskEventStatus = "open" | "done" | "blocked" | "skipped";
 export type NoteKind = "handover" | "warning" | "info";
-export type TaskStatus = TaskEvent["status"];
-
 export type ShiftType = "Frueh" | "Spaet" | "Nacht";
 
 export type ShiftNote = {
@@ -20,6 +18,8 @@ export type TaskEvent = {
   note: string;
   timestamp: number;
 };
+
+export type TaskStatus = TaskEvent["status"];
 
 export type ShiftActivity = {
   id: number;

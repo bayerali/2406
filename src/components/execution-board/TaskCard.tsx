@@ -1,5 +1,5 @@
 import React from "react";
-import type { Shift, ShiftActivity, TaskEvent } from "../../types";
+import type { ShiftActivity, TaskEvent } from "../../types";
 import {
   formatTimestamp,
   isAutoParentDone,
@@ -8,7 +8,6 @@ import {
 
 type TaskCardProps = {
   task: ShiftActivity;
-  shift: Shift;
   latest: TaskEvent | null;
   history: TaskEvent[];
   noteDraft: string;
@@ -18,15 +17,12 @@ type TaskCardProps = {
 
 export function TaskCard({
   task,
-  shift,
   latest,
   history,
   noteDraft,
   onNoteChange,
   onSaveStatus,
 }: TaskCardProps) {
-  void shift;
-
   return (
     <div className="shift-card task-card contextual-task-card">
       <div className="shift-meta task-meta">

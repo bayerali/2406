@@ -2,9 +2,9 @@ import React from "react";
 import type { ShiftActivity, TaskEvent } from "../../types";
 
 type ParentGroupPickerProps = {
-  parentGroups: ShiftActivity[];
+  parentGroups: readonly ShiftActivity[];
   selectedParentId: number | null;
-  latestEventByShiftActivityId: Map<number, TaskEvent | null>;
+  latestEventByShiftActivityId: ReadonlyMap<number, TaskEvent | null>;
   onSelect: (parentId: number) => void;
 };
 

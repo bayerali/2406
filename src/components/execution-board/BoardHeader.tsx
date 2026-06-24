@@ -1,10 +1,10 @@
 import React from "react";
 
-type BoardHeaderProps = {
+type BoardHeaderProps = Readonly<{
   title: string;
   subtitle: string;
   onBack: () => void;
-};
+}>;
 
 export function BoardHeader({
   title,

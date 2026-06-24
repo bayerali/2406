@@ -1,5 +1,10 @@
-import React from "react";
-import type { BoardMode, Shift, ShiftActivity, TaskEvent } from "../types";
+import type { CSSProperties } from "react";
+import type {
+  BoardMode,
+  Shift,
+  ShiftActivity,
+  TaskStatus,
+} from "../types";
 
 export const SHIFT_LABEL: Record<Shift["shiftType"], string> = {
   Frueh: "Frühschicht",
@@ -39,7 +44,7 @@ export function formatTimestamp(timestamp: number): string {
   }
 }
 
-export function statusLabel(status: TaskEvent["status"]): string {
+export function statusLabel(status: TaskStatus): string {
   switch (status) {
     case "done":
       return "Erledigt";
@@ -74,7 +79,7 @@ export function normalizeBoardMode(name: string): BoardMode | null {
   return null;
 }
 
-export function getBoardTheme(mode: BoardMode): React.CSSProperties {
+export function getBoardTheme(mode: BoardMode): CSSProperties {
   if (mode === "Secondary") {
     return {
       ["--context-accent" as string]: "#89D329",

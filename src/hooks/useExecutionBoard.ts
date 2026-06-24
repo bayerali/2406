@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import type {
   BoardMode,
   DB,
-  NoteKind,
   Shift,
   ShiftActivity,
+  ShiftNoteKind,
   TaskEvent,
   TaskStatus,
 } from "../types";
@@ -52,8 +52,8 @@ export type UseExecutionBoardResult = {
   setTaskNoteDraft: (activityId: number, value: string) => void;
   noteText: string;
   setNoteText: React.Dispatch<React.SetStateAction<string>>;
-  noteKind: NoteKind;
-  setNoteKind: React.Dispatch<React.SetStateAction<NoteKind>>;
+  noteKind: ShiftNoteKind;
+  setNoteKind: React.Dispatch<React.SetStateAction<ShiftNoteKind>>;
   totalLeafTasks: number;
   doneCount: number;
   blockedCount: number;
@@ -82,7 +82,7 @@ export function useExecutionBoard({
     {}
   );
   const [noteText, setNoteText] = useState("");
-  const [noteKind, setNoteKind] = useState<NoteKind>("handover");
+  const [noteKind, setNoteKind] = useState<ShiftNoteKind>("handover");
 
   const shiftActivities = shift?.shiftActivities ?? [];
   const shiftTaskEvents = shift?.taskEvents ?? [];

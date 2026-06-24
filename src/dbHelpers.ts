@@ -8,6 +8,18 @@ import type {
   TaskEvent,
 } from "./types";
 
+export type AddChildActivityForShiftDBOptions = {
+  db: DB;
+  shiftId: number;
+  parentActivityId: number;
+  label: string;
+};
+
+export type AddChildActivityForShiftDBResult = {
+  db: DB;
+  newShiftActivity: ShiftActivity | null;
+};
+
 export function requireShift(db: DB, shiftId: number): Shift {
   const shift = db.shifts.find((entry) => entry.id === shiftId);
 
@@ -97,7 +109,10 @@ export function addShiftNoteDB(
   kind: ShiftNoteKind
 ): DB {
   const trimmed = text.trim();
-  if (!trimmed) return db;
+
+  if (!trimmed) {
+    return db;
+  }
 
   const id = db.nextId;
 
@@ -123,12 +138,9 @@ export function addShiftNoteDB(
   };
 }
 
-export function addChildActivityForShiftDB(options: {
-  db: DB;
-  shiftId: number;
-  parentActivityId: number;
-  label: string;
-}): { db: DB; newShiftActivity: ShiftActivity | null } {
+export function addChildActivityForShiftDB(
+  options: AddChildActivityForShiftDBOptions
+): AddChildActivityForShiftDBResult {
   const { db, shiftId, parentActivityId, label } = options;
   const trimmed = label.trim();
 
@@ -136,15 +148,21 @@ export function addChildActivityForShiftDB(options: {
     return { db, newShiftActivity: null };
   }
 
-  const parentActivity = db.activities.find((activity) => activity.id === parentActivityId);
+  const parentActivity = db.activities.find(
+    (activity) => activity.id === parentActivityId
+  );
 
   if (!parentActivity) {
     return { db, newShiftActivity: null };
   }
 
-  const siblings = db.activities.filter((activity) => activity.parentId === parentActivityId);
+  const siblings = db.activities.filter(
+    (activity) => activity.parentId === parentActivityId
+  );
   const sortOrder =
-    siblings.length > 0 ? Math.max(...siblings.map((entry) => entry.sortOrder)) + 1 : 0;
+    siblings.length > 0
+      ? Math.max(...siblings.map((entry) => entry.sortOrder)) + 1
+      : 0;
 
   const newActivityId = db.nextId;
   const newShiftActivityId = db.nextId + 1;
@@ -159,6 +177,7 @@ export function addChildActivityForShiftDB(options: {
   };
 
   const shift = db.shifts.find((entry) => entry.id === shiftId);
+
   if (!shift) {
     return { db, newShiftActivity: null };
   }

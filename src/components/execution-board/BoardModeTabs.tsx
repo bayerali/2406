@@ -2,9 +2,11 @@ import React from "react";
 import type { BoardMode } from "../../types";
 import { BOARD_LABEL } from "../../utils/executionBoard";
 
+const BOARD_MODES = ["Primary", "Secondary"] as const satisfies readonly BoardMode[];
+
 type BoardModeTabsProps = {
   selectedMode: BoardMode;
-  availableModes: BoardMode[];
+  availableModes: readonly BoardMode[];
   onSelect: (mode: BoardMode) => void;
 };
 
@@ -15,7 +17,7 @@ export function BoardModeTabs({
 }: BoardModeTabsProps) {
   return (
     <div className="parent-list">
-      {(["Primary", "Secondary"] as BoardMode[]).map((mode) => {
+      {BOARD_MODES.map((mode) => {
         const isAvailable = availableModes.includes(mode);
         const isActive = selectedMode === mode;
 

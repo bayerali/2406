@@ -9,16 +9,14 @@ type BoardModeTabsProps = {
 
 const MODE_COPY: Record<
   BoardMode,
-  { title: string; description: string; accentClass: string }
+  { title: string; accentClass: string }
 > = {
   Primary: {
     title: "Primär",
-    description: "Hauptbereich mit blauem Kontext und Primär-Ablauf.",
     accentClass: "bereich-card--primary",
   },
   Secondary: {
     title: "Sekundär",
-    description: "Nebenbereich mit grünem Kontext und Sekundär-Ablauf.",
     accentClass: "bereich-card--secondary",
   },
 };
@@ -46,12 +44,10 @@ export function BoardModeTabs({
             onClick={() => onSelect(mode)}
           >
             <div className="bereich-card__top">
-              <span className="bereich-card__kicker">Bereich</span>
               <span className="bereich-card__indicator" aria-hidden="true" />
             </div>
 
             <div className="bereich-card__title">{config.title}</div>
-            <div className="bereich-card__description">{config.description}</div>
           </button>
         );
       })}

@@ -32,7 +32,6 @@ export function ExecutionBoardPage({
   });
 
   const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(false);
-  const [openParentPanels, setOpenParentPanels] = useState<Record<number, boolean>>({});
 
   const taskDescriptions = useMemo<Record<string, string>>(
     () => ({
@@ -47,18 +46,11 @@ export function ExecutionBoardPage({
     return taskDescriptions[normalized] ?? "";
   };
 
-  const toggleParentPanel = (parentId: number): void => {
-    setOpenParentPanels((prev) => ({
-      ...prev,
-      [parentId]: !prev[parentId],
-    }));
-  };
-
   if (!board.shift) {
     return (
       <>
         <NavBar active="board" onDashboardClick={onDashboardClick} />
-        <main className="main dashboard-layout">
+        <main className="main dashboard-layout execution-board-page">
           <article className="card empty">Schicht nicht gefunden.</article>
         </main>
       </>
@@ -87,7 +79,7 @@ export function ExecutionBoardPage({
       <NavBar active="board" onDashboardClick={onDashboardClick} />
 
       <main
-        className={`main dashboard-layout ${boardModeClass}`}
+        className={`main dashboard-layout execution-board-page ${boardModeClass}`}
         style={board.boardThemeStyle}
       >
         <BoardHeader
@@ -180,79 +172,42 @@ export function ExecutionBoardPage({
                 <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
               </>
             ) : (
-              (() => {
-                const activeParent = board.selectedParent;
-                const selectedParentIsOpen =
-                  openParentPanels[activeParent.id] ?? true;
-                const selectedParentPanelId = `parent-panel-${activeParent.id}`;
+              <>
+                <div className="task-section-head">
+                  <div>
+                    <h2 className="card-title">
+                      {board.selectedParent.nameSnapshot}
+                    </h2>
+                    <p className="card-subtitle">
+                      Unteraufgaben dieses Elternpunkts.
+                    </p>
+                  </div>
+                </div>
 
-                return (
-                  <>
-                    <div className="task-section-head">
-                      <div>
-                        <h2 className="card-title">{activeParent.nameSnapshot}</h2>
-                        <p className="card-subtitle">
-                          Unteraufgaben dieses Elternpunkts.
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        className="foldable-inline-toggle"
-                        aria-expanded={selectedParentIsOpen}
-                        aria-controls={selectedParentPanelId}
-                        onClick={() => toggleParentPanel(activeParent.id)}
-                      >
-                        <span>
-                          {selectedParentIsOpen ? "Ausblenden" : "Einblenden"}
-                        </span>
-                        <span
-                          className={`foldable-inline-toggle__icon ${
-                            selectedParentIsOpen ? "is-open" : ""
-                          }`}
-                          aria-hidden="true"
-                        >
-                          ▾
-                        </span>
-                      </button>
-                    </div>
-
-                    <div
-                      id={selectedParentPanelId}
-                      className={
-                        selectedParentIsOpen ? "foldable-section-panel" : "is-hidden"
-                      }
-                    >
-                      {board.visibleTasks.length === 0 ? (
-                        <div className="card empty">
-                          Keine Unteraufgaben für diesen Elternpunkt definiert.
-                        </div>
-                      ) : (
-                        <div
-                          className={`shift-list ${
-                            isMoParent ? "shift-list--subtasks" : ""
-                          }`}
-                        >
-                          {board.visibleTasks.map((task) => (
-                            <TaskCard
-                              key={task.id}
-                              task={task}
-                              latest={
-                                board.latestEventByShiftActivityId.get(task.id) ??
-                                null
-                              }
-                              history={board.getHistory(task.id)}
-                              description={getTaskDescription(task.nameSnapshot)}
-                              isCompact={isMoParent}
-                              onSaveStatus={(status) => board.saveStatus(task, status)}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </>
-                );
-              })()
+                {board.visibleTasks.length === 0 ? (
+                  <div className="card empty">
+                    Keine Unteraufgaben für diesen Elternpunkt definiert.
+                  </div>
+                ) : (
+                  <div
+                    className={`shift-list ${
+                      isMoParent ? "shift-list--subtasks" : ""
+                    }`}
+                  >
+                    {board.visibleTasks.map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
+                        history={board.getHistory(task.id)}
+                        description={getTaskDescription(task.nameSnapshot)}
+                        isCompact={isMoParent}
+                        onSaveStatus={(status) => board.saveStatus(task, status)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </article>
         </section>

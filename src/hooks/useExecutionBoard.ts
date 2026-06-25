@@ -59,6 +59,7 @@ export type UseExecutionBoardResult = {
   blockedCount: number;
   skippedCount: number;
   openCount: number;
+  shiftProgressPercent: number;
   selectedParentStats: ParentStats;
   boardThemeStyle: React.CSSProperties;
   saveStatus: (activity: ShiftActivity, status: TaskStatus) => void;
@@ -255,6 +256,9 @@ export function useExecutionBoard({
     0
   );
 
+  const shiftProgressPercent =
+    totalLeafTasks > 0 ? Math.round((doneCount / totalLeafTasks) * 100) : 0;
+
   const selectedParentStats = useMemo<ParentStats>(() => {
     const total = visibleTasks.length;
     const done = visibleTasks.filter(
@@ -327,10 +331,11 @@ export function useExecutionBoard({
     blockedCount,
     skippedCount,
     openCount,
+    shiftProgressPercent,
     selectedParentStats,
     boardThemeStyle,
     saveStatus,
     getHistory,
     addShiftNote,
   };
-}
+}s

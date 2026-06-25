@@ -43,7 +43,7 @@ export function ExecutionBoardPage({
   }
 
   const shiftLabel = SHIFT_LABEL[board.shift.shiftType];
-  const subtitle = `${formatDate(board.shift.date)} · ${board.shift.line}`;
+  const subtitle = `${formatDate(board.shift.date)}`;
 
   const isMoParent =
     board.selectedParent != null &&
@@ -74,7 +74,8 @@ export function ExecutionBoardPage({
           modeClassName={headerModeClass}
           shiftType={board.shift.shiftType}
           shiftLabel={shiftLabel}
-          cwid={board.shift.operator}
+          operator={board.shift.operator}
+          line={board.shift.line}
         />
 
         <ShiftStatusCard

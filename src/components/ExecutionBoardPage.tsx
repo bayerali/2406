@@ -128,9 +128,7 @@ export function ExecutionBoardPage({
                     task={task}
                     latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
                     history={board.getHistory(task.id)}
-                    noteDraft={board.taskNoteDrafts[task.id] ?? ""}
                     isCompact={isMoParent}
-                    onNoteChange={(value) => board.setTaskNoteDraft(task.id, value)}
                     onSaveStatus={(status) => board.saveStatus(task, status)}
                   />
                 ))}

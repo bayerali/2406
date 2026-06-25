@@ -1,13 +1,13 @@
 import React from "react";
-import type { NoteKind, Shift } from "../../types";
+import type { Shift, ShiftNoteKind } from "../../types";
 import { formatTimestamp } from "../../utils/executionBoard";
 
 type ShiftNotesPanelProps = {
   notes: Shift["notes"];
   noteText: string;
-  noteKind: NoteKind;
+  noteKind: ShiftNoteKind;
   onNoteTextChange: (value: string) => void;
-  onNoteKindChange: (value: NoteKind) => void;
+  onNoteKindChange: (value: ShiftNoteKind) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
@@ -36,7 +36,9 @@ export function ShiftNotesPanel({
             id="shift-note-kind"
             className="select contextual-input"
             value={noteKind}
-            onChange={(event) => onNoteKindChange(event.target.value as NoteKind)}
+            onChange={(event) =>
+              onNoteKindChange(event.target.value as ShiftNoteKind)
+            }
           >
             <option value="handover">Übergabe</option>
             <option value="warning">Warnung</option>

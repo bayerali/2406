@@ -11,6 +11,7 @@ type TaskCardProps = {
   latest: TaskEvent | null;
   history: TaskEvent[];
   noteDraft: string;
+  isCompact?: boolean;
   onNoteChange: (value: string) => void;
   onSaveStatus: (status: TaskStatus) => void;
 };
@@ -20,11 +21,16 @@ export function TaskCard({
   latest,
   history,
   noteDraft,
+  isCompact = false,
   onNoteChange,
   onSaveStatus,
 }: TaskCardProps) {
   return (
-    <div className="shift-card task-card contextual-task-card">
+    <div
+      className={`shift-card task-card contextual-task-card ${
+        isCompact ? "task-card--compact" : ""
+      }`}
+    >
       <div className="shift-meta task-meta">
         <div className="task-topline">
           <div className="shift-date">{task.nameSnapshot}</div>
@@ -44,10 +50,10 @@ export function TaskCard({
             : "Noch kein Zeitstempel"}
         </div>
 
-        <div className="task-actions">
+        <div className="task-actions task-actions--semantic">
           <button
             type="button"
-            className={`btn-primary task-status-btn ${
+            className={`task-status-btn task-status-btn--done ${
               latest?.status === "done" ? "is-active" : ""
             }`}
             onClick={() => onSaveStatus("done")}
@@ -57,7 +63,7 @@ export function TaskCard({
 
           <button
             type="button"
-            className={`btn-ghost task-status-btn ${
+            className={`task-status-btn task-status-btn--blocked ${
               latest?.status === "blocked" ? "is-active is-blocked" : ""
             }`}
             onClick={() => onSaveStatus("blocked")}
@@ -67,7 +73,7 @@ export function TaskCard({
 
           <button
             type="button"
-            className={`btn-ghost task-status-btn ${
+            className={`task-status-btn task-status-btn--skipped ${
               latest?.status === "skipped" ? "is-active is-skipped" : ""
             }`}
             onClick={() => onSaveStatus("skipped")}
@@ -83,8 +89,10 @@ export function TaskCard({
 
           <textarea
             id={`task-note-${task.id}`}
-            className="input textarea task-note-textarea contextual-input"
-            rows={3}
+            className={`input textarea task-note-textarea contextual-input ${
+              isCompact ? "task-note-textarea--compact" : ""
+            }`}
+            rows={isCompact ? 2 : 3}
             value={noteDraft}
             onChange={(event) => onNoteChange(event.target.value)}
             placeholder="Hinweis, Beobachtung oder Grund eintragen ..."

@@ -82,11 +82,6 @@ export function ExecutionBoardPage({
       ? "board-header--secondary"
       : "board-header--primary";
 
-  const selectedParentIsOpen =
-    board.selectedParent != null
-      ? (openParentPanels[board.selectedParent.id] ?? true)
-      : false;
-
   return (
     <>
       <NavBar active="board" onDashboardClick={onDashboardClick} />
@@ -171,68 +166,93 @@ export function ExecutionBoardPage({
           </article>
 
           <article className="card contextual-card">
-            <div className="task-section-head">
-              <div>
-                <h2 className="card-title">
-                  {board.selectedParent ? board.selectedParent.nameSnapshot : "Aufgaben"}
-                </h2>
-                <p className="card-subtitle">
-                  {board.selectedParent
-                    ? "Unteraufgaben dieses Elternpunkts."
-                    : "Wähle links einen Elternpunkt aus."}
-                </p>
-              </div>
-
-              {board.selectedParent ? (
-                <button
-                  type="button"
-                  className="foldable-inline-toggle"
-                  aria-expanded={selectedParentIsOpen}
-                  aria-controls={`parent-panel-${board.selectedParent.id}`}
-                  onClick={() => toggleParentPanel(board.selectedParent.id)}
-                >
-                  <span>{selectedParentIsOpen ? "Ausblenden" : "Einblenden"}</span>
-                  <span
-                    className={`foldable-inline-toggle__icon ${
-                      selectedParentIsOpen ? "is-open" : ""
-                    }`}
-                    aria-hidden="true"
-                  >
-                    ▾
-                  </span>
-                </button>
-              ) : null}
-            </div>
-
             {!board.selectedParent ? (
-              <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
+              <>
+                <div className="task-section-head">
+                  <div>
+                    <h2 className="card-title">Aufgaben</h2>
+                    <p className="card-subtitle">
+                      Wähle links einen Elternpunkt aus.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
+              </>
             ) : (
-              <div
-                id={`parent-panel-${board.selectedParent.id}`}
-                className={selectedParentIsOpen ? "foldable-section-panel" : "is-hidden"}
-              >
-                {board.visibleTasks.length === 0 ? (
-                  <div className="card empty">
-                    Keine Unteraufgaben für diesen Elternpunkt definiert.
-                  </div>
-                ) : (
-                  <div
-                    className={`shift-list ${isMoParent ? "shift-list--subtasks" : ""}`}
-                  >
-                    {board.visibleTasks.map((task) => (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
-                        history={board.getHistory(task.id)}
-                        description={getTaskDescription(task.nameSnapshot)}
-                        isCompact={isMoParent}
-                        onSaveStatus={(status) => board.saveStatus(task, status)}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+              (() => {
+                const activeParent = board.selectedParent;
+                const selectedParentIsOpen =
+                  openParentPanels[activeParent.id] ?? true;
+                const selectedParentPanelId = `parent-panel-${activeParent.id}`;
+
+                return (
+                  <>
+                    <div className="task-section-head">
+                      <div>
+                        <h2 className="card-title">{activeParent.nameSnapshot}</h2>
+                        <p className="card-subtitle">
+                          Unteraufgaben dieses Elternpunkts.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="foldable-inline-toggle"
+                        aria-expanded={selectedParentIsOpen}
+                        aria-controls={selectedParentPanelId}
+                        onClick={() => toggleParentPanel(activeParent.id)}
+                      >
+                        <span>
+                          {selectedParentIsOpen ? "Ausblenden" : "Einblenden"}
+                        </span>
+                        <span
+                          className={`foldable-inline-toggle__icon ${
+                            selectedParentIsOpen ? "is-open" : ""
+                          }`}
+                          aria-hidden="true"
+                        >
+                          ▾
+                        </span>
+                      </button>
+                    </div>
+
+                    <div
+                      id={selectedParentPanelId}
+                      className={
+                        selectedParentIsOpen ? "foldable-section-panel" : "is-hidden"
+                      }
+                    >
+                      {board.visibleTasks.length === 0 ? (
+                        <div className="card empty">
+                          Keine Unteraufgaben für diesen Elternpunkt definiert.
+                        </div>
+                      ) : (
+                        <div
+                          className={`shift-list ${
+                            isMoParent ? "shift-list--subtasks" : ""
+                          }`}
+                        >
+                          {board.visibleTasks.map((task) => (
+                            <TaskCard
+                              key={task.id}
+                              task={task}
+                              latest={
+                                board.latestEventByShiftActivityId.get(task.id) ??
+                                null
+                              }
+                              history={board.getHistory(task.id)}
+                              description={getTaskDescription(task.nameSnapshot)}
+                              isCompact={isMoParent}
+                              onSaveStatus={(status) => board.saveStatus(task, status)}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                );
+              })()
             )}
           </article>
         </section>

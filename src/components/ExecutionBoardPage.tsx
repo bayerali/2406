@@ -121,7 +121,6 @@ export function ExecutionBoardPage({
 
         <section className="card contextual-card">
           <h2 className="card-title">Bereiche</h2>
-          <p className="card-subtitle">Wähle Primär oder Sekundär.</p>
 
           <BoardModeTabs
             selectedMode={board.selectedMode}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import type { ShiftActivity, TaskEvent, TaskStatus } from "../../types";
 import {
   formatTimestamp,
@@ -23,6 +23,11 @@ export function TaskCard({
   isCompact = false,
   onSaveStatus,
 }: TaskCardProps) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
+  const hasDetails = Boolean(description) || history.length > 0;
+
   return (
     <div
       className={`shift-card task-card contextual-task-card ${
@@ -41,10 +46,6 @@ export function TaskCard({
             {latest ? statusLabel(latest.status) : "Offen"}
           </div>
         </div>
-
-        {description ? (
-          <div className="task-description contextual-surface">{description}</div>
-        ) : null}
 
         <div className="shift-sub">
           {latest
@@ -84,20 +85,55 @@ export function TaskCard({
           </button>
         </div>
 
-        {history.length > 0 ? (
-          <div className="task-note-preview contextual-surface">
-            <strong>Historie:</strong>
-            <div style={{ marginTop: 8 }}>
-              {history.map((event) => (
-                <div key={event.id} className="shift-sub">
-                  {statusLabel(event.status)} · {formatTimestamp(event.timestamp)}
-                  {event.note && !isAutoParentDone(event.note)
-                    ? ` · ${event.note}`
-                    : ""}
-                </div>
-              ))}
-            </div>
-          </div>
+        {hasDetails ? (
+          <>
+            <button
+              type="button"
+              className="task-details-toggle"
+              aria-expanded={isDetailsOpen}
+              aria-controls={detailsId}
+              onClick={() => setIsDetailsOpen((value) => !value)}
+            >
+              <span>
+                {isDetailsOpen ? "Details ausblenden" : "Details anzeigen"}
+              </span>
+              <span
+                className={`task-details-toggle__icon ${
+                  isDetailsOpen ? "is-open" : ""
+                }`}
+                aria-hidden="true"
+              >
+                ▾
+              </span>
+            </button>
+
+            {isDetailsOpen ? (
+              <div id={detailsId} className="task-details-panel">
+                {description ? (
+                  <div className="task-description contextual-surface">
+                    {description}
+                  </div>
+                ) : null}
+
+                {history.length > 0 ? (
+                  <div className="task-note-preview contextual-surface">
+                    <strong>Historie:</strong>
+                    <div style={{ marginTop: 8 }}>
+                      {history.map((event) => (
+                        <div key={event.id} className="shift-sub">
+                          {statusLabel(event.status)} ·{" "}
+                          {formatTimestamp(event.timestamp)}
+                          {event.note && !isAutoParentDone(event.note)
+                            ? ` · ${event.note}`
+                            : ""}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </>
         ) : null}
       </div>
     </div>

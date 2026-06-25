@@ -763,3 +763,88 @@ button:disabled {
   flex-direction: column;
   line-height: 1.1;
 }
+.execution-board-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shift-status-card {
+  padding: 18px;
+}
+
+.shift-status-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.shift-status-percent {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+  color: #f8fafc;
+}
+
+.shift-status-bar {
+  margin-top: 14px;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.shift-status-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  transition: width 0.2s ease;
+}
+
+.shift-status-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.shift-status-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.shift-status-chip--done {
+  background: rgba(34, 197, 94, 0.14);
+  border-color: rgba(34, 197, 94, 0.34);
+  color: #dcfce7;
+}
+
+.shift-status-chip--open {
+  background: rgba(0, 188, 255, 0.12);
+  border-color: rgba(0, 188, 255, 0.28);
+  color: #d8f3ff;
+}
+
+.shift-status-chip--blocked {
+  background: rgba(251, 146, 60, 0.14);
+  border-color: rgba(251, 146, 60, 0.34);
+  color: #fed7aa;
+}
+
+.shift-status-chip--skipped {
+  background: rgba(167, 139, 250, 0.14);
+  border-color: rgba(167, 139, 250, 0.34);
+  color: #ddd6fe;
+}
+
+.shift-status-chip--total {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: var(--text-soft);
+}

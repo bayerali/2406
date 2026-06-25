@@ -20,9 +20,7 @@ export function TaskCard({
   task,
   latest,
   history,
-  noteDraft,
   isCompact = false,
-  onNoteChange,
   onSaveStatus,
 }: TaskCardProps) {
   return (
@@ -42,12 +40,6 @@ export function TaskCard({
           >
             {latest ? statusLabel(latest.status) : "Offen"}
           </div>
-        </div>
-
-        <div className="shift-sub">
-          {latest
-            ? `Letzter Zeitstempel: ${formatTimestamp(latest.timestamp)}`
-            : "Noch kein Zeitstempel"}
         </div>
 
         <div className="task-actions task-actions--semantic">
@@ -80,23 +72,6 @@ export function TaskCard({
           >
             Übersprungen
           </button>
-        </div>
-
-        <div className="field task-note-field">
-          <label className="label" htmlFor={`task-note-${task.id}`}>
-            Notiz
-          </label>
-
-          <textarea
-            id={`task-note-${task.id}`}
-            className={`input textarea task-note-textarea contextual-input ${
-              isCompact ? "task-note-textarea--compact" : ""
-            }`}
-            rows={isCompact ? 2 : 3}
-            value={noteDraft}
-            onChange={(event) => onNoteChange(event.target.value)}
-            placeholder="Hinweis, Beobachtung oder Grund eintragen ..."
-          />
         </div>
 
         {history.length > 0 ? (

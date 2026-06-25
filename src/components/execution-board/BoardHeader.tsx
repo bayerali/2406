@@ -6,7 +6,8 @@ type BoardHeaderProps = {
   onBack: () => void;
   modeClassName?: string;
   shiftType?: "Frueh" | "Spaet" | "Nacht";
-  cwid?: string;
+  operator?: string;
+  line?: string;
   shiftLabel?: string;
 };
 
@@ -16,7 +17,8 @@ export function BoardHeader({
   onBack,
   modeClassName = "",
   shiftType,
-  cwid,
+  operator,
+  line,
   shiftLabel,
 }: BoardHeaderProps) {
   const shiftTypeClass = shiftType ? `shift-type-badge shift-type-badge--${shiftType}` : "";
@@ -29,13 +31,15 @@ export function BoardHeader({
             <h1 className="board-header__title">{title}</h1>
 
             <div className="board-header__meta">
-              {cwid ? (
-                <span className="board-header__cwid">CWID {cwid}</span>
+              {operator ? (
+                <span className="board-header__operator">{operator}</span>
               ) : null}
 
               {shiftLabel && shiftType ? (
                 <span className={shiftTypeClass}>{shiftLabel}</span>
               ) : null}
+
+              {line ? <span className="board-header__line">{line}</span> : null}
 
               <span className="board-header__subtitle">{subtitle}</span>
             </div>

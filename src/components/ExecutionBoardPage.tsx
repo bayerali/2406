@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import type { DB } from "../types";
 import { NavBar } from "./NavBar";
 import { BoardHeader } from "./execution-board/BoardHeader";
@@ -32,6 +32,27 @@ export function ExecutionBoardPage({
   });
 
   const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(false);
+  const [openParentPanels, setOpenParentPanels] = useState<Record<number, boolean>>({});
+
+  const taskDescriptions = useMemo<Record<string, string>>(
+    () => ({
+      abnahme:
+        "Durch eine Linienabnahme wird sichergestellt, dass Arbeitsbereiche und Verpackungsanlagen sauber und frei von allen verwendeten Produkten, Materialien und auftragsbezogenen Dokumenten des zuvor produzierten MOs sind.",
+    }),
+    []
+  );
+
+  const getTaskDescription = (taskName: string): string => {
+    const normalized = taskName.trim().toLowerCase();
+    return taskDescriptions[normalized] ?? "";
+  };
+
+  const toggleParentPanel = (parentId: number): void => {
+    setOpenParentPanels((prev) => ({
+      ...prev,
+      [parentId]: !prev[parentId],
+    }));
+  };
 
   if (!board.shift) {
     return (
@@ -60,6 +81,11 @@ export function ExecutionBoardPage({
     board.selectedMode === "Secondary"
       ? "board-header--secondary"
       : "board-header--primary";
+
+  const selectedParentIsOpen =
+    board.selectedParent != null
+      ? (openParentPanels[board.selectedParent.id] ?? true)
+      : false;
 
   return (
     <>
@@ -132,7 +158,9 @@ export function ExecutionBoardPage({
         <section className="dashboard-grid">
           <article className="card contextual-card">
             <h2 className="card-title">Elternpunkte</h2>
-            <p className="card-subtitle">Wähle MO Start oder MO Ende.</p>
+            <p className="card-subtitle">
+              Wähle MO Start, MO Ende, ZP Handling oder Nächste MO.
+            </p>
 
             <ParentGroupPicker
               parentGroups={board.parentGroups}
@@ -143,33 +171,67 @@ export function ExecutionBoardPage({
           </article>
 
           <article className="card contextual-card">
-            <h2 className="card-title">
-              {board.selectedParent ? board.selectedParent.nameSnapshot : "Aufgaben"}
-            </h2>
-            <p className="card-subtitle">
-              {board.selectedParent
-                ? "Unteraufgaben dieses Elternpunkts."
-                : "Wähle links einen Elternpunkt aus."}
-            </p>
+            <div className="task-section-head">
+              <div>
+                <h2 className="card-title">
+                  {board.selectedParent ? board.selectedParent.nameSnapshot : "Aufgaben"}
+                </h2>
+                <p className="card-subtitle">
+                  {board.selectedParent
+                    ? "Unteraufgaben dieses Elternpunkts."
+                    : "Wähle links einen Elternpunkt aus."}
+                </p>
+              </div>
+
+              {board.selectedParent ? (
+                <button
+                  type="button"
+                  className="foldable-inline-toggle"
+                  aria-expanded={selectedParentIsOpen}
+                  aria-controls={`parent-panel-${board.selectedParent.id}`}
+                  onClick={() => toggleParentPanel(board.selectedParent.id)}
+                >
+                  <span>{selectedParentIsOpen ? "Ausblenden" : "Einblenden"}</span>
+                  <span
+                    className={`foldable-inline-toggle__icon ${
+                      selectedParentIsOpen ? "is-open" : ""
+                    }`}
+                    aria-hidden="true"
+                  >
+                    ▾
+                  </span>
+                </button>
+              ) : null}
+            </div>
 
             {!board.selectedParent ? (
               <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
-            ) : board.visibleTasks.length === 0 ? (
-              <div className="card empty">
-                Keine Unteraufgaben für diesen Elternpunkt definiert.
-              </div>
             ) : (
-              <div className={`shift-list ${isMoParent ? "shift-list--subtasks" : ""}`}>
-                {board.visibleTasks.map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
-                    history={board.getHistory(task.id)}
-                    isCompact={isMoParent}
-                    onSaveStatus={(status) => board.saveStatus(task, status)}
-                  />
-                ))}
+              <div
+                id={`parent-panel-${board.selectedParent.id}`}
+                className={selectedParentIsOpen ? "foldable-section-panel" : "is-hidden"}
+              >
+                {board.visibleTasks.length === 0 ? (
+                  <div className="card empty">
+                    Keine Unteraufgaben für diesen Elternpunkt definiert.
+                  </div>
+                ) : (
+                  <div
+                    className={`shift-list ${isMoParent ? "shift-list--subtasks" : ""}`}
+                  >
+                    {board.visibleTasks.map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
+                        history={board.getHistory(task.id)}
+                        description={getTaskDescription(task.nameSnapshot)}
+                        isCompact={isMoParent}
+                        onSaveStatus={(status) => board.saveStatus(task, status)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </article>

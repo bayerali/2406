@@ -42,9 +42,8 @@ export function ExecutionBoardPage({
     );
   }
 
-  const subtitle = `${SHIFT_LABEL[board.shift.shiftType]} · ${formatDate(
-    board.shift.date
-  )} · CWID ${board.shift.operator} · ${board.shift.line}`;
+  const shiftLabel = SHIFT_LABEL[board.shift.shiftType];
+  const subtitle = `${formatDate(board.shift.date)} · ${board.shift.line}`;
 
   const isMoParent =
     board.selectedParent != null &&
@@ -73,6 +72,9 @@ export function ExecutionBoardPage({
           subtitle={subtitle}
           onBack={onBackToShifts}
           modeClassName={headerModeClass}
+          shiftType={board.shift.shiftType}
+          shiftLabel={shiftLabel}
+          cwid={board.shift.operator}
         />
 
         <ShiftStatusCard

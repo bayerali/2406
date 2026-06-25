@@ -9,6 +9,7 @@ import { TaskCard } from "./execution-board/TaskCard";
 import { ShiftNotesPanel } from "./execution-board/ShiftNotesPanel";
 import { useExecutionBoard } from "../hooks/useExecutionBoard";
 import { SHIFT_LABEL, formatDate } from "../utils/executionBoard";
+import styles from "./ExecutionBoardPage.module.css";
 
 type ExecutionBoardPageProps = {
   db: DB;
@@ -50,8 +51,8 @@ export function ExecutionBoardPage({
     return (
       <>
         <NavBar active="board" onDashboardClick={onDashboardClick} />
-        <main className="main dashboard-layout execution-board-page">
-          <article className="card empty">Schicht nicht gefunden.</article>
+        <main className={`main ${styles.page}`}>
+          <article className={styles.emptyCard}>Schicht nicht gefunden.</article>
         </main>
       </>
     );
@@ -65,52 +66,52 @@ export function ExecutionBoardPage({
     /^MO Start$|^MO Ende$/i.test(board.selectedParent.nameSnapshot);
 
   const boardModeClass =
-    board.selectedMode === "Secondary"
-      ? "execution-board execution-board--secondary"
-      : "execution-board execution-board--primary";
+    board.selectedMode === "Secondary" ? styles.boardSecondary : styles.boardPrimary;
 
   const headerModeClass =
     board.selectedMode === "Secondary"
-      ? "board-header--secondary"
-      : "board-header--primary";
+      ? styles.boardHeaderSecondary
+      : styles.boardHeaderPrimary;
 
   return (
     <>
       <NavBar active="board" onDashboardClick={onDashboardClick} />
 
       <main
-        className={`main dashboard-layout execution-board-page ${boardModeClass}`}
+        className={`main ${styles.page} ${styles.executionBoard} ${boardModeClass}`}
         style={board.boardThemeStyle}
       >
-        <BoardHeader
-          title="Ausführungsboard"
-          subtitle={subtitle}
-          onBack={onBackToShifts}
-          modeClassName={headerModeClass}
-          shiftType={board.shift.shiftType}
-          shiftLabel={shiftLabel}
-          operator={board.shift.operator}
-          line={board.shift.line}
-        />
+        <div className={`${styles.boardHeaderShell} ${headerModeClass}`}>
+          <BoardHeader
+            title="Ausführungsboard"
+            subtitle={subtitle}
+            onBack={onBackToShifts}
+            modeClassName=""
+            shiftType={board.shift.shiftType}
+            shiftLabel={shiftLabel}
+            operator={board.shift.operator}
+            line={board.shift.line}
+          />
+        </div>
 
-        <section className="card contextual-card">
+        <section className={styles.contextualCard}>
           <button
             type="button"
-            className="foldable-section-toggle"
+            className={styles.foldableSectionToggle}
             aria-expanded={isShiftStatusOpen}
             aria-controls="shift-status-panel"
             onClick={() => setIsShiftStatusOpen((value) => !value)}
           >
-            <div className="foldable-section-toggle__text">
-              <span className="foldable-section-toggle__title">Schichtstatus</span>
-              <span className="foldable-section-toggle__subtitle">
+            <div className={styles.foldableSectionToggleText}>
+              <span className={styles.foldableSectionToggleTitle}>Schichtstatus</span>
+              <span className={styles.foldableSectionToggleSubtitle}>
                 Fortschritt und Verteilung der Aufgaben anzeigen
               </span>
             </div>
 
             <span
-              className={`foldable-section-toggle__icon ${
-                isShiftStatusOpen ? "is-open" : ""
+              className={`${styles.foldableSectionToggleIcon} ${
+                isShiftStatusOpen ? styles.isOpen : ""
               }`}
               aria-hidden="true"
             >
@@ -119,7 +120,7 @@ export function ExecutionBoardPage({
           </button>
 
           {isShiftStatusOpen ? (
-            <div id="shift-status-panel" className="foldable-section-panel">
+            <div id="shift-status-panel" className={styles.foldableSectionPanel}>
               <ShiftStatusCard
                 totalLeafTasks={board.totalLeafTasks}
                 doneCount={board.doneCount}
@@ -132,20 +133,22 @@ export function ExecutionBoardPage({
           ) : null}
         </section>
 
-        <section className="card contextual-card">
-          <h2 className="card-title">Bereiche</h2>
+        <section className={styles.contextualCard}>
+          <h2 className={styles.cardTitle}>Bereiche</h2>
 
-          <BoardModeTabs
-            selectedMode={board.selectedMode}
-            availableModes={board.availableModes}
-            onSelect={board.setSelectedMode}
-          />
+          <div className={styles.modeTabsWrap}>
+            <BoardModeTabs
+              selectedMode={board.selectedMode}
+              availableModes={board.availableModes}
+              onSelect={board.setSelectedMode}
+            />
+          </div>
         </section>
 
-        <section className="dashboard-grid">
-          <article className="card contextual-card">
-            <h2 className="card-title">Elternpunkte</h2>
-            <p className="card-subtitle">
+        <section className={styles.dashboardGrid}>
+          <article className={styles.contextualCard}>
+            <h2 className={styles.cardTitle}>Elternpunkte</h2>
+            <p className={styles.cardSubtitle}>
               Wähle MO Start, MO Ende, ZP Handling oder Nächste MO.
             </p>
 
@@ -157,41 +160,41 @@ export function ExecutionBoardPage({
             />
           </article>
 
-          <article className="card contextual-card">
+          <article className={styles.contextualCard}>
             {!board.selectedParent ? (
               <>
-                <div className="task-section-head">
+                <div className={styles.taskSectionHead}>
                   <div>
-                    <h2 className="card-title">Aufgaben</h2>
-                    <p className="card-subtitle">
+                    <h2 className={styles.cardTitle}>Aufgaben</h2>
+                    <p className={styles.cardSubtitle}>
                       Wähle links einen Elternpunkt aus.
                     </p>
                   </div>
                 </div>
 
-                <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
+                <div className={styles.emptyCard}>Noch kein Elternpunkt ausgewählt.</div>
               </>
             ) : (
               <>
-                <div className="task-section-head">
+                <div className={styles.taskSectionHead}>
                   <div>
-                    <h2 className="card-title">
+                    <h2 className={styles.cardTitle}>
                       {board.selectedParent.nameSnapshot}
                     </h2>
-                    <p className="card-subtitle">
+                    <p className={styles.cardSubtitle}>
                       Unteraufgaben dieses Elternpunkts.
                     </p>
                   </div>
                 </div>
 
                 {board.visibleTasks.length === 0 ? (
-                  <div className="card empty">
+                  <div className={styles.emptyCard}>
                     Keine Unteraufgaben für diesen Elternpunkt definiert.
                   </div>
                 ) : (
                   <div
-                    className={`shift-list ${
-                      isMoParent ? "shift-list--subtasks" : ""
+                    className={`${styles.taskList} ${
+                      isMoParent ? styles.taskListCompact : ""
                     }`}
                   >
                     {board.visibleTasks.map((task) => (

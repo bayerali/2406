@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import type {
   BoardMode,
   DB,
+  NoteKind,
   Shift,
   ShiftActivity,
-  ShiftNoteKind,
   TaskEvent,
   TaskStatus,
 } from "../types";
@@ -52,8 +52,8 @@ export type UseExecutionBoardResult = {
   setTaskNoteDraft: (activityId: number, value: string) => void;
   noteText: string;
   setNoteText: React.Dispatch<React.SetStateAction<string>>;
-  noteKind: ShiftNoteKind;
-  setNoteKind: React.Dispatch<React.SetStateAction<ShiftNoteKind>>;
+  noteKind: NoteKind;
+  setNoteKind: React.Dispatch<React.SetStateAction<NoteKind>>;
   totalLeafTasks: number;
   doneCount: number;
   blockedCount: number;
@@ -83,7 +83,7 @@ export function useExecutionBoard({
     {}
   );
   const [noteText, setNoteText] = useState("");
-  const [noteKind, setNoteKind] = useState<ShiftNoteKind>("handover");
+  const [noteKind, setNoteKind] = useState<NoteKind>("handover");
 
   const shiftActivities = shift?.shiftActivities ?? [];
   const shiftTaskEvents = shift?.taskEvents ?? [];
@@ -114,11 +114,36 @@ export function useExecutionBoard({
   const parentGroups = useMemo(() => {
     if (!selectedRoot) return [];
 
-    return sortActivities(
-      shiftActivities.filter(
-        (activity) => activity.parentIdSnapshot === selectedRoot.id
-      )
+    const realChildren = shiftActivities.filter(
+      (activity) => activity.parentIdSnapshot === selectedRoot.id
     );
+
+    const syntheticParents: ShiftActivity[] = [
+      {
+        id: -101,
+        activityIdSnapshot: null,
+        nameSnapshot: "ZP Handling",
+        parentIdSnapshot: selectedRoot.id,
+        sortOrderSnapshot: 9001,
+      },
+      {
+        id: -102,
+        activityIdSnapshot: null,
+        nameSnapshot: "Nächste MO",
+        parentIdSnapshot: selectedRoot.id,
+        sortOrderSnapshot: 9002,
+      },
+    ];
+
+    const existingNames = new Set(
+      realChildren.map((activity) => activity.nameSnapshot.trim().toLowerCase())
+    );
+
+    const missingSyntheticParents = syntheticParents.filter(
+      (activity) => !existingNames.has(activity.nameSnapshot.trim().toLowerCase())
+    );
+
+    return sortActivities([...realChildren, ...missingSyntheticParents]);
   }, [shiftActivities, selectedRoot]);
 
   useEffect(() => {

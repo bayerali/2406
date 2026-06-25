@@ -6,7 +6,7 @@ import { BoardModeTabs } from "./execution-board/BoardModeTabs";
 import { ParentGroupPicker } from "./execution-board/ParentGroupPicker";
 import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
 import { TaskCard } from "./execution-board/TaskCard";
-import { ShiftNotesSection } from "./execution-board/ShiftNotesSection";
+import { ShiftNotesPanel } from "./execution-board/ShiftNotesPanel";
 import { useExecutionBoard } from "../hooks/useExecutionBoard";
 import { SHIFT_LABEL, formatDate } from "../utils/executionBoard";
 
@@ -150,7 +150,7 @@ export function ExecutionBoardPage({
           </article>
         </section>
 
-        <ShiftNotesSection
+        <ShiftNotesPanel
           notes={board.shift.notes}
           noteText={board.noteText}
           noteKind={board.noteKind}

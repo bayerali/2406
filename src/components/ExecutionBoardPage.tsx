@@ -55,6 +55,11 @@ export function ExecutionBoardPage({
       ? "execution-board execution-board--secondary"
       : "execution-board execution-board--primary";
 
+  const headerModeClass =
+    board.selectedMode === "Secondary"
+      ? "board-header--secondary"
+      : "board-header--primary";
+
   return (
     <>
       <NavBar active="board" onDashboardClick={onDashboardClick} />
@@ -67,6 +72,7 @@ export function ExecutionBoardPage({
           title="Ausführungsboard"
           subtitle={subtitle}
           onBack={onBackToShifts}
+          modeClassName={headerModeClass}
         />
 
         <ShiftStatusCard

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import type { DB, Line, Shift, ShiftActivity, ShiftType } from "../types";
 import { NavBar } from "./NavBar";
+import styles from "./ShiftsPage.module.css";
 
 const SHIFT_LABEL: Record<ShiftType, string> = {
   Frueh: "Frühschicht",
@@ -158,52 +159,52 @@ export function ShiftsPage({
     <>
       <NavBar active="shifts" onDashboardClick={() => onOpenShiftBoard(-1)} />
 
-      <main className="main dashboard-layout">
-        <section className="grid grid-3">
-          <article className="kpi-card">
-            <div className="kpi-label">Schichten gesamt</div>
-            <div className="kpi-value">{totalShifts}</div>
+      <main className={`main ${styles.page}`}>
+        <section className={styles.kpiGrid}>
+          <article className={styles.kpiCard}>
+            <div className={styles.kpiLabel}>Schichten gesamt</div>
+            <div className={styles.kpiValue}>{totalShifts}</div>
           </article>
 
-          <article className="kpi-card">
-            <div className="kpi-label">Aktive Linien</div>
-            <div className="kpi-value">{uniqueLines}</div>
+          <article className={styles.kpiCard}>
+            <div className={styles.kpiLabel}>Aktive Linien</div>
+            <div className={styles.kpiValue}>{uniqueLines}</div>
           </article>
 
-          <article className="kpi-card">
-            <div className="kpi-label">Heute</div>
-            <div className="kpi-value">{todayCount}</div>
+          <article className={styles.kpiCard}>
+            <div className={styles.kpiLabel}>Heute</div>
+            <div className={styles.kpiValue}>{todayCount}</div>
           </article>
         </section>
 
-        <section className="dashboard-grid">
-          <article className="card">
-            <h1 className="card-title">Neue Schicht starten</h1>
-            <p className="card-subtitle">
+        <section className={styles.dashboardGrid}>
+          <article className={styles.card}>
+            <h1 className={styles.cardTitle}>Neue Schicht starten</h1>
+            <p className={styles.cardSubtitle}>
               Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
             </p>
 
-            <form className="new-shift-form" onSubmit={startShift}>
-              <div className="field">
-                <label className="label" htmlFor="shift-date">
+            <form className={styles.newShiftForm} onSubmit={startShift}>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="shift-date">
                   Datum
                 </label>
                 <input
                   id="shift-date"
-                  className="input"
+                  className={styles.input}
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
 
-              <div className="field">
-                <label className="label" htmlFor="shift-type">
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="shift-type">
                   Schicht
                 </label>
                 <select
                   id="shift-type"
-                  className="select"
+                  className={styles.select}
                   value={shiftType}
                   onChange={(e) => setShiftType(e.target.value as ShiftType)}
                 >
@@ -213,13 +214,13 @@ export function ShiftsPage({
                 </select>
               </div>
 
-              <div className="field">
-                <label className="label" htmlFor="shift-line">
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="shift-line">
                   Linie
                 </label>
                 <select
                   id="shift-line"
-                  className="select"
+                  className={styles.select}
                   value={line}
                   onChange={(e) => setLine(e.target.value as Line)}
                 >
@@ -231,13 +232,13 @@ export function ShiftsPage({
                 </select>
               </div>
 
-              <div className="field">
-                <label className="label" htmlFor="shift-operator">
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="shift-operator">
                   CWID
                 </label>
                 <input
                   id="shift-operator"
-                  className="input"
+                  className={styles.input}
                   type="text"
                   value={operator}
                   onChange={(e) => setOperator(e.target.value)}
@@ -246,51 +247,49 @@ export function ShiftsPage({
               </div>
 
               {formError ? (
-                <div className="card empty" style={{ gridColumn: "1 / -1" }}>
-                  {formError}
-                </div>
+                <div className={styles.errorBox}>{formError}</div>
               ) : null}
 
-              <div className="new-shift-actions">
-                <button type="submit" className="btn-primary start-btn">
+              <div className={styles.newShiftActions}>
+                <button type="submit" className={styles.btnPrimary}>
                   Schicht starten →
                 </button>
               </div>
             </form>
           </article>
 
-          <article className="card">
-            <div className="row">
+          <article className={styles.card}>
+            <div className={styles.row}>
               <div>
-                <h2 className="card-title">Letzte Schichten</h2>
-                <p className="card-subtitle">{sortedShifts.length} Einträge</p>
+                <h2 className={styles.cardTitle}>Letzte Schichten</h2>
+                <p className={styles.cardSubtitle}>{sortedShifts.length} Einträge</p>
               </div>
             </div>
 
             {sortedShifts.length === 0 ? (
-              <div className="card empty">
+              <div className={styles.emptyState}>
                 Noch keine Schichten. Starte links deine erste Schicht.
               </div>
             ) : (
-              <div className="shift-list">
+              <div className={styles.shiftList}>
                 {sortedShifts.map((s) => (
                   <button
                     key={s.id}
                     type="button"
-                    className={`shift-card ${s.shiftType}`}
+                    className={`${styles.shiftCard} ${styles[`shiftCard${s.shiftType}`]}`}
                     onClick={() => onOpenShiftBoard(s.id)}
                   >
-                    <div className="shift-meta">
-                      <div className="shift-date">{formatDate(s.date)}</div>
-                      <div className="shift-sub">
+                    <div className={styles.shiftMeta}>
+                      <div className={styles.shiftDate}>{formatDate(s.date)}</div>
+                      <div className={styles.shiftSub}>
                         {s.operator} · {s.line} · {SHIFT_LABEL[s.shiftType]}
                       </div>
                     </div>
 
-                    <div className="shift-card-footer">
+                    <div className={styles.shiftCardFooter}>
                       <button
                         type="button"
-                        className="btn-danger shift-card-done-btn"
+                        className={styles.btnDanger}
                         onClick={(e) => deleteShift(s.id, e)}
                       >
                         Löschen

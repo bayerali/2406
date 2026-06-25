@@ -975,3 +975,129 @@ button:disabled {
     border-radius: 18px;
   }
 }
+.task-card {
+  background: linear-gradient(180deg, var(--task-surface-bright), var(--task-surface-bright-2));
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-color: var(--task-border-soft);
+}
+
+.task-card--compact {
+  padding: 10px 12px;
+}
+
+.task-meta {
+  width: 100%;
+  gap: 8px;
+}
+
+.task-topline {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.task-topline--actions-right {
+  align-items: center;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.task-actions--inline {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.task-status-btn {
+  min-width: 104px;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  transition:
+    transform 0.08s ease,
+    filter 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.task-status-btn:hover {
+  transform: translateY(-1px);
+}
+
+.task-status-btn--done {
+  background: var(--btn-done-bg);
+  color: #03111c;
+  border-color: var(--btn-done-border);
+  box-shadow: 0 10px 22px var(--btn-done-shadow);
+}
+
+.task-status-btn--blocked {
+  background: var(--btn-blocked-bg);
+  border-color: var(--btn-blocked-border);
+  color: var(--btn-blocked-text);
+}
+
+.task-status-btn--blocked:hover {
+  background: var(--btn-blocked-bg-hover);
+}
+
+.task-status-btn--skipped {
+  background: var(--btn-skipped-bg);
+  border-color: var(--btn-skipped-border);
+  color: var(--btn-skipped-text);
+}
+
+.task-status-btn--skipped:hover {
+  background: var(--btn-skipped-bg-hover);
+}
+
+.task-status-btn.is-active {
+  box-shadow: 0 0 0 2px var(--context-accent-soft);
+}
+
+.task-status-btn.is-blocked {
+  border-color: rgba(251, 146, 60, 0.52);
+}
+
+.task-status-btn.is-skipped {
+  border-color: rgba(167, 139, 250, 0.52);
+}
+
+.task-note-preview {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.5;
+  background: rgba(15, 23, 42, 0.68);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .task-topline,
+  .task-topline--actions-right,
+  .task-actions,
+  .task-actions--inline {
+    align-items: flex-start;
+  }
+
+  .task-actions--inline {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

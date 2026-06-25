@@ -47,7 +47,9 @@ export function BoardModeTabs({
               <span className="bereich-card__indicator" aria-hidden="true" />
             </div>
 
-            <div className="bereich-card__title">{config.title}</div>
+            <div className="bereich-card__body">
+              <div className="bereich-card__title">{config.title}</div>
+            </div>
           </button>
         );
       })}

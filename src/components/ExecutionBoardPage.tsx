@@ -50,35 +50,24 @@ export function ExecutionBoardPage({
     board.selectedParent != null &&
     /^MO Start$|^MO Ende$/i.test(board.selectedParent.nameSnapshot);
 
+  const boardModeClass =
+    board.selectedMode === "Secondary"
+      ? "execution-board execution-board--secondary"
+      : "execution-board execution-board--primary";
+
   return (
     <>
       <NavBar active="board" onDashboardClick={onDashboardClick} />
 
-      <main className="main dashboard-layout" style={board.boardThemeStyle}>
+      <main
+        className={`main dashboard-layout ${boardModeClass}`}
+        style={board.boardThemeStyle}
+      >
         <BoardHeader
           title="Ausführungsboard"
           subtitle={subtitle}
           onBack={onBackToShifts}
         />
-
-        <section className="grid grid-3">
-          <article className="kpi-card contextual-card">
-            <div className="kpi-label">Gesamtaufgaben</div>
-            <div className="kpi-value">{board.totalLeafTasks}</div>
-          </article>
-
-          <article className="kpi-card contextual-card">
-            <div className="kpi-label">Erledigt</div>
-            <div className="kpi-value">{board.doneCount}</div>
-          </article>
-
-          <article className="kpi-card contextual-card">
-            <div className="kpi-label">Offen / Blockiert / Übersprungen</div>
-            <div className="kpi-value">
-              {board.openCount} / {board.blockedCount} / {board.skippedCount}
-            </div>
-          </article>
-        </section>
 
         <ShiftStatusCard
           totalLeafTasks={board.totalLeafTasks}

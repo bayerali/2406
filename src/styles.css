@@ -1037,7 +1037,30 @@ button:disabled {
     align-self: flex-start;
   }
 
-  .board-header__meta {
-    align-items: flex-start;
-  }
+.board-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.board-header__subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.board-header__operator {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fb7185;
+  letter-spacing: 0.01em;
+}
+
+.board-header__line {
+  font-size: 14px;
+  font-weight: 800;
+  color: #facc15;
+  letter-spacing: 0.01em;
 }

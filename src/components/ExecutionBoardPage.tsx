@@ -4,9 +4,9 @@ import { NavBar } from "./NavBar";
 import { BoardHeader } from "./execution-board/BoardHeader";
 import { BoardModeTabs } from "./execution-board/BoardModeTabs";
 import { ParentGroupPicker } from "./execution-board/ParentGroupPicker";
-import { TaskProgressCard } from "./execution-board/TaskProgressCard";
+import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
 import { TaskCard } from "./execution-board/TaskCard";
-import { ShiftNotesPanel } from "./execution-board/ShiftNotesPanel";
+import { ShiftNotesSection } from "./execution-board/ShiftNotesSection";
 import { useExecutionBoard } from "../hooks/useExecutionBoard";
 import { SHIFT_LABEL, formatDate } from "../utils/executionBoard";
 
@@ -80,6 +80,15 @@ export function ExecutionBoardPage({
           </article>
         </section>
 
+        <ShiftStatusCard
+          totalLeafTasks={board.totalLeafTasks}
+          doneCount={board.doneCount}
+          blockedCount={board.blockedCount}
+          skippedCount={board.skippedCount}
+          openCount={board.openCount}
+          shiftProgressPercent={board.shiftProgressPercent}
+        />
+
         <section className="dashboard-grid">
           <article className="card contextual-card">
             <h2 className="card-title">Bereiche</h2>
@@ -116,10 +125,6 @@ export function ExecutionBoardPage({
                 : "Wähle links einen Elternpunkt aus."}
             </p>
 
-            {board.selectedParent ? (
-              <TaskProgressCard {...board.selectedParentStats} />
-            ) : null}
-
             {!board.selectedParent ? (
               <div className="card empty">Noch kein Elternpunkt ausgewählt.</div>
             ) : board.visibleTasks.length === 0 ? (
@@ -145,7 +150,7 @@ export function ExecutionBoardPage({
           </article>
         </section>
 
-        <ShiftNotesPanel
+        <ShiftNotesSection
           notes={board.shift.notes}
           noteText={board.noteText}
           noteKind={board.noteKind}

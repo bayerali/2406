@@ -46,6 +46,10 @@ export function ExecutionBoardPage({
     board.shift.date
   )} · CWID ${board.shift.operator} · ${board.shift.line}`;
 
+  const isMoParent =
+    board.selectedParent != null &&
+    /^MO Start$|^MO Ende$/i.test(board.selectedParent.nameSnapshot);
+
   return (
     <>
       <NavBar active="board" onDashboardClick={onDashboardClick} />
@@ -123,7 +127,7 @@ export function ExecutionBoardPage({
                 Keine Unteraufgaben für diesen Elternpunkt definiert.
               </div>
             ) : (
-              <div className="shift-list">
+              <div className={`shift-list ${isMoParent ? "shift-list--subtasks" : ""}`}>
                 {board.visibleTasks.map((task) => (
                   <TaskCard
                     key={task.id}
@@ -131,6 +135,7 @@ export function ExecutionBoardPage({
                     latest={board.latestEventByShiftActivityId.get(task.id) ?? null}
                     history={board.getHistory(task.id)}
                     noteDraft={board.taskNoteDrafts[task.id] ?? ""}
+                    isCompact={isMoParent}
                     onNoteChange={(value) => board.setTaskNoteDraft(task.id, value)}
                     onSaveStatus={(status) => board.saveStatus(task, status)}
                   />

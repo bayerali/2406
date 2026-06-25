@@ -121,13 +121,17 @@ export function useExecutionBoard({
     const syntheticParents: ShiftActivity[] = [
       {
         id: -101,
+        activityId: -101,
         nameSnapshot: "ZP Handling",
+        colorSnapshot: null,
         parentIdSnapshot: selectedRoot.id,
         sortOrderSnapshot: 9001,
       },
       {
         id: -102,
+        activityId: -102,
         nameSnapshot: "Nächste MO",
+        colorSnapshot: null,
         parentIdSnapshot: selectedRoot.id,
         sortOrderSnapshot: 9002,
       },

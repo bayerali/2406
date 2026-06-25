@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { DB } from "../types";
 import { NavBar } from "./NavBar";
 import { BoardHeader } from "./execution-board/BoardHeader";
@@ -30,6 +30,8 @@ export function ExecutionBoardPage({
     setDB,
     shiftId,
   });
+
+  const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(false);
 
   if (!board.shift) {
     return (
@@ -78,39 +80,67 @@ export function ExecutionBoardPage({
           line={board.shift.line}
         />
 
-        <ShiftStatusCard
-          totalLeafTasks={board.totalLeafTasks}
-          doneCount={board.doneCount}
-          blockedCount={board.blockedCount}
-          skippedCount={board.skippedCount}
-          openCount={board.openCount}
-          shiftProgressPercent={board.shiftProgressPercent}
-        />
+        <section className="card contextual-card">
+          <button
+            type="button"
+            className="foldable-section-toggle"
+            aria-expanded={isShiftStatusOpen}
+            aria-controls="shift-status-panel"
+            onClick={() => setIsShiftStatusOpen((value) => !value)}
+          >
+            <div className="foldable-section-toggle__text">
+              <span className="foldable-section-toggle__title">Schichtstatus</span>
+              <span className="foldable-section-toggle__subtitle">
+                Fortschritt und Verteilung der Aufgaben anzeigen
+              </span>
+            </div>
+
+            <span
+              className={`foldable-section-toggle__icon ${
+                isShiftStatusOpen ? "is-open" : ""
+              }`}
+              aria-hidden="true"
+            >
+              ▾
+            </span>
+          </button>
+
+          {isShiftStatusOpen ? (
+            <div id="shift-status-panel" className="foldable-section-panel">
+              <ShiftStatusCard
+                totalLeafTasks={board.totalLeafTasks}
+                doneCount={board.doneCount}
+                blockedCount={board.blockedCount}
+                skippedCount={board.skippedCount}
+                openCount={board.openCount}
+                shiftProgressPercent={board.shiftProgressPercent}
+              />
+            </div>
+          ) : null}
+        </section>
+
+        <section className="card contextual-card">
+          <h2 className="card-title">Bereiche</h2>
+          <p className="card-subtitle">Wähle Primär oder Sekundär.</p>
+
+          <BoardModeTabs
+            selectedMode={board.selectedMode}
+            availableModes={board.availableModes}
+            onSelect={board.setSelectedMode}
+          />
+        </section>
 
         <section className="dashboard-grid">
           <article className="card contextual-card">
-            <h2 className="card-title">Bereiche</h2>
-            <p className="card-subtitle">Wähle Primär oder Sekundär.</p>
+            <h2 className="card-title">Elternpunkte</h2>
+            <p className="card-subtitle">Wähle MO Start oder MO Ende.</p>
 
-            <BoardModeTabs
-              selectedMode={board.selectedMode}
-              availableModes={board.availableModes}
-              onSelect={board.setSelectedMode}
+            <ParentGroupPicker
+              parentGroups={board.parentGroups}
+              selectedParentId={board.selectedParentId}
+              latestEventByShiftActivityId={board.latestEventByShiftActivityId}
+              onSelect={board.setSelectedParentId}
             />
-
-            <div style={{ marginTop: 18 }}>
-              <h3 className="card-title" style={{ fontSize: 16 }}>
-                Elternpunkte
-              </h3>
-              <p className="card-subtitle">Wähle MO Start oder MO Ende.</p>
-
-              <ParentGroupPicker
-                parentGroups={board.parentGroups}
-                selectedParentId={board.selectedParentId}
-                latestEventByShiftActivityId={board.latestEventByShiftActivityId}
-                onSelect={board.setSelectedParentId}
-              />
-            </div>
           </article>
 
           <article className="card contextual-card">

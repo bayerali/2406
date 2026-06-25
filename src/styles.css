@@ -400,8 +400,6 @@ button:disabled {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 10px;
   min-height: 110px;
   width: 100%;
   padding: 16px;
@@ -431,7 +429,15 @@ button:disabled {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  gap: 8px;
+  min-height: 20px;
+}
+
+.bereich-card__body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .bereich-card__indicator {
@@ -448,6 +454,7 @@ button:disabled {
   font-weight: 800;
   line-height: 1.05;
   color: #f8fafc;
+  text-align: center;
 }
 
 .bereich-card--primary {
@@ -783,6 +790,13 @@ button:disabled {
   color: #03111c;
   font-weight: 800;
   box-shadow: 0 10px 22px var(--context-accent-shadow);
+}
+
+.parent-row--active {
+  border-color: var(--context-accent);
+  box-shadow:
+    0 10px 24px rgba(2, 6, 23, 0.55),
+    0 0 0 1px var(--context-accent-soft);
 }
 
 .contextual-card {

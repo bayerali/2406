@@ -1,6 +1,7 @@
 import React from "react";
 import type { ShiftNote, ShiftNoteKind } from "../../types";
 import { ShiftNotesPanel } from "./ShiftNotesPanel";
+import styles from "./ShiftNotesSection.module.css";
 
 type ShiftNotesSectionProps = {
   notes: ShiftNote[];
@@ -20,7 +21,7 @@ export function ShiftNotesSection({
   onSubmit,
 }: ShiftNotesSectionProps) {
   return (
-    <section className="execution-board-section">
+    <section className={styles.section}>
       <ShiftNotesPanel
         notes={notes}
         noteText={noteText}

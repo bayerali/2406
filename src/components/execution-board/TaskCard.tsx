@@ -11,7 +11,6 @@ type TaskCardProps = {
   task: ShiftActivity;
   latest: TaskEvent | null;
   history: TaskEvent[];
-  description?: string;
   isCompact?: boolean;
   onSaveStatus: (status: TaskStatus) => void;
 };
@@ -20,22 +19,18 @@ export function TaskCard({
   task,
   latest,
   history,
-  description,
   isCompact = false,
   onSaveStatus,
 }: TaskCardProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
 
-  const hasDetails = Boolean(description) || history.length > 0;
+  const hasDetails = history.length > 0;
   const isAutoDone = isAutoParentDone(task.nameSnapshot);
-
   const currentStatus: TaskStatus | null = latest?.status ?? null;
 
   return (
-    <article
-      className={`${styles.card} ${isCompact ? styles.cardCompact : ""}`}
-    >
+    <article className={`${styles.card} ${isCompact ? styles.cardCompact : ""}`}>
       <div className={styles.meta}>
         <div className={styles.topline}>
           <div className={styles.titleBlock}>
@@ -63,9 +58,9 @@ export function TaskCard({
           <button
             type="button"
             className={`${styles.statusButton} ${styles.statusButtonDone} ${
-              currentStatus === "Done" || isAutoDone ? styles.isActive : ""
+              currentStatus === "done" || isAutoDone ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("Done")}
+            onClick={() => onSaveStatus("done")}
           >
             Erledigt
           </button>
@@ -73,9 +68,9 @@ export function TaskCard({
           <button
             type="button"
             className={`${styles.statusButton} ${styles.statusButtonBlocked} ${
-              currentStatus === "Blocked" ? styles.isActive : ""
+              currentStatus === "blocked" ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("Blocked")}
+            onClick={() => onSaveStatus("blocked")}
           >
             Blockiert
           </button>
@@ -83,9 +78,9 @@ export function TaskCard({
           <button
             type="button"
             className={`${styles.statusButton} ${styles.statusButtonSkipped} ${
-              currentStatus === "Skipped" ? styles.isActive : ""
+              currentStatus === "skipped" ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("Skipped")}
+            onClick={() => onSaveStatus("skipped")}
           >
             Übersprungen
           </button>
@@ -100,7 +95,7 @@ export function TaskCard({
               aria-controls={detailsId}
               onClick={() => setIsDetailsOpen((value) => !value)}
             >
-              <span>Details anzeigen</span>
+              <span>Verlauf anzeigen</span>
               <span
                 className={`${styles.detailsToggleIcon} ${
                   isDetailsOpen ? styles.isOpen : ""
@@ -113,13 +108,11 @@ export function TaskCard({
 
             {isDetailsOpen ? (
               <div id={detailsId} className={styles.detailsPanel}>
-                {description ? (
-                  <div className={styles.description}>{description}</div>
-                ) : null}
-
-                {history.length > 0 ? (
-                  <div className={styles.history}>
-                    {history.map((event) => (
+                <div className={styles.history}>
+                  {history
+                    .slice()
+                    .sort((a, b) => b.timestamp - a.timestamp)
+                    .map((event) => (
                       <div key={event.id} className={styles.historyItem}>
                         <div className={styles.historyTopline}>
                           <span
@@ -129,8 +122,9 @@ export function TaskCard({
                           >
                             {statusLabel(event.status)}
                           </span>
+
                           <span className={styles.historyTime}>
-                            {formatTimestamp(event.createdAt)}
+                            {formatTimestamp(event.timestamp)}
                           </span>
                         </div>
 
@@ -139,8 +133,7 @@ export function TaskCard({
                         ) : null}
                       </div>
                     ))}
-                  </div>
-                ) : null}
+                </div>
               </div>
             ) : null}
           </>

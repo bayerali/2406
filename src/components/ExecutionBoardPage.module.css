@@ -2,12 +2,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
 }
 
 .executionBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   position: relative;
   border-radius: 24px;
-  overflow: hidden;
   isolation: isolate;
 }
 
@@ -17,6 +20,8 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  opacity: 1;
+  border-radius: 24px;
 }
 
 .boardPrimary::before {
@@ -119,12 +124,60 @@
 }
 
 .modeTabsWrap {
-  margin-top: 14px;
+  margin-top: 16px;
+}
+
+.modeTabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid var(--border);
+}
+
+.modeTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 800;
+  transition:
+    transform 0.12s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.modeTab:hover {
+  transform: translateY(-1px);
+  color: var(--text-soft);
+}
+
+.modeTabActive {
+  color: #04111d;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan-2));
+  box-shadow: 0 10px 18px rgba(14, 165, 233, 0.22);
 }
 
 .dashboardGrid {
   display: grid;
-  grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.45fr);
+  grid-template-columns: minmax(320px, 1.35fr) minmax(300px, 0.9fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -136,30 +189,49 @@
   flex-wrap: wrap;
 }
 
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
 .emptyCard {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 92px;
   padding: 14px;
+  margin-top: 16px;
   text-align: center;
   color: var(--text-muted);
   border: 1px dashed var(--border);
   border-radius: 12px;
 }
 
-.taskList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.taskListCompact {
-  gap: 10px;
-}
-
 @media (max-width: 1080px) {
   .dashboardGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .modeTabs {
+    width: 100%;
+  }
+
+  .modeTab {
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 520px) {
+  .modeTabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .modeTab {
+    width: 100%;
   }
 }

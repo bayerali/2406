@@ -82,16 +82,16 @@ export function ExecutionBoardPage({
         style={board.boardThemeStyle}
       >
         <div className={`${styles.boardHeaderShell} ${headerModeClass}`}>
-          <BoardHeader
-            title="Ausführungsboard"
-            subtitle={subtitle}
-            onBack={onBackToShifts}
-            modeClassName=""
-            shiftType={board.shift.shiftType}
-            shiftLabel={shiftLabel}
-            operator={board.shift.operator}
-            line={board.shift.line}
-          />
+         <BoardHeader
+  title="Ausführungsboard"
+  subtitle={subtitle}
+  onBack={onBackToShifts}
+  mode={board.selectedMode === "Secondary" ? "secondary" : "primary"}
+  shiftType={board.shift.shiftType}
+  shiftLabel={shiftLabel}
+  operator={board.shift.operator}
+  line={board.shift.line}
+/>
         </div>
 
         <section className={styles.contextualCard}>

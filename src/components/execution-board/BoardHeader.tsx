@@ -1,10 +1,11 @@
 import React from "react";
+import styles from "./BoardHeader.module.css";
 
 type BoardHeaderProps = {
   title: string;
   subtitle: string;
   onBack: () => void;
-  modeClassName?: string;
+  mode?: "primary" | "secondary";
   shiftType?: "Frueh" | "Spaet" | "Nacht";
   operator?: string;
   line?: string;
@@ -15,45 +16,52 @@ export function BoardHeader({
   title,
   subtitle,
   onBack,
-  modeClassName = "",
+  mode = "primary",
   shiftType,
   operator,
   line,
   shiftLabel,
 }: BoardHeaderProps) {
-  const shiftTypeClass = shiftType ? `shift-type-badge shift-type-badge--${shiftType}` : "";
+  const headerModeClass =
+    mode === "secondary" ? styles.headerSecondary : styles.headerPrimary;
+
+  const shiftTypeClass = shiftType
+    ? styles[`shiftTypeBadge${shiftType}`]
+    : "";
 
   return (
-    <section className={`board-header ${modeClassName}`.trim()}>
-      <div className="board-header__row">
-        <div className="board-header__content">
-          <div className="board-header__text">
-            <h1 className="board-header__title">{title}</h1>
+    <header className={`${styles.header} ${headerModeClass}`}>
+      <div className={styles.row}>
+        <div className={styles.content}>
+          <div className={styles.text}>
+            <h1 className={styles.title}>{title}</h1>
 
-            <div className="board-header__meta">
+            <div className={styles.meta}>
               {operator ? (
-                <span className="board-header__operator">{operator}</span>
+                <span className={styles.operator}>{operator}</span>
               ) : null}
 
               {shiftLabel && shiftType ? (
-                <span className={shiftTypeClass}>{shiftLabel}</span>
+                <span className={`${styles.shiftTypeBadge} ${shiftTypeClass}`}>
+                  {shiftLabel}
+                </span>
               ) : null}
 
-              {line ? <span className="board-header__line">{line}</span> : null}
-
-              <span className="board-header__subtitle">{subtitle}</span>
+              {line ? <span className={styles.line}>{line}</span> : null}
             </div>
+
+            <p className={styles.subtitle}>{subtitle}</p>
           </div>
         </div>
 
         <button
           type="button"
-          className="btn-ghost board-header__back"
+          className={styles.backButton}
           onClick={onBack}
         >
           Zurück zu Schichten
         </button>
       </div>
-    </section>
+    </header>
   );
 }

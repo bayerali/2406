@@ -1,15 +1,15 @@
 import React from "react";
-import type { Shift, ShiftNoteKind } from "../../types";
+import type { ShiftNote, ShiftNoteKind } from "../../types";
 import { formatTimestamp } from "../../utils/executionBoard";
 import styles from "./ShiftNotesPanel.module.css";
 
 type ShiftNotesPanelProps = {
-  notes: Shift["notes"];
+  notes: ShiftNote[];
   noteText: string;
   noteKind: ShiftNoteKind;
   onNoteTextChange: (value: string) => void;
   onNoteKindChange: (value: ShiftNoteKind) => void;
-  onSubmit: (event: React.FormEvent) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
 export function ShiftNotesPanel({

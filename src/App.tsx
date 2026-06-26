@@ -3,6 +3,7 @@ import { loadDB, saveDB } from "./storage";
 import type { DB } from "./types";
 import { ShiftsPage } from "./components/ShiftsPage";
 import { ExecutionBoardPage } from "./components/ExecutionBoardPage";
+import "./styles/globals.css";
 
 type Route =
   | { kind: "dashboard" }
@@ -57,28 +58,32 @@ export default function App() {
     }
 
     return (
-      <ExecutionBoardPage
-        db={db}
-        setDB={setDB}
-        shiftId={route.shiftId}
-        onBackToShifts={() => navigate("/")}
-        onDashboardClick={() => navigate("/")}
-      />
+      <main className="main">
+        <ExecutionBoardPage
+          db={db}
+          setDB={setDB}
+          shiftId={route.shiftId}
+          onBackToShifts={() => navigate("/")}
+          onDashboardClick={() => navigate("/")}
+        />
+      </main>
     );
   }
 
   return (
-    <ShiftsPage
-      db={db}
-      setDB={setDB}
-      onOpenShiftBoard={(id) => {
-        if (id > 0) {
-          navigate(`/shift/${id}`);
-          return;
-        }
+    <main className="main">
+      <ShiftsPage
+        db={db}
+        setDB={setDB}
+        onOpenShiftBoard={(id) => {
+          if (id > 0) {
+            navigate(`/shift/${id}`);
+            return;
+          }
 
-        navigate("/");
-      }}
-    />
+          navigate("/");
+        }}
+      />
+    </main>
   );
 }

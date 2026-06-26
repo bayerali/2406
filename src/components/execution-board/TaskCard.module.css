@@ -1,0 +1,268 @@
+.card {
+  padding: 16px;
+  border: 1px solid var(--task-border-soft);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(0, 188, 255, 0.06), transparent 26%),
+    linear-gradient(180deg, var(--task-surface-bright), var(--task-surface-bright-2));
+  box-shadow: var(--shadow-card);
+}
+
+.cardCompact {
+  padding: 14px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titleBlock {
+  min-width: 0;
+  flex: 1;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.latestNote {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.statusButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 800;
+  transition:
+    transform 0.12s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.statusButton:hover {
+  transform: translateY(-1px);
+}
+
+.statusButton:focus-visible,
+.detailsToggle:focus-visible {
+  outline: 2px solid #f8fafc;
+  outline-offset: 3px;
+}
+
+.statusButtonDone {
+  color: #f8fafc;
+  background: var(--btn-done-bg);
+  border-color: var(--btn-done-border);
+  box-shadow: 0 10px 18px var(--btn-done-shadow);
+}
+
+.statusButtonBlocked {
+  color: var(--btn-blocked-text);
+  background: var(--btn-blocked-bg);
+  border-color: var(--btn-blocked-border);
+}
+
+.statusButtonBlocked:hover,
+.statusButtonBlocked.isActive {
+  background: var(--btn-blocked-bg-hover);
+}
+
+.statusButtonSkipped {
+  color: var(--btn-skipped-text);
+  background: var(--btn-skipped-bg);
+  border-color: var(--btn-skipped-border);
+}
+
+.statusButtonSkipped:hover,
+.statusButtonSkipped.isActive {
+  background: var(--btn-skipped-bg-hover);
+}
+
+.isActive {
+  box-shadow:
+    0 12px 22px rgba(34, 197, 94, 0.2),
+    0 0 0 1px rgba(248, 250, 252, 0.12);
+}
+
+.detailsToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--context-accent-border);
+  background: rgba(15, 23, 42, 0.72);
+  color: var(--text-soft);
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.12s ease;
+}
+
+.detailsToggle:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.84);
+}
+
+.detailsToggleIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease;
+}
+
+.isOpen {
+  transform: rotate(180deg);
+}
+
+.detailsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.description {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-soft);
+  border: 1px solid var(--context-accent-border);
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.historyItem {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--context-accent-border);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.historyTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.historyTime {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.notePreview {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.statusOpen {
+  background: rgba(148, 163, 184, 0.16);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #e2e8f0;
+}
+
+.statusDone {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.34);
+  color: #dcfce7;
+}
+
+.statusBlocked {
+  background: rgba(251, 146, 60, 0.18);
+  border-color: rgba(251, 146, 60, 0.34);
+  color: #fed7aa;
+}
+
+.statusSkipped {
+  background: rgba(167, 139, 250, 0.18);
+  border-color: rgba(167, 139, 250, 0.34);
+  color: #e9ddff;
+}
+
+@media (max-width: 720px) {
+  .topline,
+  .titleRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  .statusButton {
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 520px) {
+  .statusButton {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}

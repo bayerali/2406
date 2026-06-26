@@ -5,6 +5,7 @@ import {
   isAutoParentDone,
   statusLabel,
 } from "../../utils/executionBoard";
+import styles from "./TaskCard.module.css";
 
 type TaskCardProps = {
   task: ShiftActivity;
@@ -24,62 +25,67 @@ export function TaskCard({
   onSaveStatus,
 }: TaskCardProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
   const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
+
   const hasDetails = Boolean(description) || history.length > 0;
+  const isAutoDone = isAutoParentDone(task.nameSnapshot);
+
+  const currentStatus: TaskStatus | null = latest?.status ?? null;
 
   return (
-    <div
-      className={`shift-card task-card contextual-task-card ${
-        isCompact ? "task-card--compact" : ""
-      }`}
+    <article
+      className={`${styles.card} ${isCompact ? styles.cardCompact : ""}`}
     >
-      <div className="shift-meta task-meta">
-        <div className="task-topline">
-          <div className="shift-date">{task.nameSnapshot}</div>
+      <div className={styles.meta}>
+        <div className={styles.topline}>
+          <div className={styles.titleBlock}>
+            <div className={styles.titleRow}>
+              <h3 className={styles.title}>{task.nameSnapshot}</h3>
 
-          <div
-            className={`status-badge ${
-              latest ? `status-${latest.status}` : "status-open"
-            }`}
-          >
-            {latest ? statusLabel(latest.status) : "Offen"}
+              <span
+                className={`${styles.statusBadge} ${
+                  currentStatus
+                    ? styles[`status${currentStatus}`]
+                    : styles.statusOpen
+                }`}
+              >
+                {currentStatus ? statusLabel(currentStatus) : "Offen"}
+              </span>
+            </div>
+
+            {latest?.note ? (
+              <p className={styles.latestNote}>{latest.note}</p>
+            ) : null}
           </div>
         </div>
 
-        <div className="shift-sub">
-          {latest
-            ? `Letzter Zeitstempel: ${formatTimestamp(latest.timestamp)}`
-            : "Noch kein Zeitstempel"}
-        </div>
-
-        <div className="task-actions">
+        <div className={styles.actions}>
           <button
             type="button"
-            className={`btn-primary task-status-btn task-status-btn--done ${
-              latest?.status === "done" ? "is-active" : ""
+            className={`${styles.statusButton} ${styles.statusButtonDone} ${
+              currentStatus === "Done" || isAutoDone ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("done")}
+            onClick={() => onSaveStatus("Done")}
           >
             Erledigt
           </button>
 
           <button
             type="button"
-            className={`btn-ghost task-status-btn task-status-btn--blocked ${
-              latest?.status === "blocked" ? "is-active is-blocked" : ""
+            className={`${styles.statusButton} ${styles.statusButtonBlocked} ${
+              currentStatus === "Blocked" ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("blocked")}
+            onClick={() => onSaveStatus("Blocked")}
           >
             Blockiert
           </button>
 
           <button
             type="button"
-            className={`btn-ghost task-status-btn task-status-btn--skipped ${
-              latest?.status === "skipped" ? "is-active is-skipped" : ""
+            className={`${styles.statusButton} ${styles.statusButtonSkipped} ${
+              currentStatus === "Skipped" ? styles.isActive : ""
             }`}
-            onClick={() => onSaveStatus("skipped")}
+            onClick={() => onSaveStatus("Skipped")}
           >
             Übersprungen
           </button>
@@ -89,17 +95,15 @@ export function TaskCard({
           <>
             <button
               type="button"
-              className="task-details-toggle"
+              className={styles.detailsToggle}
               aria-expanded={isDetailsOpen}
               aria-controls={detailsId}
               onClick={() => setIsDetailsOpen((value) => !value)}
             >
-              <span>
-                {isDetailsOpen ? "Details ausblenden" : "Details anzeigen"}
-              </span>
+              <span>Details anzeigen</span>
               <span
-                className={`task-details-toggle__icon ${
-                  isDetailsOpen ? "is-open" : ""
+                className={`${styles.detailsToggleIcon} ${
+                  isDetailsOpen ? styles.isOpen : ""
                 }`}
                 aria-hidden="true"
               >
@@ -108,27 +112,33 @@ export function TaskCard({
             </button>
 
             {isDetailsOpen ? (
-              <div id={detailsId} className="task-details-panel">
+              <div id={detailsId} className={styles.detailsPanel}>
                 {description ? (
-                  <div className="task-description contextual-surface">
-                    {description}
-                  </div>
+                  <div className={styles.description}>{description}</div>
                 ) : null}
 
                 {history.length > 0 ? (
-                  <div className="task-note-preview contextual-surface">
-                    <strong>Historie:</strong>
-                    <div style={{ marginTop: 8 }}>
-                      {history.map((event) => (
-                        <div key={event.id} className="shift-sub">
-                          {statusLabel(event.status)} ·{" "}
-                          {formatTimestamp(event.timestamp)}
-                          {event.note && !isAutoParentDone(event.note)
-                            ? ` · ${event.note}`
-                            : ""}
+                  <div className={styles.history}>
+                    {history.map((event) => (
+                      <div key={event.id} className={styles.historyItem}>
+                        <div className={styles.historyTopline}>
+                          <span
+                            className={`${styles.statusBadge} ${
+                              styles[`status${event.status}`]
+                            }`}
+                          >
+                            {statusLabel(event.status)}
+                          </span>
+                          <span className={styles.historyTime}>
+                            {formatTimestamp(event.createdAt)}
+                          </span>
                         </div>
-                      ))}
-                    </div>
+
+                        {event.note ? (
+                          <div className={styles.notePreview}>{event.note}</div>
+                        ) : null}
+                      </div>
+                    ))}
                   </div>
                 ) : null}
               </div>
@@ -136,6 +146,6 @@ export function TaskCard({
           </>
         ) : null}
       </div>
-    </div>
+    </article>
   );
 }

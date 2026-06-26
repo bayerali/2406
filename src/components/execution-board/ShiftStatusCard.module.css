@@ -106,3 +106,23 @@
     grid-template-columns: 1fr;
   }
 }
+.progressMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.progressEyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.progressSummary {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-soft);
+}

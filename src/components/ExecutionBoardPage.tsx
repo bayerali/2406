@@ -29,22 +29,27 @@ function getShiftLabel(shiftType: Shift["shiftType"]): string {
   return "Nachtschicht";
 }
 
-function getModeForActivity(
-  activity: ShiftActivity,
-  activitiesById: Map<number, ShiftActivity>
-): BoardMode {
-  const parent =
-    activity.parentIdSnapshot !== null
-      ? activitiesById.get(activity.parentIdSnapshot) ?? null
-      : null;
+function normalizeLabel(value: string): string {
+  return value
+    .trim()
+    .toLocaleLowerCase("de-DE")
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue");
+}
 
-  const source = parent ?? activity;
+function getModeForActivity(activity: ShiftActivity): BoardMode {
+  const normalizedName = normalizeLabel(activity.nameSnapshot);
 
-  return source.colorSnapshot === "blue" ||
-    source.colorSnapshot === "teal" ||
-    source.colorSnapshot === "purple"
-    ? "Secondary"
-    : "Primary";
+  if (
+    normalizedName.includes("primaer") ||
+    normalizedName.includes("primary") ||
+    normalizedName === "p"
+  ) {
+    return "Primary";
+  }
+
+  return "Secondary";
 }
 
 function createTaskEvent(task: ShiftActivity, status: TaskStatus): TaskEvent {
@@ -89,10 +94,6 @@ export function ExecutionBoardPage({
 
   const sortedActivities = [...shift.shiftActivities].sort(
     (a, b) => a.sortOrderSnapshot - b.sortOrderSnapshot
-  );
-
-  const activitiesById = new Map<number, ShiftActivity>(
-    sortedActivities.map((activity) => [activity.id, activity])
   );
 
   const childrenByParentId = new Map<number, ShiftActivity[]>();
@@ -146,11 +147,11 @@ export function ExecutionBoardPage({
   );
 
   const primaryParentGroups = allParentGroups.filter(
-    (activity) => getModeForActivity(activity, activitiesById) === "Primary"
+    (activity) => getModeForActivity(activity) === "Primary"
   );
 
   const secondaryParentGroups = allParentGroups.filter(
-    (activity) => getModeForActivity(activity, activitiesById) === "Secondary"
+    (activity) => getModeForActivity(activity) === "Secondary"
   );
 
   const parentGroups =

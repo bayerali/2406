@@ -225,13 +225,7 @@ export function ExecutionBoardPage({
 
   return (
     <main className={styles.page}>
-      <div
-        className={`${styles.executionBoard} ${
-          selectedMode === "Secondary"
-            ? styles.boardSecondary
-            : styles.boardPrimary
-        }`}
-      >
+      <div className={styles.executionBoard}>
         <div className={styles.boardHeaderShell}>
           <BoardHeader
             title="Ausführungsboard"
@@ -257,8 +251,7 @@ export function ExecutionBoardPage({
                 Schichtstatus
               </span>
               <span className={styles.foldableSectionToggleSubtitle}>
-                Gesamtfortschritt der laufenden Schicht statt nur eines
-                Aufgabenblocks.
+                Gesamtfortschritt der laufenden Schicht.
               </span>
             </span>
 
@@ -313,14 +306,14 @@ export function ExecutionBoardPage({
                 Secondary
               </button>
             </div>
-          </div>
 
-          <ParentGroupPicker
-            parentGroups={parentGroups}
-            selectedParentId={effectiveParentId}
-            latestEventByShiftActivityId={latestEventByShiftActivityId}
-            onSelect={setSelectedParentId}
-          />
+            <ParentGroupPicker
+              parentGroups={parentGroups}
+              selectedParentId={effectiveParentId}
+              latestEventByShiftActivityId={latestEventByShiftActivityId}
+              onSelect={setSelectedParentId}
+            />
+          </div>
         </section>
 
         <div className={styles.dashboardGrid}>
@@ -365,7 +358,7 @@ export function ExecutionBoardPage({
             )}
           </section>
 
-          <div className={styles.sideColumn}>
+          <aside className={styles.sideColumn}>
             <section className={styles.contextualCard}>
               <button
                 type="button"
@@ -406,7 +399,7 @@ export function ExecutionBoardPage({
                 </div>
               ) : null}
             </section>
-          </div>
+          </aside>
         </div>
       </div>
     </main>

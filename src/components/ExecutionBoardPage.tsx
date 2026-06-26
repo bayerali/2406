@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import type {
+  BoardMode,
   DB,
   Shift,
   ShiftActivity,
@@ -19,9 +20,8 @@ type ExecutionBoardPageProps = {
   shiftId: number;
   setDB: (db: DB) => void;
   onBackToShifts: () => void;
+  onDashboardClick: () => void;
 };
-
-type BoardMode = "Primary" | "Secondary";
 
 function getShiftLabel(shiftType: Shift["shiftType"]): string {
   if (shiftType === "Frueh") return "Frühschicht";
@@ -29,23 +29,33 @@ function getShiftLabel(shiftType: Shift["shiftType"]): string {
   return "Nachtschicht";
 }
 
-function createTaskEvent(
-  task: ShiftActivity,
-  shiftId: number,
-  status: TaskStatus
-): TaskEvent {
-  return {
-    id: Date.now() + Math.floor(Math.random() * 1000),
-    shiftId,
-    shiftActivityId: task.id,
-    status,
-    createdAt: Date.now(),
-    note: "",
-  };
+function getModeForActivity(
+  activity: ShiftActivity,
+  activitiesById: Map<number, ShiftActivity>
+): BoardMode {
+  const parent =
+    activity.parentIdSnapshot !== null
+      ? activitiesById.get(activity.parentIdSnapshot) ?? null
+      : null;
+
+  const source = parent ?? activity;
+
+  return source.colorSnapshot === "blue" ||
+    source.colorSnapshot === "teal" ||
+    source.colorSnapshot === "purple"
+    ? "Secondary"
+    : "Primary";
 }
 
-function isLeafTask(task: ShiftActivity): boolean {
-  return !task.children || task.children.length === 0;
+function createTaskEvent(task: ShiftActivity, status: TaskStatus): TaskEvent {
+  return {
+    id: Date.now() + Math.floor(Math.random() * 1000),
+    shiftActivityId: task.id,
+    status,
+    note: "",
+    timestamp: Date.now(),
+    imageData: null,
+  };
 }
 
 export function ExecutionBoardPage({
@@ -53,6 +63,7 @@ export function ExecutionBoardPage({
   shiftId,
   setDB,
   onBackToShifts,
+  onDashboardClick,
 }: ExecutionBoardPageProps) {
   const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(true);
   const [isNotesOpen, setIsNotesOpen] = useState(true);
@@ -76,12 +87,28 @@ export function ExecutionBoardPage({
 
   const shiftLabel = getShiftLabel(shift.shiftType);
 
+  const sortedActivities = [...shift.shiftActivities].sort(
+    (a, b) => a.sortOrderSnapshot - b.sortOrderSnapshot
+  );
+
+  const activitiesById = new Map<number, ShiftActivity>(
+    sortedActivities.map((activity) => [activity.id, activity])
+  );
+
+  const childrenByParentId = new Map<number, ShiftActivity[]>();
+
+  sortedActivities.forEach((activity) => {
+    if (activity.parentIdSnapshot === null) return;
+    const current = childrenByParentId.get(activity.parentIdSnapshot) ?? [];
+    current.push(activity);
+    childrenByParentId.set(activity.parentIdSnapshot, current);
+  });
+
   const latestEventByShiftActivityId = new Map<number, TaskEvent>();
   const historyByShiftActivityId = new Map<number, TaskEvent[]>();
 
-  [...db.taskEvents]
-    .filter((event) => event.shiftId === shift.id)
-    .sort((a, b) => a.createdAt - b.createdAt)
+  [...shift.taskEvents]
+    .sort((a, b) => a.timestamp - b.timestamp)
     .forEach((event) => {
       latestEventByShiftActivityId.set(event.shiftActivityId, event);
 
@@ -90,16 +117,22 @@ export function ExecutionBoardPage({
       historyByShiftActivityId.set(event.shiftActivityId, current);
     });
 
-  const allLeafTasks = shift.activities.filter(isLeafTask);
+  const allLeafTasks = sortedActivities.filter(
+    (activity) => !childrenByParentId.has(activity.id)
+  );
+
   const doneCount = allLeafTasks.filter(
-    (task) => latestEventByShiftActivityId.get(task.id)?.status === "Done"
+    (task) => latestEventByShiftActivityId.get(task.id)?.status === "done"
   ).length;
+
   const blockedCount = allLeafTasks.filter(
-    (task) => latestEventByShiftActivityId.get(task.id)?.status === "Blocked"
+    (task) => latestEventByShiftActivityId.get(task.id)?.status === "blocked"
   ).length;
+
   const skippedCount = allLeafTasks.filter(
-    (task) => latestEventByShiftActivityId.get(task.id)?.status === "Skipped"
+    (task) => latestEventByShiftActivityId.get(task.id)?.status === "skipped"
   ).length;
+
   const totalLeafTasks = allLeafTasks.length;
   const openCount = Math.max(
     totalLeafTasks - doneCount - blockedCount - skippedCount,
@@ -108,43 +141,58 @@ export function ExecutionBoardPage({
   const shiftProgressPercent =
     totalLeafTasks > 0 ? Math.round((doneCount / totalLeafTasks) * 100) : 0;
 
-  const primaryParentGroups = shift.activities.filter(
-    (task) =>
-      !task.parentId &&
-      (task.mode === "Primary" || !task.mode)
+  const allParentGroups = sortedActivities.filter((activity) =>
+    childrenByParentId.has(activity.id)
   );
 
-  const secondaryParentGroups = shift.activities.filter(
-    (task) => !task.parentId && task.mode === "Secondary"
+  const primaryParentGroups = allParentGroups.filter(
+    (activity) => getModeForActivity(activity, activitiesById) === "Primary"
+  );
+
+  const secondaryParentGroups = allParentGroups.filter(
+    (activity) => getModeForActivity(activity, activitiesById) === "Secondary"
   );
 
   const parentGroups =
     selectedMode === "Primary" ? primaryParentGroups : secondaryParentGroups;
 
   const effectiveParentId =
-    selectedParentId && parentGroups.some((group) => group.id === selectedParentId)
+    selectedParentId !== null &&
+    parentGroups.some((group) => group.id === selectedParentId)
       ? selectedParentId
       : parentGroups[0]?.id ?? null;
 
   const selectedParent =
     parentGroups.find((group) => group.id === effectiveParentId) ?? null;
 
-  const childTasks = selectedParent
-    ? shift.activities.filter((task) => task.parentId === selectedParent.id)
-    : [];
+  const childTasks =
+    selectedParent !== null
+      ? sortedActivities.filter(
+          (activity) => activity.parentIdSnapshot === selectedParent.id
+        )
+      : [];
 
   const subtitle = `${shift.date} · ${shift.operator} · ${shift.line}`;
 
   const saveTaskStatus = (task: ShiftActivity, status: TaskStatus) => {
-    const event = createTaskEvent(task, shift.id, status);
+    const event = createTaskEvent(task, status);
+
+    const nextShifts = db.shifts.map((entry) =>
+      entry.id === shift.id
+        ? {
+            ...entry,
+            taskEvents: [...entry.taskEvents, event],
+          }
+        : entry
+    );
 
     setDB({
       ...db,
-      taskEvents: [...db.taskEvents, event],
+      shifts: nextShifts,
     });
   };
 
-  const handleSubmitNote = (event: React.FormEvent) => {
+  const handleSubmitNote = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmed = noteText.trim();
@@ -179,7 +227,9 @@ export function ExecutionBoardPage({
     <main className={styles.page}>
       <div
         className={`${styles.executionBoard} ${
-          selectedMode === "Secondary" ? styles.boardSecondary : styles.boardPrimary
+          selectedMode === "Secondary"
+            ? styles.boardSecondary
+            : styles.boardPrimary
         }`}
       >
         <div className={styles.boardHeaderShell}>
@@ -207,7 +257,8 @@ export function ExecutionBoardPage({
                 Schichtstatus
               </span>
               <span className={styles.foldableSectionToggleSubtitle}>
-                Gesamtfortschritt der laufenden Schicht statt nur eines Aufgabenblocks.
+                Gesamtfortschritt der laufenden Schicht statt nur eines
+                Aufgabenblocks.
               </span>
             </span>
 
@@ -285,6 +336,14 @@ export function ExecutionBoardPage({
                     : "Wähle zuerst einen Elternpunkt aus."}
                 </p>
               </div>
+
+              <button
+                type="button"
+                className={styles.secondaryAction}
+                onClick={onDashboardClick}
+              >
+                Zur Schichtübersicht
+              </button>
             </div>
 
             {childTasks.length === 0 ? (
@@ -299,7 +358,6 @@ export function ExecutionBoardPage({
                     task={task}
                     latest={latestEventByShiftActivityId.get(task.id) ?? null}
                     history={historyByShiftActivityId.get(task.id) ?? []}
-                    description={task.descriptionSnapshot}
                     onSaveStatus={(status) => saveTaskStatus(task, status)}
                   />
                 ))}
@@ -320,7 +378,8 @@ export function ExecutionBoardPage({
                     Übergabe & Meldungen
                   </span>
                   <span className={styles.foldableSectionToggleSubtitle}>
-                    Hinweise für die nächste Schicht, Warnungen oder allgemeine Infos.
+                    Hinweise für die nächste Schicht, Warnungen oder allgemeine
+                    Infos.
                   </span>
                 </span>
 

@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .executionBoard {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .boardPrimary,
@@ -15,42 +17,51 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .boardHeaderShell {
-  display: block;
+  min-width: 0;
 }
 
 .contextualCard {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px;
-  border: 1px solid var(--border, rgba(148, 163, 184, 0.24));
-  border-radius: 16px;
-  background: var(--panel, rgba(15, 23, 42, 0.72));
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--context-accent-border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(0, 188, 255, 0.06), transparent 26%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.96));
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 1px var(--context-accent-soft);
 }
 
 .cardTitle {
   margin: 0;
   font-size: 18px;
   font-weight: 800;
-  color: var(--text, #f8fafc);
+  color: var(--text-main);
 }
 
 .cardSubtitle {
   margin: 6px 0 0;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
+  max-width: 72ch;
 }
 
 .foldableSectionToggle {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   width: 100%;
+  min-width: 0;
   padding: 0;
   background: transparent;
   border: 0;
@@ -62,31 +73,38 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
+  flex: 1;
 }
 
 .foldableSectionToggleTitle {
   font-size: 18px;
   font-weight: 800;
-  color: var(--text, #f8fafc);
+  color: var(--text-main);
 }
 
 .foldableSectionToggleSubtitle {
   font-size: 13px;
   line-height: 1.45;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
+  max-width: 72ch;
 }
 
 .foldableSectionToggleIcon {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1px solid var(--border, rgba(148, 163, 184, 0.24));
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--context-accent-border);
   background: rgba(15, 23, 42, 0.78);
-  color: var(--text-muted, #94a3b8);
-  transition: transform 0.18s ease;
+  color: var(--text-soft);
+  transition:
+    transform 0.18s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .isOpen {
@@ -107,25 +125,44 @@
 
 .modeTabs {
   display: inline-flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.72);
 }
 
 .modeTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
   padding: 10px 16px;
-  border: 1px solid var(--border, rgba(148, 163, 184, 0.24));
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.72);
-  color: var(--text-muted, #94a3b8);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 800;
+  transition:
+    transform 0.12s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.modeTab:hover {
+  transform: translateY(-1px);
+  color: var(--text-soft);
 }
 
 .modeTabActive {
-  color: #020617;
-  background: #67e8f9;
-  border-color: #67e8f9;
+  color: #04111d;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan-2));
+  box-shadow: 0 10px 18px rgba(34, 211, 238, 0.22);
 }
 
 .dashboardGrid {
@@ -133,12 +170,18 @@
   grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
   gap: 16px;
   align-items: start;
+  min-width: 0;
+}
+
+.dashboardGrid > * {
+  min-width: 0;
 }
 
 .sideColumn {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .taskSectionHead {
@@ -147,31 +190,52 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  min-width: 0;
+}
+
+.taskSectionHead > div {
+  min-width: 0;
+  flex: 1;
 }
 
 .secondaryAction {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
   padding: 10px 14px;
-  border: 1px solid var(--border, rgba(148, 163, 184, 0.24));
+  border: 1px solid var(--border);
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.72);
-  color: var(--text, #f8fafc);
+  color: var(--text-main);
   font-size: 13px;
   font-weight: 700;
+  transition:
+    transform 0.12s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.secondaryAction:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.84);
 }
 
 .taskList {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .emptyCard {
   padding: 16px;
-  border: 1px dashed var(--border, rgba(148, 163, 184, 0.24));
+  border: 1px dashed var(--border);
   border-radius: 12px;
-  color: var(--text-muted, #94a3b8);
+  color: var(--text-muted);
   text-align: center;
+  background: rgba(15, 23, 42, 0.28);
 }
 
 @media (max-width: 1080px) {
@@ -180,9 +244,33 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .modeTabs {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  .modeTab {
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .contextualCard {
+    padding: 14px;
+  }
+
+  .foldableSectionToggle {
+    align-items: flex-start;
+  }
+
+  .taskSectionHead {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .secondaryAction {
+    width: 100%;
   }
 }

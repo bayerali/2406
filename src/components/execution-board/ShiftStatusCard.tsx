@@ -21,11 +21,11 @@ export function ShiftStatusCard({
   return (
     <section className={styles.card}>
       <div className={styles.header}>
-        <div>
-          <h2 className={styles.title}>Schichtstatus</h2>
-          <p className={styles.subtitle}>
-            Gesamtfortschritt der laufenden Schicht statt nur eines Aufgabenblocks.
-          </p>
+        <div className={styles.progressMeta}>
+          <div className={styles.progressEyebrow}>Fortschritt</div>
+          <div className={styles.progressSummary}>
+            {doneCount} von {totalLeafTasks} Aufgaben erledigt
+          </div>
         </div>
 
         <div className={styles.progressValue}>{shiftProgressPercent}%</div>
@@ -63,10 +63,6 @@ export function ShiftStatusCard({
           className={styles.progressBarFill}
           style={{ width: `${shiftProgressPercent}%` }}
         />
-      </div>
-
-      <div className={styles.progressLabel}>
-        Gesamtfortschritt der laufenden Schicht statt nur eines Aufgabenblocks.
       </div>
     </section>
   );

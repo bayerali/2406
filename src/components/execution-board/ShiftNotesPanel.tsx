@@ -1,6 +1,7 @@
 import React from "react";
 import type { Shift, ShiftNoteKind } from "../../types";
 import { formatTimestamp } from "../../utils/executionBoard";
+import styles from "./ShiftNotesPanel.module.css";
 
 type ShiftNotesPanelProps = {
   notes: Shift["notes"];
@@ -8,7 +9,7 @@ type ShiftNotesPanelProps = {
   noteKind: ShiftNoteKind;
   onNoteTextChange: (value: string) => void;
   onNoteKindChange: (value: ShiftNoteKind) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: React.FormEvent) => void;
 };
 
 export function ShiftNotesPanel({
@@ -20,21 +21,20 @@ export function ShiftNotesPanel({
   onSubmit,
 }: ShiftNotesPanelProps) {
   return (
-    <section className="card contextual-card">
-      <h2 className="card-title">Übergabe & Meldungen</h2>
-      <p className="card-subtitle">
+    <section className={styles.card}>
+      <h2 className={styles.title}>Übergabe & Meldungen</h2>
+      <p className={styles.subtitle}>
         Hinweise für die nächste Schicht, Warnungen oder allgemeine Infos.
       </p>
 
-      <form onSubmit={onSubmit}>
-        <div className="field">
-          <label className="label" htmlFor="shift-note-kind">
+      <form className={styles.form} onSubmit={onSubmit}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="shift-note-kind">
             Typ
           </label>
-
           <select
             id="shift-note-kind"
-            className="select contextual-input"
+            className={styles.select}
             value={noteKind}
             onChange={(event) =>
               onNoteKindChange(event.target.value as ShiftNoteKind)
@@ -46,14 +46,13 @@ export function ShiftNotesPanel({
           </select>
         </div>
 
-        <div className="field">
-          <label className="label" htmlFor="shift-note">
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="shift-note-text">
             Neue Notiz
           </label>
-
           <textarea
-            id="shift-note"
-            className="input textarea contextual-input"
+            id="shift-note-text"
+            className={styles.textarea}
             value={noteText}
             onChange={(event) => onNoteTextChange(event.target.value)}
             rows={4}
@@ -61,45 +60,51 @@ export function ShiftNotesPanel({
           />
         </div>
 
-        <div className="parent-list" style={{ marginTop: 12 }}>
-          <button type="submit" className="btn-primary">
+        <div className={styles.actions}>
+          <button type="submit" className={styles.primaryButton}>
             Notiz speichern
           </button>
         </div>
       </form>
 
-      <div className="shift-list" style={{ marginTop: 16 }}>
-        {notes.length === 0 ? (
-          <div className="card empty">
-            Noch keine Übergaben oder Meldungen erfasst.
-          </div>
-        ) : (
-          [...notes]
+      {notes.length === 0 ? (
+        <div className={styles.emptyState}>
+          Noch keine Übergaben oder Meldungen erfasst.
+        </div>
+      ) : (
+        <div className={styles.notesList}>
+          {[...notes]
             .sort((a, b) => b.createdAt - a.createdAt)
             .map((note) => (
-              <div
+              <article
                 key={note.id}
-                className={`shift-card note-card note-${note.kind}`}
+                className={`${styles.noteCard} ${
+                  note.kind === "handover"
+                    ? styles.noteHandover
+                    : note.kind === "warning"
+                    ? styles.noteWarning
+                    : styles.noteInfo
+                }`}
               >
-                <div className="shift-meta">
-                  <div className="shift-date">
+                <div className={styles.noteTopline}>
+                  <span className={styles.noteKind}>
                     {note.kind === "handover"
                       ? "Übergabe"
                       : note.kind === "warning"
                       ? "Warnung"
                       : "Info"}
-                  </div>
+                  </span>
 
-                  <div className="shift-sub">
+                  <span className={styles.noteTime}>
                     {formatTimestamp(note.createdAt)}
-                  </div>
-
-                  <div className="shift-sub">{note.text}</div>
+                  </span>
                 </div>
-              </div>
-            ))
-        )}
-      </div>
+
+                <div className={styles.noteText}>{note.text}</div>
+              </article>
+            ))}
+        </div>
+      )}
     </section>
   );
 }

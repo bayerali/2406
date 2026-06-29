@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type {
   BoardMode,
   DB,
@@ -11,7 +11,6 @@ import type {
 import { BoardHeader } from "./execution-board/BoardHeader";
 import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
 import { ShiftNotesPanel } from "./execution-board/ShiftNotesPanel";
-import { ParentGroupPicker } from "./execution-board/ParentGroupPicker";
 import { TaskCard } from "./execution-board/TaskCard";
 import styles from "./ExecutionBoardPage.module.css";
 
@@ -63,6 +62,18 @@ function createTaskEvent(task: ShiftActivity, status: TaskStatus): TaskEvent {
   };
 }
 
+function formatShiftDate(dateValue: string): string {
+  const parsed = new Date(`${dateValue}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return dateValue;
+
+  return new Intl.DateTimeFormat("de-DE", {
+    weekday: "long",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(parsed);
+}
+
 export function ExecutionBoardPage({
   db,
   shiftId,
@@ -70,10 +81,15 @@ export function ExecutionBoardPage({
   onBackToShifts,
   onDashboardClick,
 }: ExecutionBoardPageProps) {
-  const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(true);
-  const [isNotesOpen, setIsNotesOpen] = useState(true);
+  const [isShiftStatusOpen, setIsShiftStatusOpen] = useState(false);
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState<BoardMode>("Primary");
-  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
+  const [selectedTopParentId, setSelectedTopParentId] = useState<number | null>(
+    null
+  );
+  const [selectedSubParentId, setSelectedSubParentId] = useState<number | null>(
+    null
+  );
   const [noteText, setNoteText] = useState("");
   const [noteKind, setNoteKind] = useState<ShiftNoteKind>("handover");
 
@@ -91,6 +107,7 @@ export function ExecutionBoardPage({
   }
 
   const shiftLabel = getShiftLabel(shift.shiftType);
+  const formattedDate = formatShiftDate(shift.date);
 
   const sortedActivities = [...shift.shiftActivities].sort(
     (a, b) => a.sortOrderSnapshot - b.sortOrderSnapshot
@@ -142,38 +159,56 @@ export function ExecutionBoardPage({
   const shiftProgressPercent =
     totalLeafTasks > 0 ? Math.round((doneCount / totalLeafTasks) * 100) : 0;
 
-  const allParentGroups = sortedActivities.filter((activity) =>
-    childrenByParentId.has(activity.id)
+  const topParents = sortedActivities.filter(
+    (activity) => activity.parentIdSnapshot === null
   );
 
-  const primaryParentGroups = allParentGroups.filter(
-    (activity) => getModeForActivity(activity) === "Primary"
+  const filteredTopParents = topParents.filter(
+    (activity) => getModeForActivity(activity) === selectedMode
   );
 
-  const secondaryParentGroups = allParentGroups.filter(
-    (activity) => getModeForActivity(activity) === "Secondary"
-  );
+  const effectiveTopParentId =
+    selectedTopParentId !== null &&
+    filteredTopParents.some((group) => group.id === selectedTopParentId)
+      ? selectedTopParentId
+      : filteredTopParents[0]?.id ?? null;
 
-  const parentGroups =
-    selectedMode === "Primary" ? primaryParentGroups : secondaryParentGroups;
+  const selectedTopParent =
+    filteredTopParents.find((group) => group.id === effectiveTopParentId) ?? null;
 
-  const effectiveParentId =
-    selectedParentId !== null &&
-    parentGroups.some((group) => group.id === selectedParentId)
-      ? selectedParentId
-      : parentGroups[0]?.id ?? null;
-
-  const selectedParent =
-    parentGroups.find((group) => group.id === effectiveParentId) ?? null;
-
-  const childTasks =
-    selectedParent !== null
+  const subParents =
+    selectedTopParent !== null
       ? sortedActivities.filter(
-          (activity) => activity.parentIdSnapshot === selectedParent.id
+          (activity) => activity.parentIdSnapshot === selectedTopParent.id
         )
       : [];
 
-  const subtitle = `${shift.date} · ${shift.operator} · ${shift.line}`;
+  const effectiveSubParentId =
+    selectedSubParentId !== null &&
+    subParents.some((group) => group.id === selectedSubParentId)
+      ? selectedSubParentId
+      : subParents[0]?.id ?? null;
+
+  const selectedSubParent =
+    subParents.find((group) => group.id === effectiveSubParentId) ?? null;
+
+  const leafTasks =
+    selectedSubParent !== null
+      ? sortedActivities.filter(
+          (activity) => activity.parentIdSnapshot === selectedSubParent.id
+        )
+      : [];
+
+  useEffect(() => {
+    setSelectedTopParentId(null);
+    setSelectedSubParentId(null);
+  }, [selectedMode, shift.id]);
+
+  useEffect(() => {
+    setSelectedSubParentId(null);
+  }, [effectiveTopParentId]);
+
+  const subtitle = `${formattedDate}`;
 
   const saveTaskStatus = (task: ShiftActivity, status: TaskStatus) => {
     const event = createTaskEvent(task, status);
@@ -240,7 +275,7 @@ export function ExecutionBoardPage({
           />
         </div>
 
-        <section className={`${styles.contextualCard} ${styles.controlCard}`}>
+        <section className={styles.statusShell}>
           <button
             type="button"
             className={styles.foldableSectionToggle}
@@ -252,7 +287,7 @@ export function ExecutionBoardPage({
                 Schichtstatus
               </span>
               <span className={styles.foldableSectionToggleSubtitle}>
-                Gesamtfortschritt der laufenden Schicht.
+                Fortschritt, offene Punkte und aktuelle Lage der Schicht.
               </span>
             </span>
 
@@ -278,56 +313,77 @@ export function ExecutionBoardPage({
               />
             </div>
           ) : null}
+        </section>
 
-          <div className={styles.modeTabsWrap}>
-            <div className={styles.modeTabs}>
-              <button
-                type="button"
-                className={`${styles.modeTab} ${
-                  selectedMode === "Primary" ? styles.modeTabActive : ""
-                }`}
-                onClick={() => {
-                  setSelectedMode("Primary");
-                  setSelectedParentId(null);
-                }}
-              >
-                Primary
-              </button>
+        <section className={styles.selectionShell}>
+          <div className={styles.modeTabs}>
+            <button
+              type="button"
+              className={`${styles.modeTab} ${
+                selectedMode === "Primary" ? styles.modeTabActive : ""
+              }`}
+              onClick={() => setSelectedMode("Primary")}
+            >
+              Primary
+            </button>
 
-              <button
-                type="button"
-                className={`${styles.modeTab} ${
-                  selectedMode === "Secondary" ? styles.modeTabActive : ""
-                }`}
-                onClick={() => {
-                  setSelectedMode("Secondary");
-                  setSelectedParentId(null);
-                }}
-              >
-                Secondary
-              </button>
-            </div>
+            <button
+              type="button"
+              className={`${styles.modeTab} ${
+                selectedMode === "Secondary" ? styles.modeTabActive : ""
+              }`}
+              onClick={() => setSelectedMode("Secondary")}
+            >
+              Secondary
+            </button>
+          </div>
 
-            <ParentGroupPicker
-              parentGroups={parentGroups}
-              selectedParentId={effectiveParentId}
-              latestEventByShiftActivityId={latestEventByShiftActivityId}
-              onSelect={setSelectedParentId}
-            />
+          <div className={styles.topParentGrid}>
+            {filteredTopParents.length === 0 ? (
+              <div className={styles.emptyCard}>
+                Keine Top-Parent-Gruppen für {selectedMode} vorhanden.
+              </div>
+            ) : (
+              filteredTopParents.map((group) => {
+                const subParentCount =
+                  childrenByParentId.get(group.id)?.length ?? 0;
+
+                return (
+                  <button
+                    key={group.id}
+                    type="button"
+                    className={`${styles.topParentCard} ${
+                      effectiveTopParentId === group.id
+                        ? styles.topParentCardActive
+                        : ""
+                    }`}
+                    onClick={() => setSelectedTopParentId(group.id)}
+                  >
+                    <span className={styles.topParentEyebrow}>
+                      {selectedMode}
+                    </span>
+                    <span className={styles.topParentTitle}>
+                      {group.nameSnapshot}
+                    </span>
+                    <span className={styles.topParentMeta}>
+                      {subParentCount} Teilbereiche
+                    </span>
+                  </button>
+                );
+              })
+            )}
           </div>
         </section>
 
-        <div className={styles.dashboardGrid}>
-          <section className={`${styles.contextualCard} ${styles.workCard}`}>
-            <div className={styles.taskSectionHead}>
+        <div className={styles.workspaceGrid}>
+          <section className={styles.masterPane}>
+            <div className={styles.paneHead}>
               <div>
-                <h2 className={styles.cardTitle}>
-                  {selectedParent?.nameSnapshot ?? "Aufgaben"}
-                </h2>
+                <h2 className={styles.cardTitle}>Teilbereiche</h2>
                 <p className={styles.cardSubtitle}>
-                  {selectedParent
-                    ? "Bearbeite die zugeordneten Aufgaben innerhalb dieses Blocks."
-                    : "Wähle zuerst einen Elternpunkt aus."}
+                  {selectedTopParent
+                    ? `Untergruppen für ${selectedTopParent.nameSnapshot}.`
+                    : "Wähle zuerst einen Top Parent aus."}
                 </p>
               </div>
 
@@ -340,13 +396,67 @@ export function ExecutionBoardPage({
               </button>
             </div>
 
-            {childTasks.length === 0 ? (
+            {subParents.length === 0 ? (
               <div className={styles.emptyCard}>
-                Keine Aufgaben für diesen Bereich vorhanden.
+                Keine Teilbereiche für diese Auswahl vorhanden.
+              </div>
+            ) : (
+              <div className={styles.subParentList}>
+                {subParents.map((group) => {
+                  const groupLeafTasks = sortedActivities.filter(
+                    (activity) => activity.parentIdSnapshot === group.id
+                  );
+
+                  const groupDoneCount = groupLeafTasks.filter(
+                    (task) =>
+                      latestEventByShiftActivityId.get(task.id)?.status === "done"
+                  ).length;
+
+                  return (
+                    <button
+                      key={group.id}
+                      type="button"
+                      className={`${styles.subParentItem} ${
+                        effectiveSubParentId === group.id
+                          ? styles.subParentItemActive
+                          : ""
+                      }`}
+                      onClick={() => setSelectedSubParentId(group.id)}
+                    >
+                      <span className={styles.subParentTitle}>
+                        {group.nameSnapshot}
+                      </span>
+                      <span className={styles.subParentMeta}>
+                        {groupLeafTasks.length} Aufgaben · {groupDoneCount} erledigt
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          <section className={styles.detailPane}>
+            <div className={styles.paneHead}>
+              <div>
+                <h2 className={styles.cardTitle}>
+                  {selectedSubParent?.nameSnapshot ?? "Aufgaben"}
+                </h2>
+                <p className={styles.cardSubtitle}>
+                  {selectedSubParent
+                    ? "Bearbeite die Aufgaben dieses Teilbereichs. Verlauf ist pro Aufgabe einklappbar."
+                    : "Wähle links einen Teilbereich aus."}
+                </p>
+              </div>
+            </div>
+
+            {leafTasks.length === 0 ? (
+              <div className={styles.emptyCard}>
+                Keine Aufgaben für diesen Teilbereich vorhanden.
               </div>
             ) : (
               <div className={styles.taskList}>
-                {childTasks.map((task) => (
+                {leafTasks.map((task) => (
                   <TaskCard
                     key={task.id}
                     task={task}
@@ -358,50 +468,47 @@ export function ExecutionBoardPage({
               </div>
             )}
           </section>
-
-          <aside className={styles.sideColumn}>
-            <section className={`${styles.contextualCard} ${styles.notesCard}`}>
-              <button
-                type="button"
-                className={styles.foldableSectionToggle}
-                onClick={() => setIsNotesOpen((value) => !value)}
-                aria-expanded={isNotesOpen}
-              >
-                <span className={styles.foldableSectionToggleText}>
-                  <span className={styles.foldableSectionToggleTitle}>
-                    Übergabe & Meldungen
-                  </span>
-                  <span className={styles.foldableSectionToggleSubtitle}>
-                    Hinweise für die nächste Schicht, Warnungen oder allgemeine
-                    Infos.
-                  </span>
-                </span>
-
-                <span
-                  className={`${styles.foldableSectionToggleIcon} ${
-                    isNotesOpen ? styles.isOpen : ""
-                  }`}
-                  aria-hidden="true"
-                >
-                  ▾
-                </span>
-              </button>
-
-              {isNotesOpen ? (
-                <div className={styles.foldableSectionPanel}>
-                  <ShiftNotesPanel
-                    notes={shift.notes}
-                    noteText={noteText}
-                    noteKind={noteKind}
-                    onNoteTextChange={setNoteText}
-                    onNoteKindChange={setNoteKind}
-                    onSubmit={handleSubmitNote}
-                  />
-                </div>
-              ) : null}
-            </section>
-          </aside>
         </div>
+
+        <aside className={styles.notesShell}>
+          <button
+            type="button"
+            className={styles.foldableSectionToggle}
+            onClick={() => setIsNotesOpen((value) => !value)}
+            aria-expanded={isNotesOpen}
+          >
+            <span className={styles.foldableSectionToggleText}>
+              <span className={styles.foldableSectionToggleTitle}>
+                Übergabe & Meldungen
+              </span>
+              <span className={styles.foldableSectionToggleSubtitle}>
+                Hinweise, Warnungen und Informationen für die nächste Schicht.
+              </span>
+            </span>
+
+            <span
+              className={`${styles.foldableSectionToggleIcon} ${
+                isNotesOpen ? styles.isOpen : ""
+              }`}
+              aria-hidden="true"
+            >
+              ▾
+            </span>
+          </button>
+
+          {isNotesOpen ? (
+            <div className={styles.foldableSectionPanel}>
+              <ShiftNotesPanel
+                notes={shift.notes}
+                noteText={noteText}
+                noteKind={noteKind}
+                onNoteTextChange={setNoteText}
+                onNoteKindChange={setNoteKind}
+                onSubmit={handleSubmitNote}
+              />
+            </div>
+          ) : null}
+        </aside>
       </div>
     </main>
   );

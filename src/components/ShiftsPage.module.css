@@ -5,6 +5,87 @@
   min-width: 0;
 }
 
+.heroHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid rgba(87, 208, 255, 0.22);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top right, rgba(87, 208, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(10, 20, 38, 0.98), rgba(2, 6, 23, 0.98));
+  box-shadow: var(--shadow-card);
+}
+
+.heroHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.brandMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(87, 208, 255, 0.12), rgba(74, 222, 128, 0.06));
+  box-shadow:
+    inset 0 0 0 1px rgba(87, 208, 255, 0.16),
+    0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.brandMarkSvg {
+  width: 62px;
+  height: 62px;
+}
+
+.brandMarkText {
+  fill: #e6f7ff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.heroText {
+  min-width: 0;
+}
+
+.heroEyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9bd8ff;
+}
+
+.heroTitle {
+  margin: 4px 0 0;
+  font-size: 30px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: var(--text-main);
+}
+
+.heroSubtitle {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 70ch;
+}
+
+.heroShiftBadge {
+  flex: 0 0 auto;
+}
+
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -18,7 +99,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, rgba(0, 188, 255, 0.06), transparent 28%),
+    radial-gradient(circle at top right, rgba(0, 188, 255, 0.08), transparent 28%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.96));
   box-shadow: var(--shadow-card);
 }
@@ -46,6 +127,24 @@
   min-width: 0;
 }
 
+.dashboardThemeFrueh {
+  --panel-accent: rgba(56, 189, 248, 0.24);
+  --panel-accent-border: rgba(56, 189, 248, 0.3);
+  --panel-glow: rgba(56, 189, 248, 0.16);
+}
+
+.dashboardThemeSpaet {
+  --panel-accent: rgba(74, 222, 128, 0.24);
+  --panel-accent-border: rgba(74, 222, 128, 0.3);
+  --panel-glow: rgba(74, 222, 128, 0.16);
+}
+
+.dashboardThemeNacht {
+  --panel-accent: rgba(168, 85, 247, 0.24);
+  --panel-accent-border: rgba(168, 85, 247, 0.3);
+  --panel-glow: rgba(168, 85, 247, 0.16);
+}
+
 .card {
   position: relative;
   overflow: hidden;
@@ -65,32 +164,46 @@
     var(--shadow-card),
     0 0 0 1px var(--shift-accent-soft, transparent);
   background:
-    radial-gradient(circle at top right, var(--shift-glow, rgba(0, 188, 255, 0.08)), transparent 30%),
+    radial-gradient(circle at top right, var(--shift-glow, rgba(0, 188, 255, 0.12)), transparent 30%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.98));
 }
 
+.shiftHistoryCard {
+  border-color: var(--panel-accent-border, var(--border));
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 1px color-mix(in srgb, var(--panel-accent, rgba(56, 189, 248, 0.18)) 58%, transparent);
+  background:
+    radial-gradient(circle at top right, var(--panel-glow, rgba(56, 189, 248, 0.16)), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, rgba(15, 23, 42, 0.98) 84%, var(--panel-accent, rgba(56, 189, 248, 0.18))),
+      rgba(2, 6, 23, 0.98)
+    );
+}
+
 .shiftThemeFrueh {
-  --shift-accent: #22c55e;
-  --shift-accent-2: #16a34a;
-  --shift-accent-soft: rgba(34, 197, 94, 0.16);
-  --shift-accent-border: rgba(34, 197, 94, 0.34);
-  --shift-glow: rgba(34, 197, 94, 0.16);
+  --shift-accent: #38bdf8;
+  --shift-accent-2: #2563eb;
+  --shift-accent-soft: rgba(56, 189, 248, 0.22);
+  --shift-accent-border: rgba(56, 189, 248, 0.42);
+  --shift-glow: rgba(56, 189, 248, 0.22);
 }
 
 .shiftThemeSpaet {
-  --shift-accent: #fb923c;
-  --shift-accent-2: #f97316;
-  --shift-accent-soft: rgba(251, 146, 60, 0.16);
-  --shift-accent-border: rgba(251, 146, 60, 0.34);
-  --shift-glow: rgba(251, 146, 60, 0.16);
+  --shift-accent: #4ade80;
+  --shift-accent-2: #16a34a;
+  --shift-accent-soft: rgba(74, 222, 128, 0.22);
+  --shift-accent-border: rgba(74, 222, 128, 0.42);
+  --shift-glow: rgba(74, 222, 128, 0.22);
 }
 
 .shiftThemeNacht {
-  --shift-accent: #f472b6;
-  --shift-accent-2: #ec4899;
-  --shift-accent-soft: rgba(244, 114, 182, 0.16);
-  --shift-accent-border: rgba(244, 114, 182, 0.34);
-  --shift-glow: rgba(244, 114, 182, 0.16);
+  --shift-accent: #a855f7;
+  --shift-accent-2: #7c3aed;
+  --shift-accent-soft: rgba(168, 85, 247, 0.22);
+  --shift-accent-border: rgba(168, 85, 247, 0.42);
+  --shift-glow: rgba(168, 85, 247, 0.22);
 }
 
 .cardHead {
@@ -214,7 +327,11 @@
 .btnPrimary {
   min-width: 180px;
   color: #04111d;
-  background: linear-gradient(135deg, var(--shift-accent, var(--cyan)), var(--shift-accent-2, var(--cyan-2)));
+  background: linear-gradient(
+    135deg,
+    var(--shift-accent, var(--cyan)),
+    var(--shift-accent-2, var(--cyan-2))
+  );
   box-shadow: 0 10px 18px var(--shift-accent-soft, rgba(14, 165, 233, 0.22));
 }
 
@@ -240,35 +357,35 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, var(--shift-card-glow, rgba(0, 188, 255, 0.08)), transparent 32%),
+    radial-gradient(circle at top right, var(--shift-card-glow, rgba(0, 188, 255, 0.1)), transparent 32%),
     linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.98));
   box-shadow: var(--shadow-card);
 }
 
 .shiftCardFrueh {
-  --shift-card-accent: #22c55e;
-  --shift-card-accent-2: #16a34a;
-  --shift-card-soft: rgba(34, 197, 94, 0.16);
-  --shift-card-border: rgba(34, 197, 94, 0.34);
-  --shift-card-glow: rgba(34, 197, 94, 0.14);
+  --shift-card-accent: #38bdf8;
+  --shift-card-accent-2: #2563eb;
+  --shift-card-soft: rgba(56, 189, 248, 0.22);
+  --shift-card-border: rgba(56, 189, 248, 0.42);
+  --shift-card-glow: rgba(56, 189, 248, 0.18);
   border-color: var(--shift-card-border);
 }
 
 .shiftCardSpaet {
-  --shift-card-accent: #fb923c;
-  --shift-card-accent-2: #f97316;
-  --shift-card-soft: rgba(251, 146, 60, 0.16);
-  --shift-card-border: rgba(251, 146, 60, 0.34);
-  --shift-card-glow: rgba(251, 146, 60, 0.14);
+  --shift-card-accent: #4ade80;
+  --shift-card-accent-2: #16a34a;
+  --shift-card-soft: rgba(74, 222, 128, 0.22);
+  --shift-card-border: rgba(74, 222, 128, 0.42);
+  --shift-card-glow: rgba(74, 222, 128, 0.18);
   border-color: var(--shift-card-border);
 }
 
 .shiftCardNacht {
-  --shift-card-accent: #f472b6;
-  --shift-card-accent-2: #ec4899;
-  --shift-card-soft: rgba(244, 114, 182, 0.16);
-  --shift-card-border: rgba(244, 114, 182, 0.34);
-  --shift-card-glow: rgba(244, 114, 182, 0.14);
+  --shift-card-accent: #a855f7;
+  --shift-card-accent-2: #7c3aed;
+  --shift-card-soft: rgba(168, 85, 247, 0.22);
+  --shift-card-border: rgba(168, 85, 247, 0.42);
+  --shift-card-glow: rgba(168, 85, 247, 0.18);
   border-color: var(--shift-card-border);
 }
 
@@ -331,21 +448,21 @@
 }
 
 .shiftBadgeFrueh {
-  color: #dcfce7;
-  background: rgba(34, 197, 94, 0.16);
-  border-color: rgba(34, 197, 94, 0.34);
+  color: #e0f2fe;
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.42);
 }
 
 .shiftBadgeSpaet {
-  color: #fed7aa;
-  background: rgba(251, 146, 60, 0.16);
-  border-color: rgba(251, 146, 60, 0.34);
+  color: #dcfce7;
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.42);
 }
 
 .shiftBadgeNacht {
-  color: #fbcfe8;
-  background: rgba(244, 114, 182, 0.16);
-  border-color: rgba(244, 114, 182, 0.34);
+  color: #f3e8ff;
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.42);
 }
 
 .emptyState {
@@ -367,6 +484,15 @@
 }
 
 @media (max-width: 720px) {
+  .heroHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroHeaderLeft {
+    align-items: flex-start;
+  }
+
   .newShiftForm {
     grid-template-columns: 1fr;
   }
@@ -394,5 +520,19 @@
 @media (max-width: 520px) {
   .kpiGrid {
     grid-template-columns: 1fr;
+  }
+
+  .brandMark {
+    width: 64px;
+    height: 64px;
+  }
+
+  .brandMarkSvg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .heroTitle {
+    font-size: 26px;
   }
 }

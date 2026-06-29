@@ -51,6 +51,10 @@ function getModeForActivity(activity: ShiftActivity): BoardMode {
   return "Secondary";
 }
 
+function getModeLabel(mode: BoardMode): string {
+  return mode === "Primary" ? "Primär" : "Sekundär";
+}
+
 function createTaskEvent(task: ShiftActivity, status: TaskStatus): TaskEvent {
   return {
     id: Date.now() + Math.floor(Math.random() * 1000),
@@ -316,26 +320,38 @@ export function ExecutionBoardPage({
         </section>
 
         <section className={styles.selectionShell}>
-          <div className={styles.modeTabs}>
-            <button
-              type="button"
-              className={`${styles.modeTab} ${
-                selectedMode === "Primary" ? styles.modeTabActive : ""
-              }`}
-              onClick={() => setSelectedMode("Primary")}
+          <div className={styles.modeTabsWrap}>
+            <div
+              className={styles.modeTabs}
+              role="tablist"
+              aria-label="Auswahl der Arbeitsbereiche"
             >
-              Primary
-            </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={selectedMode === "Primary"}
+                className={`${styles.modeTab} ${styles.modeTabPrimary} ${
+                  selectedMode === "Primary" ? styles.modeTabPrimaryActive : ""
+                }`}
+                onClick={() => setSelectedMode("Primary")}
+              >
+                Primär
+              </button>
 
-            <button
-              type="button"
-              className={`${styles.modeTab} ${
-                selectedMode === "Secondary" ? styles.modeTabActive : ""
-              }`}
-              onClick={() => setSelectedMode("Secondary")}
-            >
-              Secondary
-            </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={selectedMode === "Secondary"}
+                className={`${styles.modeTab} ${styles.modeTabSecondary} ${
+                  selectedMode === "Secondary"
+                    ? styles.modeTabSecondaryActive
+                    : ""
+                }`}
+                onClick={() => setSelectedMode("Secondary")}
+              >
+                Sekundär
+              </button>
+            </div>
           </div>
         </section>
 
@@ -346,8 +362,8 @@ export function ExecutionBoardPage({
                 <h2 className={styles.cardTitle}>Teilbereiche</h2>
                 <p className={styles.cardSubtitle}>
                   {selectedTopParent
-                    ? `Untergruppen für ${selectedTopParent.nameSnapshot}.`
-                    : "Wähle zuerst einen Top Parent aus."}
+                    ? `Untergruppen für ${getModeLabel(selectedMode)}.`
+                    : "Wähle zuerst einen Bereich aus."}
                 </p>
               </div>
 

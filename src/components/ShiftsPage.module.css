@@ -1,73 +1,77 @@
 .shiftPageTheme {
   --shift-solid: #e0ffcd;
-  --shift-surface: rgba(224, 255, 205, 0.18);
-  --shift-surface-strong: rgba(224, 255, 205, 0.28);
-  --shift-border: rgba(224, 255, 205, 0.42);
-  --shift-glow: rgba(224, 255, 205, 0.22);
+  --shift-surface: rgba(224, 255, 205, 0.08);
+  --shift-surface-strong: rgba(224, 255, 205, 0.14);
+  --shift-border: rgba(224, 255, 205, 0.26);
+  --shift-border-strong: rgba(224, 255, 205, 0.38);
+  --shift-glow: rgba(224, 255, 205, 0.12);
 
   --nav-shift-bg:
-    radial-gradient(circle at top right, rgba(224, 255, 205, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
-  --nav-shift-border: rgba(224, 255, 205, 0.26);
-  --nav-shift-glow: rgba(224, 255, 205, 0.16);
-  --nav-shift-active-bg: #e0ffcd;
-  --nav-shift-active-border: rgba(224, 255, 205, 0.44);
-  --nav-shift-active-text: #0f172a;
-  --nav-shift-brand-ring: rgba(224, 255, 205, 0.2);
+    radial-gradient(circle at top right, rgba(224, 255, 205, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(12, 22, 40, 0.98), rgba(5, 10, 24, 0.98));
+  --nav-shift-border: rgba(224, 255, 205, 0.18);
+  --nav-shift-glow: rgba(224, 255, 205, 0.08);
+  --nav-shift-active-bg: rgba(224, 255, 205, 0.14);
+  --nav-shift-active-border: rgba(224, 255, 205, 0.28);
+  --nav-shift-active-text: #f8fff4;
+  --nav-shift-brand-ring: rgba(224, 255, 205, 0.14);
 }
 
 .themeFrueh {
   --shift-solid: #e0ffcd;
-  --shift-surface: rgba(224, 255, 205, 0.18);
-  --shift-surface-strong: rgba(224, 255, 205, 0.28);
-  --shift-border: rgba(224, 255, 205, 0.42);
-  --shift-glow: rgba(224, 255, 205, 0.22);
+  --shift-surface: rgba(224, 255, 205, 0.08);
+  --shift-surface-strong: rgba(224, 255, 205, 0.14);
+  --shift-border: rgba(224, 255, 205, 0.26);
+  --shift-border-strong: rgba(224, 255, 205, 0.38);
+  --shift-glow: rgba(224, 255, 205, 0.12);
 
   --nav-shift-bg:
-    radial-gradient(circle at top right, rgba(224, 255, 205, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
-  --nav-shift-border: rgba(224, 255, 205, 0.26);
-  --nav-shift-glow: rgba(224, 255, 205, 0.16);
-  --nav-shift-active-bg: #e0ffcd;
-  --nav-shift-active-border: rgba(224, 255, 205, 0.44);
-  --nav-shift-active-text: #0f172a;
-  --nav-shift-brand-ring: rgba(224, 255, 205, 0.2);
+    radial-gradient(circle at top right, rgba(224, 255, 205, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(12, 22, 40, 0.98), rgba(5, 10, 24, 0.98));
+  --nav-shift-border: rgba(224, 255, 205, 0.18);
+  --nav-shift-glow: rgba(224, 255, 205, 0.08);
+  --nav-shift-active-bg: rgba(224, 255, 205, 0.14);
+  --nav-shift-active-border: rgba(224, 255, 205, 0.28);
+  --nav-shift-active-text: #f8fff4;
+  --nav-shift-brand-ring: rgba(224, 255, 205, 0.14);
 }
 
 .themeSpaet {
   --shift-solid: #ffebbb;
-  --shift-surface: rgba(255, 235, 187, 0.18);
-  --shift-surface-strong: rgba(255, 235, 187, 0.28);
-  --shift-border: rgba(255, 235, 187, 0.42);
-  --shift-glow: rgba(255, 235, 187, 0.22);
+  --shift-surface: rgba(255, 235, 187, 0.08);
+  --shift-surface-strong: rgba(255, 235, 187, 0.14);
+  --shift-border: rgba(255, 235, 187, 0.26);
+  --shift-border-strong: rgba(255, 235, 187, 0.38);
+  --shift-glow: rgba(255, 235, 187, 0.12);
 
   --nav-shift-bg:
-    radial-gradient(circle at top right, rgba(255, 235, 187, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
-  --nav-shift-border: rgba(255, 235, 187, 0.26);
-  --nav-shift-glow: rgba(255, 235, 187, 0.16);
-  --nav-shift-active-bg: #ffebbb;
-  --nav-shift-active-border: rgba(255, 235, 187, 0.44);
-  --nav-shift-active-text: #0f172a;
-  --nav-shift-brand-ring: rgba(255, 235, 187, 0.2);
+    radial-gradient(circle at top right, rgba(255, 235, 187, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(12, 22, 40, 0.98), rgba(5, 10, 24, 0.98));
+  --nav-shift-border: rgba(255, 235, 187, 0.18);
+  --nav-shift-glow: rgba(255, 235, 187, 0.08);
+  --nav-shift-active-bg: rgba(255, 235, 187, 0.14);
+  --nav-shift-active-border: rgba(255, 235, 187, 0.28);
+  --nav-shift-active-text: #fffdf7;
+  --nav-shift-brand-ring: rgba(255, 235, 187, 0.14);
 }
 
 .themeNacht {
   --shift-solid: #ffcab0;
-  --shift-surface: rgba(255, 202, 176, 0.18);
-  --shift-surface-strong: rgba(255, 202, 176, 0.28);
-  --shift-border: rgba(255, 202, 176, 0.42);
-  --shift-glow: rgba(255, 202, 176, 0.22);
+  --shift-surface: rgba(255, 202, 176, 0.08);
+  --shift-surface-strong: rgba(255, 202, 176, 0.14);
+  --shift-border: rgba(255, 202, 176, 0.26);
+  --shift-border-strong: rgba(255, 202, 176, 0.38);
+  --shift-glow: rgba(255, 202, 176, 0.12);
 
   --nav-shift-bg:
-    radial-gradient(circle at top right, rgba(255, 202, 176, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
-  --nav-shift-border: rgba(255, 202, 176, 0.26);
-  --nav-shift-glow: rgba(255, 202, 176, 0.16);
-  --nav-shift-active-bg: #ffcab0;
-  --nav-shift-active-border: rgba(255, 202, 176, 0.44);
-  --nav-shift-active-text: #0f172a;
-  --nav-shift-brand-ring: rgba(255, 202, 176, 0.2);
+    radial-gradient(circle at top right, rgba(255, 202, 176, 0.06), transparent 30%),
+    linear-gradient(180deg, rgba(12, 22, 40, 0.98), rgba(5, 10, 24, 0.98));
+  --nav-shift-border: rgba(255, 202, 176, 0.18);
+  --nav-shift-glow: rgba(255, 202, 176, 0.08);
+  --nav-shift-active-bg: rgba(255, 202, 176, 0.14);
+  --nav-shift-active-border: rgba(255, 202, 176, 0.28);
+  --nav-shift-active-text: #fffaf7;
+  --nav-shift-brand-ring: rgba(255, 202, 176, 0.14);
 }
 
 .page {
@@ -86,8 +90,8 @@
   border: 1px solid var(--shift-border);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 28%),
-    linear-gradient(180deg, rgba(10, 20, 38, 0.98), rgba(2, 6, 23, 0.98));
+    radial-gradient(circle at top right, var(--shift-glow), transparent 26%),
+    linear-gradient(180deg, rgba(15, 24, 42, 0.98), rgba(5, 10, 24, 0.98));
   box-shadow: var(--shadow-card);
 }
 
@@ -171,8 +175,8 @@
   border: 1px solid var(--shift-border);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 28%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.96));
+    radial-gradient(circle at top right, var(--shift-glow), transparent 26%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(4, 8, 20, 0.98));
   box-shadow: var(--shadow-card);
 }
 
@@ -203,35 +207,32 @@
   position: relative;
   overflow: hidden;
   padding: 18px;
-  border: 1px solid var(--shift-border);
+  border: 1px solid rgba(55, 72, 98, 0.72);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 26%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.96));
+    linear-gradient(180deg, rgba(15, 23, 42, 0.97), rgba(4, 8, 20, 0.99));
   box-shadow: var(--shadow-card);
   min-width: 0;
 }
 
 .shiftComposer {
+  border-color: var(--shift-border-strong);
   box-shadow:
     var(--shadow-card),
     0 0 0 1px var(--shift-surface);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 30%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.98));
+    radial-gradient(circle at top right, var(--shift-glow), transparent 28%),
+    linear-gradient(180deg, rgba(16, 25, 45, 0.97), rgba(4, 8, 20, 0.99));
 }
 
 .shiftHistoryCard {
+  border-color: var(--shift-border);
   box-shadow:
     var(--shadow-card),
-    0 0 0 1px var(--shift-surface);
+    0 0 0 1px rgba(255, 255, 255, 0.02);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 34%),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, rgba(15, 23, 42, 0.98) 84%, var(--shift-surface-strong)),
-      rgba(2, 6, 23, 0.98)
-    );
+    radial-gradient(circle at top right, var(--shift-glow), transparent 22%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.97), rgba(4, 8, 20, 0.99));
 }
 
 .shiftThemeFrueh,
@@ -240,7 +241,7 @@
   --shift-accent: var(--shift-solid);
   --shift-accent-2: var(--shift-solid);
   --shift-accent-soft: var(--shift-surface-strong);
-  --shift-accent-border: var(--shift-border);
+  --shift-accent-border: var(--shift-border-strong);
 }
 
 .cardHead {
@@ -297,9 +298,9 @@
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid var(--shift-border);
+  border: 1px solid rgba(70, 88, 116, 0.82);
   color: var(--text-main);
-  background: rgba(15, 23, 42, 0.78);
+  background: rgba(15, 23, 42, 0.82);
 }
 
 .input::placeholder {
@@ -309,7 +310,7 @@
 .shiftComposer .input:focus,
 .shiftComposer .select:focus {
   outline: none;
-  border-color: var(--shift-border);
+  border-color: var(--shift-border-strong);
   box-shadow: 0 0 0 3px var(--shift-surface);
 }
 
@@ -365,7 +366,8 @@
   min-width: 180px;
   color: #0f172a;
   background: var(--shift-solid);
-  box-shadow: 0 10px 18px var(--shift-surface);
+  border-color: var(--shift-border-strong);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
 }
 
 .btnDanger {
@@ -387,24 +389,23 @@
   gap: 12px;
   min-width: 0;
   padding: 16px;
-  border: 1px solid var(--shift-border);
+  border: 1px solid rgba(55, 72, 98, 0.72);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, var(--shift-glow), transparent 32%),
-    linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.98));
+    linear-gradient(180deg, rgba(17, 25, 44, 0.96), rgba(6, 10, 22, 0.98));
   box-shadow: var(--shadow-card);
 }
 
 .shiftCardFrueh {
-  border-color: rgba(224, 255, 205, 0.42);
+  border-color: rgba(224, 255, 205, 0.24);
 }
 
 .shiftCardSpaet {
-  border-color: rgba(255, 235, 187, 0.42);
+  border-color: rgba(255, 235, 187, 0.24);
 }
 
 .shiftCardNacht {
-  border-color: rgba(255, 202, 176, 0.42);
+  border-color: rgba(255, 202, 176, 0.24);
 }
 
 .shiftCardMain {
@@ -461,7 +462,7 @@
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
-  border: 1px solid var(--shift-border);
+  border: 1px solid var(--shift-border-strong);
   white-space: nowrap;
   color: #0f172a;
   background: var(--shift-solid);
@@ -487,7 +488,7 @@
   padding: 12px;
   text-align: center;
   color: var(--text-muted);
-  border: 1px dashed var(--shift-border);
+  border: 1px dashed rgba(77, 96, 124, 0.72);
   border-radius: 12px;
 }
 

@@ -1,16 +1,19 @@
 .shiftPageTheme {
+  --shift-solid: #e0ffcd;
   --shift-surface: rgba(224, 255, 205, 0.18);
   --shift-surface-strong: rgba(224, 255, 205, 0.28);
   --shift-border: rgba(224, 255, 205, 0.42);
   --shift-glow: rgba(224, 255, 205, 0.22);
-  --shift-badge-text: #f3fff0;
+
   --nav-shift-bg:
+    radial-gradient(circle at top right, rgba(224, 255, 205, 0.12), transparent 30%),
     linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
   --nav-shift-border: rgba(224, 255, 205, 0.26);
-  --nav-shift-glow: rgba(224, 255, 205, 0.14);
-  --nav-shift-active-bg: rgba(224, 255, 205, 0.2);
-  --nav-shift-active-border: rgba(224, 255, 205, 0.4);
-  --nav-shift-active-text: #f8fff4;
+  --nav-shift-glow: rgba(224, 255, 205, 0.16);
+  --nav-shift-active-bg: #e0ffcd;
+  --nav-shift-active-border: rgba(224, 255, 205, 0.44);
+  --nav-shift-active-text: #0f172a;
+  --nav-shift-brand-ring: rgba(224, 255, 205, 0.2);
 }
 
 .themeFrueh {
@@ -19,12 +22,16 @@
   --shift-surface-strong: rgba(224, 255, 205, 0.28);
   --shift-border: rgba(224, 255, 205, 0.42);
   --shift-glow: rgba(224, 255, 205, 0.22);
-  --shift-badge-text: #f3fff0;
+
+  --nav-shift-bg:
+    radial-gradient(circle at top right, rgba(224, 255, 205, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
   --nav-shift-border: rgba(224, 255, 205, 0.26);
-  --nav-shift-glow: rgba(224, 255, 205, 0.14);
-  --nav-shift-active-bg: rgba(224, 255, 205, 0.2);
-  --nav-shift-active-border: rgba(224, 255, 205, 0.4);
-  --nav-shift-active-text: #f8fff4;
+  --nav-shift-glow: rgba(224, 255, 205, 0.16);
+  --nav-shift-active-bg: #e0ffcd;
+  --nav-shift-active-border: rgba(224, 255, 205, 0.44);
+  --nav-shift-active-text: #0f172a;
+  --nav-shift-brand-ring: rgba(224, 255, 205, 0.2);
 }
 
 .themeSpaet {
@@ -33,12 +40,16 @@
   --shift-surface-strong: rgba(255, 235, 187, 0.28);
   --shift-border: rgba(255, 235, 187, 0.42);
   --shift-glow: rgba(255, 235, 187, 0.22);
-  --shift-badge-text: #fffaf0;
+
+  --nav-shift-bg:
+    radial-gradient(circle at top right, rgba(255, 235, 187, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
   --nav-shift-border: rgba(255, 235, 187, 0.26);
-  --nav-shift-glow: rgba(255, 235, 187, 0.14);
-  --nav-shift-active-bg: rgba(255, 235, 187, 0.2);
-  --nav-shift-active-border: rgba(255, 235, 187, 0.4);
-  --nav-shift-active-text: #fffdf5;
+  --nav-shift-glow: rgba(255, 235, 187, 0.16);
+  --nav-shift-active-bg: #ffebbb;
+  --nav-shift-active-border: rgba(255, 235, 187, 0.44);
+  --nav-shift-active-text: #0f172a;
+  --nav-shift-brand-ring: rgba(255, 235, 187, 0.2);
 }
 
 .themeNacht {
@@ -47,12 +58,16 @@
   --shift-surface-strong: rgba(255, 202, 176, 0.28);
   --shift-border: rgba(255, 202, 176, 0.42);
   --shift-glow: rgba(255, 202, 176, 0.22);
-  --shift-badge-text: #fff8f3;
+
+  --nav-shift-bg:
+    radial-gradient(circle at top right, rgba(255, 202, 176, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98));
   --nav-shift-border: rgba(255, 202, 176, 0.26);
-  --nav-shift-glow: rgba(255, 202, 176, 0.14);
-  --nav-shift-active-bg: rgba(255, 202, 176, 0.2);
-  --nav-shift-active-border: rgba(255, 202, 176, 0.4);
-  --nav-shift-active-text: #fffaf7;
+  --nav-shift-glow: rgba(255, 202, 176, 0.16);
+  --nav-shift-active-bg: #ffcab0;
+  --nav-shift-active-border: rgba(255, 202, 176, 0.44);
+  --nav-shift-active-text: #0f172a;
+  --nav-shift-brand-ring: rgba(255, 202, 176, 0.2);
 }
 
 .page {
@@ -226,7 +241,6 @@
   --shift-accent-2: var(--shift-solid);
   --shift-accent-soft: var(--shift-surface-strong);
   --shift-accent-border: var(--shift-border);
-  --shift-glow: var(--shift-glow);
 }
 
 .cardHead {

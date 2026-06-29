@@ -240,7 +240,7 @@ export function ExecutionBoardPage({
           />
         </div>
 
-        <section className={styles.contextualCard}>
+        <section className={`${styles.contextualCard} ${styles.controlCard}`}>
           <button
             type="button"
             className={styles.foldableSectionToggle}
@@ -318,7 +318,7 @@ export function ExecutionBoardPage({
         </section>
 
         <div className={styles.dashboardGrid}>
-          <section className={styles.contextualCard}>
+          <section className={`${styles.contextualCard} ${styles.workCard}`}>
             <div className={styles.taskSectionHead}>
               <div>
                 <h2 className={styles.cardTitle}>
@@ -360,7 +360,7 @@ export function ExecutionBoardPage({
           </section>
 
           <aside className={styles.sideColumn}>
-            <section className={styles.contextualCard}>
+            <section className={`${styles.contextualCard} ${styles.notesCard}`}>
               <button
                 type="button"
                 className={styles.foldableSectionToggle}

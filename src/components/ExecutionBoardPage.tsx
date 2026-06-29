@@ -337,42 +337,6 @@ export function ExecutionBoardPage({
               Secondary
             </button>
           </div>
-
-          <div className={styles.topParentGrid}>
-            {filteredTopParents.length === 0 ? (
-              <div className={styles.emptyCard}>
-                Keine Top-Parent-Gruppen für {selectedMode} vorhanden.
-              </div>
-            ) : (
-              filteredTopParents.map((group) => {
-                const subParentCount =
-                  childrenByParentId.get(group.id)?.length ?? 0;
-
-                return (
-                  <button
-                    key={group.id}
-                    type="button"
-                    className={`${styles.topParentCard} ${
-                      effectiveTopParentId === group.id
-                        ? styles.topParentCardActive
-                        : ""
-                    }`}
-                    onClick={() => setSelectedTopParentId(group.id)}
-                  >
-                    <span className={styles.topParentEyebrow}>
-                      {selectedMode}
-                    </span>
-                    <span className={styles.topParentTitle}>
-                      {group.nameSnapshot}
-                    </span>
-                    <span className={styles.topParentMeta}>
-                      {subParentCount} Teilbereiche
-                    </span>
-                  </button>
-                );
-              })
-            )}
-          </div>
         </section>
 
         <div className={styles.workspaceGrid}>

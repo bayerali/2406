@@ -37,6 +37,89 @@ export interface ShiftsPageProps {
   onOpenShiftBoard: (shiftId: number) => void;
 }
 
+function BayerLogo() {
+  return (
+    <div className={styles.brandMark} aria-label="Bayer">
+      <svg
+        viewBox="0 0 120 120"
+        className={styles.brandMarkSvg}
+        role="img"
+        aria-label="Bayer Logo"
+      >
+        <defs>
+          <linearGradient id="bayerRing" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#57d0ff" />
+            <stop offset="100%" stopColor="#4ade80" />
+          </linearGradient>
+        </defs>
+
+        <circle
+          cx="60"
+          cy="60"
+          r="49"
+          fill="none"
+          stroke="url(#bayerRing)"
+          strokeWidth="6"
+        />
+        <line
+          x1="60"
+          y1="18"
+          x2="60"
+          y2="102"
+          stroke="url(#bayerRing)"
+          strokeWidth="5"
+          strokeLinecap="round"
+        />
+        <line
+          x1="18"
+          y1="60"
+          x2="102"
+          y2="60"
+          stroke="url(#bayerRing)"
+          strokeWidth="5"
+          strokeLinecap="round"
+        />
+
+        <text
+          x="60"
+          y="34"
+          textAnchor="middle"
+          className={styles.brandMarkText}
+        >
+          BAYER
+        </text>
+        <text
+          x="60"
+          y="92"
+          textAnchor="middle"
+          className={styles.brandMarkText}
+          transform="rotate(180 60 92)"
+        >
+          BAYER
+        </text>
+        <text
+          x="92"
+          y="64"
+          textAnchor="middle"
+          className={styles.brandMarkText}
+          transform="rotate(90 92 64)"
+        >
+          BAYER
+        </text>
+        <text
+          x="28"
+          y="64"
+          textAnchor="middle"
+          className={styles.brandMarkText}
+          transform="rotate(-90 28 64)"
+        >
+          BAYER
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 export function ShiftsPage({
   db,
   setDB,
@@ -158,6 +241,25 @@ export function ShiftsPage({
       <NavBar active="shifts" onDashboardClick={() => onOpenShiftBoard(-1)} />
 
       <main className={`main ${styles.page}`}>
+        <section className={styles.heroHeader}>
+          <div className={styles.heroHeaderLeft}>
+            <BayerLogo />
+
+            <div className={styles.heroText}>
+              <div className={styles.heroEyebrow}>Bayer Produktionssteuerung</div>
+              <h1 className={styles.heroTitle}>Schichten</h1>
+              <p className={styles.heroSubtitle}>
+                Neue Schichten anlegen, laufende Schichten prüfen und direkt ins
+                Ausführungsboard wechseln.
+              </p>
+            </div>
+          </div>
+
+          <span className={`${styles.heroShiftBadge} ${styles[`shiftBadge${shiftType}`]}`}>
+            Aktuell ausgewählt: {SHIFT_LABEL[shiftType]}
+          </span>
+        </section>
+
         <section className={styles.kpiGrid}>
           <article className={styles.kpiCard}>
             <div className={styles.kpiLabel}>Schichten gesamt</div>
@@ -175,13 +277,15 @@ export function ShiftsPage({
           </article>
         </section>
 
-        <section className={styles.dashboardGrid}>
+        <section
+          className={`${styles.dashboardGrid} ${styles[`dashboardTheme${shiftType}`]}`}
+        >
           <article
             className={`${styles.card} ${styles.shiftComposer} ${styles[`shiftTheme${shiftType}`]}`}
           >
             <div className={styles.cardHead}>
               <div>
-                <h1 className={styles.cardTitle}>Neue Schicht starten</h1>
+                <h2 className={styles.cardTitle}>Neue Schicht starten</h2>
                 <p className={styles.cardSubtitle}>
                   Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
                 </p>
@@ -266,7 +370,7 @@ export function ShiftsPage({
             </form>
           </article>
 
-          <article className={styles.card}>
+          <article className={`${styles.card} ${styles.shiftHistoryCard}`}>
             <div className={styles.row}>
               <div>
                 <h2 className={styles.cardTitle}>Letzte Schichten</h2>

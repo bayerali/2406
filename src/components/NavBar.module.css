@@ -1,0 +1,14 @@
+.navbar {
+  border-color: var(--nav-shift-border, var(--border));
+  background:
+    radial-gradient(circle at top right, var(--nav-shift-glow, rgba(0, 188, 255, 0.08)), transparent 28%),
+    var(--nav-shift-bg, linear-gradient(180deg, rgba(10, 20, 38, 0.96), rgba(2, 6, 23, 0.98)));
+}
+
+.navLinkActive,
+.navItemActive,
+.active {
+  background: var(--nav-shift-active-bg, rgba(255, 255, 255, 0.08));
+  border-color: var(--nav-shift-active-border, rgba(255, 255, 255, 0.16));
+  color: var(--nav-shift-active-text, var(--text-main));
+}

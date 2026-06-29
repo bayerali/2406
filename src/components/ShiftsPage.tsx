@@ -47,13 +47,13 @@ function BayerLogo() {
         aria-label="Bayer Logo"
       >
         <defs>
-          earGradient id="bayerRing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="bayerRing" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#57d0ff" />
             <stop offset="100%" stopColor="#4ade80" />
           </linearGradient>
         </defs>
 
-        ircle
+        <circle
           cx="60"
           cy="60"
           r="49"
@@ -61,7 +61,7 @@ function BayerLogo() {
           stroke="url(#bayerRing)"
           strokeWidth="6"
         />
-        e
+        <line
           x1="60"
           y1="18"
           x2="60"
@@ -70,7 +70,7 @@ function BayerLogo() {
           strokeWidth="5"
           strokeLinecap="round"
         />
-        e
+        <line
           x1="18"
           y1="60"
           x2="102"
@@ -255,7 +255,9 @@ export function ShiftsPage({
             </div>
           </div>
 
-          <span className={`${styles.heroShiftBadge} ${styles[`shiftBadge${shiftType}`]}`}>
+          <span
+            className={`${styles.heroShiftBadge} ${styles[`shiftBadge${shiftType}`]}`}
+          >
             Aktuell ausgewählt: {SHIFT_LABEL[shiftType]}
           </span>
         </section>
@@ -289,14 +291,16 @@ export function ShiftsPage({
                 </p>
               </div>
 
-              <span className={`${styles.shiftBadge} ${styles[`shiftBadge${shiftType}`]}`}>
+              <span
+                className={`${styles.shiftBadge} ${styles[`shiftBadge${shiftType}`]}`}
+              >
                 {SHIFT_LABEL[shiftType]}
               </span>
             </div>
 
             <form className={styles.newShiftForm} onSubmit={startShift}>
               <div className={styles.field}>
-                abel className={styles.label} htmlFor="shift-date">
+                <label className={styles.label} htmlFor="shift-date">
                   Datum
                 </label>
                 <input
@@ -309,7 +313,7 @@ export function ShiftsPage({
               </div>
 
               <div className={styles.field}>
-                abel className={styles.label} htmlFor="shift-type">
+                <label className={styles.label} htmlFor="shift-type">
                   Schicht
                 </label>
                 <select
@@ -325,7 +329,7 @@ export function ShiftsPage({
               </div>
 
               <div className={styles.field}>
-                abel className={styles.label} htmlFor="shift-line">
+                <label className={styles.label} htmlFor="shift-line">
                   Linie
                 </label>
                 <select
@@ -343,7 +347,7 @@ export function ShiftsPage({
               </div>
 
               <div className={styles.field}>
-                abel className={styles.label} htmlFor="shift-operator">
+                <label className={styles.label} htmlFor="shift-operator">
                   CWID
                 </label>
                 <input
@@ -362,7 +366,7 @@ export function ShiftsPage({
 
               <div className={styles.newShiftActions}>
                 <button type="submit" className={styles.btnPrimary}>
-                  Schicht starten →
+                  Schicht starten
                 </button>
               </div>
             </form>
@@ -401,7 +405,9 @@ export function ShiftsPage({
                     </button>
 
                     <div className={styles.shiftCardFooter}>
-                      <span className={`${styles.shiftBadge} ${styles[`shiftBadge${s.shiftType}`]}`}>
+                      <span
+                        className={`${styles.shiftBadge} ${styles[`shiftBadge${s.shiftType}`]}`}
+                      >
                         {SHIFT_LABEL[s.shiftType]}
                       </span>
 

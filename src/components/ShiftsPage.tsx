@@ -144,9 +144,7 @@ export function ShiftsPage({
     onOpenShiftBoard(shiftId);
   };
 
-  const deleteShift = (id: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-
+  const deleteShift = (id: number) => {
     if (!window.confirm("Diese Schicht wirklich löschen?")) return;
 
     setDB({
@@ -178,11 +176,21 @@ export function ShiftsPage({
         </section>
 
         <section className={styles.dashboardGrid}>
-          <article className={styles.card}>
-            <h1 className={styles.cardTitle}>Neue Schicht starten</h1>
-            <p className={styles.cardSubtitle}>
-              Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
-            </p>
+          <article
+            className={`${styles.card} ${styles.shiftComposer} ${styles[`shiftTheme${shiftType}`]}`}
+          >
+            <div className={styles.cardHead}>
+              <div>
+                <h1 className={styles.cardTitle}>Neue Schicht starten</h1>
+                <p className={styles.cardSubtitle}>
+                  Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
+                </p>
+              </div>
+
+              <span className={`${styles.shiftBadge} ${styles[`shiftBadge${shiftType}`]}`}>
+                {SHIFT_LABEL[shiftType]}
+              </span>
+            </div>
 
             <form className={styles.newShiftForm} onSubmit={startShift}>
               <div className={styles.field}>
@@ -273,29 +281,37 @@ export function ShiftsPage({
             ) : (
               <div className={styles.shiftList}>
                 {sortedShifts.map((s) => (
-                  <button
+                  <article
                     key={s.id}
-                    type="button"
                     className={`${styles.shiftCard} ${styles[`shiftCard${s.shiftType}`]}`}
-                    onClick={() => onOpenShiftBoard(s.id)}
                   >
-                    <div className={styles.shiftMeta}>
-                      <div className={styles.shiftDate}>{formatDate(s.date)}</div>
-                      <div className={styles.shiftSub}>
-                        {s.operator} · {s.line} · {SHIFT_LABEL[s.shiftType]}
+                    <button
+                      type="button"
+                      className={styles.shiftCardMain}
+                      onClick={() => onOpenShiftBoard(s.id)}
+                    >
+                      <div className={styles.shiftMeta}>
+                        <div className={styles.shiftDate}>{formatDate(s.date)}</div>
+                        <div className={styles.shiftSub}>
+                          {s.operator} · {s.line} · {SHIFT_LABEL[s.shiftType]}
+                        </div>
                       </div>
-                    </div>
+                    </button>
 
                     <div className={styles.shiftCardFooter}>
+                      <span className={`${styles.shiftBadge} ${styles[`shiftBadge${s.shiftType}`]}`}>
+                        {SHIFT_LABEL[s.shiftType]}
+                      </span>
+
                       <button
                         type="button"
                         className={styles.btnDanger}
-                        onClick={(e) => deleteShift(s.id, e)}
+                        onClick={() => deleteShift(s.id)}
                       >
                         Löschen
                       </button>
                     </div>
-                  </button>
+                  </article>
                 ))}
               </div>
             )}

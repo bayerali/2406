@@ -40,82 +40,11 @@ export interface ShiftsPageProps {
 function BayerLogo() {
   return (
     <div className={styles.brandMark} aria-label="Bayer">
-      <svg
-        viewBox="0 0 120 120"
-        className={styles.brandMarkSvg}
-        role="img"
-        aria-label="Bayer Logo"
-      >
-        <defs>
-          <linearGradient id="bayerRing" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#57d0ff" />
-            <stop offset="100%" stopColor="#4ade80" />
-          </linearGradient>
-        </defs>
-
-        <circle
-          cx="60"
-          cy="60"
-          r="49"
-          fill="none"
-          stroke="url(#bayerRing)"
-          strokeWidth="6"
-        />
-        <line
-          x1="60"
-          y1="18"
-          x2="60"
-          y2="102"
-          stroke="url(#bayerRing)"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-        <line
-          x1="18"
-          y1="60"
-          x2="102"
-          y2="60"
-          stroke="url(#bayerRing)"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-
-        <text
-          x="60"
-          y="34"
-          textAnchor="middle"
-          className={styles.brandMarkText}
-        >
-          BAYER
-        </text>
-        <text
-          x="60"
-          y="92"
-          textAnchor="middle"
-          className={styles.brandMarkText}
-          transform="rotate(180 60 92)"
-        >
-          BAYER
-        </text>
-        <text
-          x="92"
-          y="64"
-          textAnchor="middle"
-          className={styles.brandMarkText}
-          transform="rotate(90 92 64)"
-        >
-          BAYER
-        </text>
-        <text
-          x="28"
-          y="64"
-          textAnchor="middle"
-          className={styles.brandMarkText}
-          transform="rotate(-90 28 64)"
-        >
-          BAYER
-        </text>
-      </svg>
+      <img
+        src="./bayer-logo.jpg"
+        alt="Bayer Logo"
+        className={styles.brandMarkImage}
+      />
     </div>
   );
 }
@@ -254,12 +183,6 @@ export function ShiftsPage({
               </p>
             </div>
           </div>
-
-          <span
-            className={`${styles.heroShiftBadge} ${styles[`shiftBadge${shiftType}`]}`}
-          >
-            Aktuell ausgewählt: {SHIFT_LABEL[shiftType]}
-          </span>
         </section>
 
         <section className={styles.kpiGrid}>
@@ -290,12 +213,6 @@ export function ShiftsPage({
                   Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
                 </p>
               </div>
-
-              <span
-                className={`${styles.shiftBadge} ${styles[`shiftBadge${shiftType}`]}`}
-              >
-                {SHIFT_LABEL[shiftType]}
-              </span>
             </div>
 
             <form className={styles.newShiftForm} onSubmit={startShift}>
@@ -405,12 +322,6 @@ export function ShiftsPage({
                     </button>
 
                     <div className={styles.shiftCardFooter}>
-                      <span
-                        className={`${styles.shiftBadge} ${styles[`shiftBadge${s.shiftType}`]}`}
-                      >
-                        {SHIFT_LABEL[s.shiftType]}
-                      </span>
-
                       <button
                         type="button"
                         className={styles.btnDanger}

@@ -11,105 +11,67 @@ type NavBarProps = Readonly<{
 function BayerLogoMark() {
   return (
     <span className={styles.brandLogo} aria-hidden="true">
-      <svg viewBox="0 0 120 120" className={styles.brandLogoSvg}>
+      <svg
+        viewBox="0 0 64 64"
+        className={styles.brandLogoSvg}
+        role="img"
+        aria-label="Bayer Logo"
+      >
         <defs>
-          <linearGradient id="navBayerRingLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+          <linearGradient id="bayerNavGreen" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#89D329" />
-            <stop offset="100%" stopColor="#89D329" />
+            <stop offset="100%" stopColor="#6FC61B" />
           </linearGradient>
-          <linearGradient id="navBayerRingRight" x1="0%" y1="0%" x2="0%" y2="100%">
+
+          <linearGradient id="bayerNavBlue" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#00BCFF" />
-            <stop offset="100%" stopColor="#00BCFF" />
+            <stop offset="100%" stopColor="#00A7E1" />
           </linearGradient>
         </defs>
 
         <path
-          d="M60 10a50 50 0 0 0 0 100"
+          d="M32 7a25 25 0 0 0 0 50"
           fill="none"
-          stroke="url(#navBayerRingLeft)"
-          strokeWidth="7"
+          stroke="url(#bayerNavGreen)"
+          strokeWidth="4.5"
           strokeLinecap="round"
         />
         <path
-          d="M60 10a50 50 0 0 1 0 100"
+          d="M32 7a25 25 0 0 1 0 50"
           fill="none"
-          stroke="url(#navBayerRingRight)"
-          strokeWidth="7"
+          stroke="url(#bayerNavBlue)"
+          strokeWidth="4.5"
           strokeLinecap="round"
+        />
+
+        <circle
+          cx="32"
+          cy="32"
+          r="13"
+          fill="none"
+          stroke="#10384F"
+          strokeWidth="2.5"
+          opacity="0.12"
         />
 
         <line
-          x1="60"
-          y1="22"
-          x2="60"
-          y2="98"
+          x1="32"
+          y1="18"
+          x2="32"
+          y2="46"
           stroke="#10384F"
-          strokeWidth="6"
+          strokeWidth="3.5"
           strokeLinecap="round"
         />
         <line
-          x1="22"
-          y1="60"
-          x2="98"
-          y2="60"
+          x1="18"
+          y1="32"
+          x2="46"
+          y2="32"
           stroke="#10384F"
-          strokeWidth="6"
+          strokeWidth="3.5"
           strokeLinecap="round"
         />
-
-        <text x="60" y="30" textAnchor="middle" className={styles.brandLogoText}>
-          B
-        </text>
-        <text x="60" y="48" textAnchor="middle" className={styles.brandLogoText}>
-          A
-        </text>
-        <text x="60" y="92" textAnchor="middle" className={styles.brandLogoText}>
-          E
-        </text>
-        <text x="60" y="110" textAnchor="middle" className={styles.brandLogoText}>
-          R
-        </text>
-
-        <text
-          x="33"
-          y="67"
-          textAnchor="middle"
-          className={styles.brandLogoTextWide}
-        >
-          B
-        </text>
-        <text
-          x="48"
-          y="67"
-          textAnchor="middle"
-          className={styles.brandLogoTextWide}
-        >
-          A
-        </text>
-        <text
-          x="60"
-          y="67"
-          textAnchor="middle"
-          className={styles.brandLogoTextWide}
-        >
-          Y
-        </text>
-        <text
-          x="74"
-          y="67"
-          textAnchor="middle"
-          className={styles.brandLogoTextWide}
-        >
-          E
-        </text>
-        <text
-          x="90"
-          y="67"
-          textAnchor="middle"
-          className={styles.brandLogoTextWide}
-        >
-          R
-        </text>
       </svg>
     </span>
   );

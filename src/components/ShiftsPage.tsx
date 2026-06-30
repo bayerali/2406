@@ -40,11 +40,86 @@ export interface ShiftsPageProps {
 function BayerLogo() {
   return (
     <div className={styles.brandMark} aria-label="Bayer">
-      <img
-        src="./bayer-logo.jpg"
-        alt="Bayer Logo"
-        className={styles.brandMarkImage}
-      />
+      <svg
+        viewBox="0 0 120 120"
+        className={styles.brandMarkSvg}
+        role="img"
+        aria-label="Bayer Logo"
+      >
+        <defs>
+          <linearGradient id="bayerRingLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#89D329" />
+            <stop offset="100%" stopColor="#89D329" />
+          </linearGradient>
+          <linearGradient id="bayerRingRight" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#00BCFF" />
+            <stop offset="100%" stopColor="#00BCFF" />
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M60 10a50 50 0 0 0 0 100"
+          fill="none"
+          stroke="url(#bayerRingLeft)"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+        <path
+          d="M60 10a50 50 0 0 1 0 100"
+          fill="none"
+          stroke="url(#bayerRingRight)"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+
+        <line
+          x1="60"
+          y1="22"
+          x2="60"
+          y2="98"
+          stroke="#10384F"
+          strokeWidth="6"
+          strokeLinecap="round"
+        />
+        <line
+          x1="22"
+          y1="60"
+          x2="98"
+          y2="60"
+          stroke="#10384F"
+          strokeWidth="6"
+          strokeLinecap="round"
+        />
+
+        <text x="60" y="30" textAnchor="middle" className={styles.brandMarkText}>
+          B
+        </text>
+        <text x="60" y="48" textAnchor="middle" className={styles.brandMarkText}>
+          A
+        </text>
+        <text x="60" y="92" textAnchor="middle" className={styles.brandMarkText}>
+          E
+        </text>
+        <text x="60" y="110" textAnchor="middle" className={styles.brandMarkText}>
+          R
+        </text>
+
+        <text x="33" y="67" textAnchor="middle" className={styles.brandMarkTextWide}>
+          B
+        </text>
+        <text x="48" y="67" textAnchor="middle" className={styles.brandMarkTextWide}>
+          A
+        </text>
+        <text x="60" y="67" textAnchor="middle" className={styles.brandMarkTextWide}>
+          Y
+        </text>
+        <text x="74" y="67" textAnchor="middle" className={styles.brandMarkTextWide}>
+          E
+        </text>
+        <text x="90" y="67" textAnchor="middle" className={styles.brandMarkTextWide}>
+          R
+        </text>
+      </svg>
     </div>
   );
 }

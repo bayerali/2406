@@ -5,12 +5,12 @@ import {
   isAutoParentDone,
   statusLabel,
 } from "../../utils/executionBoard";
-import styles from "./TaskCard.module.css";
 
 type TaskCardProps = {
   task: ShiftActivity;
   latest: TaskEvent | null;
   history: TaskEvent[];
+  description?: string;
   isCompact?: boolean;
   onSaveStatus: (status: TaskStatus) => void;
 };
@@ -19,126 +19,157 @@ export function TaskCard({
   task,
   latest,
   history,
+  description,
   isCompact = false,
   onSaveStatus,
 }: TaskCardProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
 
-  const hasDetails = history.length > 0;
-  const isAutoDone = isAutoParentDone(task.nameSnapshot);
-  const currentStatus: TaskStatus | null = latest?.status ?? null;
+  const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
+  const hasDetails = Boolean(description) || history.length > 0;
 
   return (
-    <article className={`${styles.card} ${isCompact ? styles.cardCompact : ""}`}>
-      <div className={styles.meta}>
-        <div className={styles.topline}>
-          <div className={styles.titleBlock}>
-            <div className={styles.titleRow}>
-              <h3 className={styles.title}>{task.nameSnapshot}</h3>
+    <div
+      className={[
+        "shift-card",
+        "task-card",
+        "contextual-task-card",
+        isCompact ? "task-card--compact" : "",
+        latest ? `task-card--${latest.status}` : "task-card--open",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className="shift-meta task-meta">
+        <div className="task-topline">
+          <div className="shift-date task-title">{task.nameSnapshot}</div>
 
-              <span
-                className={`${styles.statusBadge} ${
-                  currentStatus
-                    ? styles[`status${currentStatus}`]
-                    : styles.statusOpen
-                }`}
-              >
-                {currentStatus ? statusLabel(currentStatus) : "Offen"}
-              </span>
-            </div>
-
-            {latest?.note ? (
-              <p className={styles.latestNote}>{latest.note}</p>
-            ) : null}
+          <div
+            className={[
+              "status-badge",
+              "task-status-badge",
+              latest ? `status-${latest.status}` : "status-open",
+              latest ? "task-status-badge--strong" : "",
+            ].join(" ")}
+          >
+            {latest ? statusLabel(latest.status) : "Offen"}
           </div>
         </div>
 
-        <div className={styles.actions}>
-          <button
-            type="button"
-            className={`${styles.statusButton} ${styles.statusButtonDone} ${
-              currentStatus === "done" || isAutoDone ? styles.isActive : ""
-            }`}
-            onClick={() => onSaveStatus("done")}
-          >
-            Erledigt
-          </button>
-
-          <button
-            type="button"
-            className={`${styles.statusButton} ${styles.statusButtonBlocked} ${
-              currentStatus === "blocked" ? styles.isActive : ""
-            }`}
-            onClick={() => onSaveStatus("blocked")}
-          >
-            Blockiert
-          </button>
-
-          <button
-            type="button"
-            className={`${styles.statusButton} ${styles.statusButtonSkipped} ${
-              currentStatus === "skipped" ? styles.isActive : ""
-            }`}
-            onClick={() => onSaveStatus("skipped")}
-          >
-            Übersprungen
-          </button>
+        <div className="shift-sub task-timestamp">
+          {latest
+            ? `Letzter Zeitstempel: ${formatTimestamp(latest.timestamp)}`
+            : "Noch kein Zeitstempel"}
         </div>
+      </div>
+
+      <div className="task-actions task-actions--compact">
+        <button
+          type="button"
+          className={[
+            "btn-primary",
+            "task-status-btn",
+            "task-status-btn--done",
+            latest?.status === "done" ? "is-active" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          onClick={() => onSaveStatus("done")}
+        >
+          Erledigt
+        </button>
+
+        <button
+          type="button"
+          className={[
+            "btn-ghost",
+            "task-status-btn",
+            "task-status-btn--blocked",
+            latest?.status === "blocked" ? "is-active is-blocked" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          onClick={() => onSaveStatus("blocked")}
+        >
+          Blockiert
+        </button>
+
+        <button
+          type="button"
+          className={[
+            "btn-ghost",
+            "task-status-btn",
+            "task-status-btn--skipped",
+            latest?.status === "skipped" ? "is-active is-skipped" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          onClick={() => onSaveStatus("skipped")}
+        >
+          Übersprungen
+        </button>
 
         {hasDetails ? (
-          <>
-            <button
-              type="button"
-              className={styles.detailsToggle}
-              aria-expanded={isDetailsOpen}
-              aria-controls={detailsId}
-              onClick={() => setIsDetailsOpen((value) => !value)}
-            >
-              <span>Verlauf anzeigen</span>
-              <span
-                className={`${styles.detailsToggleIcon} ${
-                  isDetailsOpen ? styles.isOpen : ""
-                }`}
-                aria-hidden="true"
-              >
-                ▾
-              </span>
-            </button>
+          <button
+            type="button"
+            className={[
+              "task-details-toggle",
+              isDetailsOpen ? "is-open" : "",
+              history.length > 0 ? "has-history" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            aria-expanded={isDetailsOpen}
+            aria-controls={detailsId}
+            aria-label={isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"}
+            title={isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"}
+            onClick={() => setIsDetailsOpen((value) => !value)}
+          >
+            <span className="task-details-toggle__icon" aria-hidden="true">
+              {isDetailsOpen ? "−" : "+"}
+            </span>
 
-            {isDetailsOpen ? (
-              <div id={detailsId} className={styles.detailsPanel}>
-                <div className={styles.history}>
-                  {history
-                    .slice()
-                    .sort((a, b) => b.timestamp - a.timestamp)
-                    .map((event) => (
-                      <div key={event.id} className={styles.historyItem}>
-                        <div className={styles.historyTopline}>
-                          <span
-                            className={`${styles.statusBadge} ${
-                              styles[`status${event.status}`]
-                            }`}
-                          >
-                            {statusLabel(event.status)}
-                          </span>
-
-                          <span className={styles.historyTime}>
-                            {formatTimestamp(event.timestamp)}
-                          </span>
-                        </div>
-
-                        {event.note ? (
-                          <div className={styles.notePreview}>{event.note}</div>
-                        ) : null}
-                      </div>
-                    ))}
-                </div>
-              </div>
+            {history.length > 0 ? (
+              <span className="task-details-toggle__count">{history.length}</span>
             ) : null}
-          </>
+          </button>
         ) : null}
       </div>
-    </article>
+
+      {isDetailsOpen ? (
+        <div id={detailsId} className="task-details-panel">
+          {description ? (
+            <div className="task-description contextual-surface">{description}</div>
+          ) : null}
+
+          {history.length > 0 ? (
+            <div className="task-note-preview contextual-surface">
+              {history.map((event) => (
+                <div key={event.id} className="task-history-row">
+                  <div className="task-history-row__top">
+                    <span
+                      className={[
+                        "status-badge",
+                        "task-history-badge",
+                        `status-${event.status}`,
+                      ].join(" ")}
+                    >
+                      {statusLabel(event.status)}
+                    </span>
+                    <span className="shift-sub">
+                      {formatTimestamp(event.timestamp)}
+                    </span>
+                  </div>
+
+                  {event.note && !isAutoParentDone(event.note) ? (
+                    <div className="task-history-note">{event.note}</div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   isAutoParentDone,
   statusLabel,
 } from "../../utils/executionBoard";
+import styles from "./TaskCard.module.css";
 
 type TaskCardProps = {
   task: ShiftActivity;
@@ -28,144 +29,165 @@ export function TaskCard({
   const detailsId = useMemo(() => `task-details-${task.id}`, [task.id]);
   const hasDetails = Boolean(description) || history.length > 0;
 
-  return (
-    <div
-      className={[
-        "shift-card",
-        "task-card",
-        "contextual-task-card",
-        isCompact ? "task-card--compact" : "",
-        latest ? `task-card--${latest.status}` : "task-card--open",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      <div className="shift-meta task-meta">
-        <div className="task-topline">
-          <div className="shift-date task-title">{task.nameSnapshot}</div>
+  const cardClassName = [
+    styles.card,
+    isCompact ? styles.cardCompact : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-          <div
-            className={[
-              "status-badge",
-              "task-status-badge",
-              latest ? `status-${latest.status}` : "status-open",
-              latest ? "task-status-badge--strong" : "",
-            ].join(" ")}
-          >
-            {latest ? statusLabel(latest.status) : "Offen"}
+  const currentStatusBadgeClassName = [
+    styles.statusBadge,
+    latest?.status === "done"
+      ? styles.statusDone
+      : latest?.status === "blocked"
+      ? styles.statusBlocked
+      : latest?.status === "skipped"
+      ? styles.statusSkipped
+      : styles.statusOpen,
+  ].join(" ");
+
+  const doneButtonClassName = [
+    styles.statusButton,
+    styles.statusButtonDone,
+    latest?.status === "done" ? styles.isActive : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const blockedButtonClassName = [
+    styles.statusButton,
+    styles.statusButtonBlocked,
+    latest?.status === "blocked" ? styles.isActive : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const skippedButtonClassName = [
+    styles.statusButton,
+    styles.statusButtonSkipped,
+    latest?.status === "skipped" ? styles.isActive : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const toggleIconClassName = [
+    styles.detailsToggleIcon,
+    isDetailsOpen ? styles.isOpen : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={cardClassName}>
+      <div className={styles.meta}>
+        <div className={styles.topline}>
+          <div className={styles.titleBlock}>
+            <div className={styles.titleRow}>
+              <h3 className={styles.title}>{task.nameSnapshot}</h3>
+
+              <span className={currentStatusBadgeClassName}>
+                {latest ? statusLabel(latest.status) : "Offen"}
+              </span>
+            </div>
+
+            <div className={styles.latestNote}>
+              {latest
+                ? `Letzter Zeitstempel: ${formatTimestamp(latest.timestamp)}`
+                : "Noch kein Zeitstempel"}
+            </div>
           </div>
         </div>
 
-        <div className="shift-sub task-timestamp">
-          {latest
-            ? `Letzter Zeitstempel: ${formatTimestamp(latest.timestamp)}`
-            : "Noch kein Zeitstempel"}
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={doneButtonClassName}
+            onClick={() => onSaveStatus("done")}
+          >
+            Erledigt
+          </button>
+
+          <button
+            type="button"
+            className={blockedButtonClassName}
+            onClick={() => onSaveStatus("blocked")}
+          >
+            Blockiert
+          </button>
+
+          <button
+            type="button"
+            className={skippedButtonClassName}
+            onClick={() => onSaveStatus("skipped")}
+          >
+            Übersprungen
+          </button>
+
+          {hasDetails ? (
+            <button
+              type="button"
+              className={styles.detailsToggle}
+              aria-expanded={isDetailsOpen}
+              aria-controls={detailsId}
+              aria-label={
+                isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"
+              }
+              title={isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"}
+              onClick={() => setIsDetailsOpen((value) => !value)}
+            >
+              <span className={toggleIconClassName} aria-hidden="true">
+                ⌄
+              </span>
+
+              {history.length > 0 ? (
+                <span className={styles.detailsToggleCount}>
+                  {history.length}
+                </span>
+              ) : null}
+            </button>
+          ) : null}
         </div>
       </div>
 
-      <div className="task-actions task-actions--compact">
-        <button
-          type="button"
-          className={[
-            "btn-primary",
-            "task-status-btn",
-            "task-status-btn--done",
-            latest?.status === "done" ? "is-active" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => onSaveStatus("done")}
-        >
-          Erledigt
-        </button>
-
-        <button
-          type="button"
-          className={[
-            "btn-ghost",
-            "task-status-btn",
-            "task-status-btn--blocked",
-            latest?.status === "blocked" ? "is-active is-blocked" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => onSaveStatus("blocked")}
-        >
-          Blockiert
-        </button>
-
-        <button
-          type="button"
-          className={[
-            "btn-ghost",
-            "task-status-btn",
-            "task-status-btn--skipped",
-            latest?.status === "skipped" ? "is-active is-skipped" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => onSaveStatus("skipped")}
-        >
-          Übersprungen
-        </button>
-
-        {hasDetails ? (
-          <button
-            type="button"
-            className={[
-              "task-details-toggle",
-              isDetailsOpen ? "is-open" : "",
-              history.length > 0 ? "has-history" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            aria-expanded={isDetailsOpen}
-            aria-controls={detailsId}
-            aria-label={isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"}
-            title={isDetailsOpen ? "Verlauf ausblenden" : "Verlauf einblenden"}
-            onClick={() => setIsDetailsOpen((value) => !value)}
-          >
-            <span className="task-details-toggle__icon" aria-hidden="true">
-              {isDetailsOpen ? "−" : "+"}
-            </span>
-
-            {history.length > 0 ? (
-              <span className="task-details-toggle__count">{history.length}</span>
-            ) : null}
-          </button>
-        ) : null}
-      </div>
-
       {isDetailsOpen ? (
-        <div id={detailsId} className="task-details-panel">
+        <div id={detailsId} className={styles.detailsPanel}>
           {description ? (
-            <div className="task-description contextual-surface">{description}</div>
+            <div className={styles.description}>{description}</div>
           ) : null}
 
           {history.length > 0 ? (
-            <div className="task-note-preview contextual-surface">
-              {history.map((event) => (
-                <div key={event.id} className="task-history-row">
-                  <div className="task-history-row__top">
-                    <span
-                      className={[
-                        "status-badge",
-                        "task-history-badge",
-                        `status-${event.status}`,
-                      ].join(" ")}
-                    >
-                      {statusLabel(event.status)}
-                    </span>
-                    <span className="shift-sub">
-                      {formatTimestamp(event.timestamp)}
-                    </span>
-                  </div>
+            <div className={styles.history}>
+              {history.map((event) => {
+                const historyBadgeClassName = [
+                  styles.statusBadge,
+                  event.status === "done"
+                    ? styles.statusDone
+                    : event.status === "blocked"
+                    ? styles.statusBlocked
+                    : event.status === "skipped"
+                    ? styles.statusSkipped
+                    : styles.statusOpen,
+                ].join(" ");
 
-                  {event.note && !isAutoParentDone(event.note) ? (
-                    <div className="task-history-note">{event.note}</div>
-                  ) : null}
-                </div>
-              ))}
+                return (
+                  <div key={event.id} className={styles.historyItem}>
+                    <div className={styles.historyTopline}>
+                      <span className={historyBadgeClassName}>
+                        {statusLabel(event.status)}
+                      </span>
+
+                      <span className={styles.historyTime}>
+                        {formatTimestamp(event.timestamp)}
+                      </span>
+                    </div>
+
+                    {event.note && !isAutoParentDone(event.note) ? (
+                      <div className={styles.notePreview}>{event.note}</div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           ) : null}
         </div>

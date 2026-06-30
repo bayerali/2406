@@ -5,11 +5,11 @@
   --bayer-teal: #00617f;
 
   --shift-solid: #bce784;
-  --shift-surface: rgba(188, 231, 132, 0.12);
-  --shift-surface-strong: rgba(188, 231, 132, 0.2);
-  --shift-border: rgba(188, 231, 132, 0.3);
-  --shift-border-strong: rgba(188, 231, 132, 0.46);
-  --shift-glow: rgba(188, 231, 132, 0.14);
+  --shift-surface: rgba(188, 231, 132, 0.14);
+  --shift-surface-strong: rgba(188, 231, 132, 0.3);
+  --shift-border: rgba(188, 231, 132, 0.4);
+  --shift-border-strong: rgba(188, 231, 132, 0.54);
+  --shift-glow: rgba(188, 231, 132, 0.22);
 
   --nav-shift-bg:
     radial-gradient(circle at top right, rgba(0, 188, 255, 0.08), transparent 32%),
@@ -24,29 +24,29 @@
 
 .themeFrueh {
   --shift-solid: #bce784;
-  --shift-surface: rgba(188, 231, 132, 0.14);
-  --shift-surface-strong: rgba(188, 231, 132, 0.24);
-  --shift-border: rgba(188, 231, 132, 0.34);
-  --shift-border-strong: rgba(188, 231, 132, 0.5);
-  --shift-glow: rgba(188, 231, 132, 0.16);
+  --shift-surface: rgba(188, 231, 132, 0.18);
+  --shift-surface-strong: rgba(188, 231, 132, 0.32);
+  --shift-border: rgba(188, 231, 132, 0.44);
+  --shift-border-strong: rgba(188, 231, 132, 0.58);
+  --shift-glow: rgba(188, 231, 132, 0.24);
 }
 
 .themeSpaet {
   --shift-solid: #ffba08;
-  --shift-surface: rgba(255, 186, 8, 0.14);
-  --shift-surface-strong: rgba(255, 186, 8, 0.24);
-  --shift-border: rgba(255, 186, 8, 0.34);
-  --shift-border-strong: rgba(255, 186, 8, 0.5);
-  --shift-glow: rgba(255, 186, 8, 0.16);
+  --shift-surface: rgba(255, 186, 8, 0.18);
+  --shift-surface-strong: rgba(255, 186, 8, 0.34);
+  --shift-border: rgba(255, 186, 8, 0.44);
+  --shift-border-strong: rgba(255, 186, 8, 0.6);
+  --shift-glow: rgba(255, 186, 8, 0.24);
 }
 
 .themeNacht {
   --shift-solid: #dc2f02;
-  --shift-surface: rgba(220, 47, 2, 0.14);
-  --shift-surface-strong: rgba(220, 47, 2, 0.24);
-  --shift-border: rgba(220, 47, 2, 0.34);
-  --shift-border-strong: rgba(220, 47, 2, 0.5);
-  --shift-glow: rgba(220, 47, 2, 0.16);
+  --shift-surface: rgba(220, 47, 2, 0.18);
+  --shift-surface-strong: rgba(220, 47, 2, 0.34);
+  --shift-border: rgba(220, 47, 2, 0.44);
+  --shift-border-strong: rgba(220, 47, 2, 0.6);
+  --shift-glow: rgba(220, 47, 2, 0.24);
 }
 
 .page {
@@ -85,17 +85,17 @@
   height: 84px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.985);
   box-shadow:
     inset 0 0 0 1px rgba(0, 188, 255, 0.12),
     0 10px 24px rgba(0, 0, 0, 0.22);
   overflow: hidden;
 }
 
-.brandMarkImage {
-  width: 74px;
-  height: 74px;
-  object-fit: contain;
+.brandMarkSvg {
+  width: 56px;
+  height: 56px;
+  display: block;
 }
 
 .heroText {
@@ -173,8 +173,7 @@
   padding: 18px;
   border: 1px solid rgba(0, 98, 127, 0.72);
   border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, rgba(16, 56, 79, 0.95), rgba(6, 32, 48, 0.98));
+  background: linear-gradient(180deg, rgba(16, 56, 79, 0.95), rgba(6, 32, 48, 0.98));
   box-shadow: var(--shadow-card);
   min-width: 0;
 }
@@ -334,51 +333,68 @@
 }
 
 .btnDanger {
-  color: #fff3f0;
-  background: rgba(220, 47, 2, 0.18);
-  border-color: rgba(220, 47, 2, 0.34);
+  min-height: 32px;
+  padding: 7px 11px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.96);
+  background: rgba(7, 18, 31, 0.2);
+  border-color: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(4px);
 }
 
 .shiftList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
 }
 
 .shiftCard {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
-  padding: 16px;
+  padding: 10px 12px;
   border: 1px solid transparent;
-  border-radius: var(--radius);
+  border-radius: 14px;
   box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.shiftCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%);
+  pointer-events: none;
 }
 
 .shiftCardFrueh {
-  border-color: rgba(188, 231, 132, 0.46);
+  border-color: rgba(188, 231, 132, 0.52);
   background:
-    radial-gradient(circle at top right, rgba(188, 231, 132, 0.16), transparent 34%),
-    linear-gradient(180deg, rgba(188, 231, 132, 0.22), rgba(16, 56, 79, 0.78));
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(188, 231, 132, 0.88), rgba(121, 175, 68, 0.92));
 }
 
 .shiftCardSpaet {
-  border-color: rgba(255, 186, 8, 0.5);
+  border-color: rgba(255, 186, 8, 0.56);
   background:
-    radial-gradient(circle at top right, rgba(255, 186, 8, 0.18), transparent 34%),
-    linear-gradient(180deg, rgba(255, 186, 8, 0.22), rgba(16, 56, 79, 0.78));
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(255, 186, 8, 0.92), rgba(214, 136, 0, 0.94));
 }
 
 .shiftCardNacht {
-  border-color: rgba(220, 47, 2, 0.5);
+  border-color: rgba(220, 47, 2, 0.56);
   background:
-    radial-gradient(circle at top right, rgba(220, 47, 2, 0.18), transparent 34%),
-    linear-gradient(180deg, rgba(220, 47, 2, 0.24), rgba(16, 56, 79, 0.78));
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(220, 47, 2, 0.9), rgba(145, 26, 0, 0.94));
 }
 
 .shiftCardMain {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   min-width: 0;
@@ -399,27 +415,39 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
 }
 
 .shiftDate {
-  font-size: 15px;
-  font-weight: 800;
+  display: block;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 900;
   color: #f8fafc;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .shiftSub {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #e8f0f6;
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: rgba(248, 250, 252, 0.94);
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 .shiftCardFooter {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 
 .emptyState {
@@ -463,13 +491,17 @@
     align-items: flex-start;
   }
 
-  .shiftCardFooter {
-    flex-direction: column;
+  .shiftCard {
+    grid-template-columns: 1fr;
     align-items: stretch;
+    gap: 8px;
   }
 
-  .btnPrimary,
-  .btnDanger {
+  .shiftCardFooter {
+    justify-content: flex-start;
+  }
+
+  .btnPrimary {
     width: 100%;
   }
 }
@@ -484,12 +516,16 @@
     height: 72px;
   }
 
-  .brandMarkImage {
-    width: 62px;
-    height: 62px;
+  .brandMarkSvg {
+    width: 48px;
+    height: 48px;
   }
 
   .heroTitle {
     font-size: 26px;
+  }
+
+  .shiftCard {
+    padding: 10px 11px;
   }
 }

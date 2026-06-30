@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./NavBar.module.css";
 
 export type NavActive = "shifts" | "board";
 
@@ -9,41 +10,106 @@ type NavBarProps = Readonly<{
 
 function BayerLogoMark() {
   return (
-    <span className="nav-brand-logo" aria-hidden="true">
-      <svg viewBox="0 0 120 120" className="nav-brand-logo-svg">
+    <span className={styles.brandLogo} aria-hidden="true">
+      <svg viewBox="0 0 120 120" className={styles.brandLogoSvg}>
         <defs>
-          <linearGradient id="nav-bayer-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#57d0ff" />
-            <stop offset="100%" stopColor="#4ade80" />
+          <linearGradient id="navBayerRingLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#89D329" />
+            <stop offset="100%" stopColor="#89D329" />
+          </linearGradient>
+          <linearGradient id="navBayerRingRight" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#00BCFF" />
+            <stop offset="100%" stopColor="#00BCFF" />
           </linearGradient>
         </defs>
 
-        <circle
-          cx="60"
-          cy="60"
-          r="49"
+        <path
+          d="M60 10a50 50 0 0 0 0 100"
           fill="none"
-          stroke="url(#nav-bayer-ring)"
-          strokeWidth="6"
+          stroke="url(#navBayerRingLeft)"
+          strokeWidth="7"
+          strokeLinecap="round"
         />
+        <path
+          d="M60 10a50 50 0 0 1 0 100"
+          fill="none"
+          stroke="url(#navBayerRingRight)"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+
         <line
           x1="60"
-          y1="18"
+          y1="22"
           x2="60"
-          y2="102"
-          stroke="url(#nav-bayer-ring)"
-          strokeWidth="5"
+          y2="98"
+          stroke="#10384F"
+          strokeWidth="6"
           strokeLinecap="round"
         />
         <line
-          x1="18"
+          x1="22"
           y1="60"
-          x2="102"
+          x2="98"
           y2="60"
-          stroke="url(#nav-bayer-ring)"
-          strokeWidth="5"
+          stroke="#10384F"
+          strokeWidth="6"
           strokeLinecap="round"
         />
+
+        <text x="60" y="30" textAnchor="middle" className={styles.brandLogoText}>
+          B
+        </text>
+        <text x="60" y="48" textAnchor="middle" className={styles.brandLogoText}>
+          A
+        </text>
+        <text x="60" y="92" textAnchor="middle" className={styles.brandLogoText}>
+          E
+        </text>
+        <text x="60" y="110" textAnchor="middle" className={styles.brandLogoText}>
+          R
+        </text>
+
+        <text
+          x="33"
+          y="67"
+          textAnchor="middle"
+          className={styles.brandLogoTextWide}
+        >
+          B
+        </text>
+        <text
+          x="48"
+          y="67"
+          textAnchor="middle"
+          className={styles.brandLogoTextWide}
+        >
+          A
+        </text>
+        <text
+          x="60"
+          y="67"
+          textAnchor="middle"
+          className={styles.brandLogoTextWide}
+        >
+          Y
+        </text>
+        <text
+          x="74"
+          y="67"
+          textAnchor="middle"
+          className={styles.brandLogoTextWide}
+        >
+          E
+        </text>
+        <text
+          x="90"
+          y="67"
+          textAnchor="middle"
+          className={styles.brandLogoTextWide}
+        >
+          R
+        </text>
       </svg>
     </span>
   );
@@ -51,20 +117,25 @@ function BayerLogoMark() {
 
 export function NavBar({ active, onDashboardClick }: NavBarProps) {
   return (
-    <header className="nav">
-      <div className="nav-brand">
+    <header className={styles.navbar}>
+      <div className={styles.brand}>
         <BayerLogoMark />
 
-        <div className="nav-brand-text">
-          <span className="nav-brand-title">Bayer Produktion</span>
-          <span className="nav-brand-subtitle">Schichtübersicht</span>
+        <div className={styles.brandText}>
+          <span className={styles.brandTitle}>Bayer Produktion</span>
+          <span className={styles.brandSubtitle}>Schichtübersicht</span>
         </div>
       </div>
 
-      <div className="nav-links">
+      <div className={styles.links}>
         <button
           type="button"
-          className={"nav-link " + (active === "shifts" ? "active" : "")}
+          className={[
+            styles.navLink,
+            active === "shifts" ? styles.active : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
           onClick={onDashboardClick}
         >
           Übersicht

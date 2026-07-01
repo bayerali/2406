@@ -191,8 +191,7 @@ export function useExecutionBoard({
       for (const task of visibleTasks) {
         const latest = latestEventByShiftActivityId.get(task.id);
         next[task.id] =
-          prev[task.id] ??
-          (latest && !isAutoParentDone(latest.note) ? latest.note : "");
+          prev[task.id] ?? (latest && !isAutoParentDone(latest.note) ? latest.note : "");
       }
 
       return next;
@@ -304,8 +303,9 @@ export function useExecutionBoard({
   }, [visibleTasks, latestEventByShiftActivityId]);
 
   const boardThemeStyle = useMemo<React.CSSProperties>(() => {
-    return getBoardTheme(selectedMode);
-  }, [selectedMode]);
+    if (!shift) return {};
+    return getBoardTheme(selectedMode, shift.shiftType);
+  }, [selectedMode, shift]);
 
   const saveStatus = (activity: ShiftActivity, status: TaskStatus): void => {
     if (!shift) return;

@@ -1,7 +1,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  padding: 18px;
 }
 
 .header {
@@ -29,15 +30,16 @@
 
 .progressSummary {
   font-size: 14px;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--board-soft-text, #dce7ef);
 }
 
 .progressValue {
-  font-size: 28px;
+  font-size: clamp(30px, 4vw, 40px);
   line-height: 1;
-  font-weight: 800;
+  font-weight: 900;
   color: #f8fafc;
+  letter-spacing: -0.03em;
 }
 
 .kpiGrid {
@@ -47,29 +49,33 @@
 }
 
 .kpiCard {
+  min-width: 0;
   padding: 14px;
   border: 1px solid var(--board-panel-border);
-  border-radius: var(--radius);
+  border-radius: 16px;
   background:
     radial-gradient(circle at top right, var(--shift-surface), transparent 32%),
-    linear-gradient(180deg, rgba(11, 34, 48, 0.86), rgba(7, 26, 38, 0.92));
-  box-shadow: var(--shadow-card);
+    linear-gradient(180deg, rgba(11, 34, 48, 0.88), rgba(7, 26, 38, 0.94));
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .kpiLabel {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--board-muted-text, #b7c7d5);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .kpiValue {
-  margin-top: 8px;
-  font-size: 28px;
+  margin-top: 10px;
+  font-size: 30px;
   line-height: 1;
-  font-weight: 800;
+  font-weight: 900;
   color: #f8fafc;
+  letter-spacing: -0.02em;
 }
 
 .progressBar {
@@ -77,7 +83,7 @@
   overflow: hidden;
   height: 12px;
   border-radius: 999px;
-  background: rgba(11, 34, 48, 0.9);
+  background: rgba(11, 34, 48, 0.92);
   border: 1px solid var(--board-panel-border);
 }
 
@@ -86,7 +92,12 @@
   inset: 0 auto 0 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(180deg, var(--shift-solid), color-mix(in srgb, var(--shift-solid) 68%, #ffffff 32%));
+  background: linear-gradient(
+    90deg,
+    var(--shift-solid),
+    color-mix(in srgb, var(--shift-solid) 70%, white 30%)
+  );
+  box-shadow: 0 0 20px var(--shift-glow);
 }
 
 @media (max-width: 1080px) {
@@ -96,8 +107,16 @@
 }
 
 @media (max-width: 720px) {
+  .card {
+    padding: 14px;
+  }
+
   .kpiGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .progressValue {
+    font-size: 30px;
   }
 }
 

@@ -1,10 +1,10 @@
 .card {
   padding: 12px;
-  border: 1px solid var(--task-border-soft);
+  border: 1px solid var(--board-panel-border);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at top right, rgba(0, 188, 255, 0.05), transparent 24%),
-    linear-gradient(180deg, var(--task-surface-bright), var(--task-surface-bright-2));
+    radial-gradient(circle at top right, var(--shift-surface), transparent 28%),
+    linear-gradient(180deg, rgba(11, 34, 48, 0.92), rgba(7, 26, 38, 0.96));
   box-shadow: var(--shadow-card);
 }
 
@@ -50,7 +50,7 @@
   margin: 4px 0 0;
   font-size: 12px;
   line-height: 1.4;
-  color: var(--text-soft);
+  color: var(--board-soft-text, #dce7ef);
 }
 
 .actions {
@@ -89,7 +89,7 @@
 }
 
 .statusButtonDone {
-  color: #f8fafc;
+  color: #062334;
   background: var(--btn-done-bg);
   border-color: var(--btn-done-border);
   box-shadow: 0 8px 16px var(--btn-done-shadow);
@@ -125,29 +125,29 @@
 }
 
 .statusButtonDone.isActive {
-  color: #052e16;
-  background: #22c55e;
-  border-color: #22c55e;
+  color: #062334;
+  background: #89d329;
+  border-color: #89d329;
   box-shadow:
-    0 10px 22px rgba(34, 197, 94, 0.28),
+    0 10px 22px rgba(137, 211, 41, 0.28),
     0 0 0 1px rgba(248, 250, 252, 0.14);
 }
 
 .statusButtonBlocked.isActive {
-  color: #431407;
-  background: #fb923c;
-  border-color: #fb923c;
+  color: #4a3200;
+  background: #ffba08;
+  border-color: #ffba08;
   box-shadow:
-    0 10px 22px rgba(251, 146, 60, 0.26),
+    0 10px 22px rgba(255, 186, 8, 0.26),
     0 0 0 1px rgba(248, 250, 252, 0.12);
 }
 
 .statusButtonSkipped.isActive {
-  color: #2e1065;
-  background: #a78bfa;
-  border-color: #a78bfa;
+  color: #5d1300;
+  background: #dc2f02;
+  border-color: #dc2f02;
   box-shadow:
-    0 10px 22px rgba(167, 139, 250, 0.26),
+    0 10px 22px rgba(220, 47, 2, 0.26),
     0 0 0 1px rgba(248, 250, 252, 0.12);
 }
 
@@ -163,9 +163,9 @@
   height: 34px;
   padding: 0 8px;
   border-radius: 10px;
-  border: 1px solid var(--context-accent-border);
-  background: rgba(15, 23, 42, 0.72);
-  color: var(--text-soft);
+  border: 1px solid var(--board-panel-border);
+  background: rgba(11, 34, 48, 0.76);
+  color: var(--board-soft-text, #dce7ef);
   text-align: center;
   transition:
     border-color 0.15s ease,
@@ -175,7 +175,7 @@
 
 .detailsToggle:hover {
   transform: translateY(-1px);
-  background: rgba(15, 23, 42, 0.84);
+  background: rgba(11, 34, 48, 0.88);
 }
 
 .detailsToggleIcon {
@@ -219,8 +219,9 @@
   border-radius: 10px;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--text-soft);
-  border: 1px solid var(--context-accent-border);
+  color: var(--board-soft-text, #dce7ef);
+  border: 1px solid var(--board-panel-border);
+  background: rgba(11, 34, 48, 0.42);
 }
 
 .history {
@@ -232,8 +233,8 @@
 .historyItem {
   padding: 9px 10px;
   border-radius: 10px;
-  border: 1px solid var(--context-accent-border);
-  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid var(--board-panel-border);
+  background: rgba(11, 34, 48, 0.42);
 }
 
 .historyTopline {
@@ -246,14 +247,14 @@
 
 .historyTime {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--board-muted-text, #b7c7d5);
 }
 
 .notePreview {
   margin-top: 6px;
   font-size: 12px;
   line-height: 1.45;
-  color: var(--text-soft);
+  color: var(--board-soft-text, #dce7ef);
 }
 
 .statusBadge {
@@ -279,30 +280,30 @@
 }
 
 .statusDone {
-  background: rgba(34, 197, 94, 0.28);
-  border-color: rgba(34, 197, 94, 0.56);
-  color: #dcfce7;
+  background: rgba(137, 211, 41, 0.22);
+  border-color: rgba(137, 211, 41, 0.46);
+  color: #f4fbe8;
   box-shadow:
     inset 0 0 0 1px rgba(240, 253, 244, 0.06),
-    0 8px 18px rgba(34, 197, 94, 0.14);
+    0 8px 18px rgba(137, 211, 41, 0.14);
 }
 
 .statusBlocked {
-  background: rgba(251, 146, 60, 0.28);
-  border-color: rgba(251, 146, 60, 0.56);
-  color: #fed7aa;
+  background: rgba(255, 186, 8, 0.22);
+  border-color: rgba(255, 186, 8, 0.46);
+  color: #fff2d4;
   box-shadow:
     inset 0 0 0 1px rgba(255, 247, 237, 0.06),
-    0 8px 18px rgba(251, 146, 60, 0.14);
+    0 8px 18px rgba(255, 186, 8, 0.14);
 }
 
 .statusSkipped {
-  background: rgba(167, 139, 250, 0.28);
-  border-color: rgba(167, 139, 250, 0.56);
-  color: #ede9fe;
+  background: rgba(220, 47, 2, 0.2);
+  border-color: rgba(220, 47, 2, 0.44);
+  color: #fff0ea;
   box-shadow:
-    inset 0 0 0 1px rgba(245, 243, 255, 0.06),
-    0 8px 18px rgba(167, 139, 250, 0.14);
+    inset 0 0 0 1px rgba(255, 243, 240, 0.06),
+    0 8px 18px rgba(220, 47, 2, 0.14);
 }
 
 @media (max-width: 720px) {

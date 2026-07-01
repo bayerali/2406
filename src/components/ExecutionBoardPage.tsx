@@ -1,5 +1,5 @@
 import React from "react";
-import type { DB, TaskStatus } from "../types";
+import type { DB, ShiftActivity, TaskStatus } from "../types";
 import { useExecutionBoard } from "../hooks/useExecutionBoard";
 import { BoardHeader } from "./execution-board/BoardHeader";
 import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
@@ -21,6 +21,14 @@ const SHIFT_LABEL: Record<"Frueh" | "Spaet" | "Nacht", string> = {
   Nacht: "Nachtschicht",
 };
 
+function formatBoardSubtitle(
+  shiftType: "Frueh" | "Spaet" | "Nacht",
+  line: string,
+  operator: string
+): string {
+  return `${SHIFT_LABEL[shiftType]} · ${line} · ${operator}`;
+}
+
 export function ExecutionBoardPage({
   db,
   setDB,
@@ -28,12 +36,6 @@ export function ExecutionBoardPage({
   onBackToShifts,
   onDashboardClick,
 }: ExecutionBoardPageProps) {
-  const board = useExecutionBoard({
-    db,
-    setDB,
-    shiftId,
-  });
-
   const {
     shift,
     selectedMode,
@@ -41,6 +43,7 @@ export function ExecutionBoardPage({
     selectedParentId,
     setSelectedParentId,
     selectedParent,
+    availableModes,
     parentGroups,
     visibleTasks,
     latestEventByShiftActivityId,
@@ -54,17 +57,26 @@ export function ExecutionBoardPage({
     skippedCount,
     openCount,
     shiftProgressPercent,
+    selectedParentStats,
     boardThemeStyle,
-    boardSubtitle,
-    handleShiftNoteSubmit,
-    handleTaskStatusSave,
-    getTaskHistory,
-    getTaskDescription,
-  } = board;
+    saveStatus,
+    getHistory,
+    addShiftNote,
+  } = useExecutionBoard({
+    db,
+    setDB,
+    shiftId,
+  });
 
   if (!shift) {
     return null;
   }
+
+  const boardSubtitle = formatBoardSubtitle(
+    shift.shiftType,
+    shift.line,
+    shift.operator
+  );
 
   return (
     <main className={`main ${styles.page}`} style={boardThemeStyle}>
@@ -72,7 +84,9 @@ export function ExecutionBoardPage({
         title="Ausführungsboard"
         subtitle={boardSubtitle}
         onBack={onBackToShifts}
-        mode="primary"
+        modeClassName={
+          selectedMode === "Primary" ? styles.headerPrimary : styles.headerSecondary
+        }
         shiftType={shift.shiftType}
         operator={shift.operator}
         line={shift.line}
@@ -80,7 +94,7 @@ export function ExecutionBoardPage({
       />
 
       <section className={styles.summaryRow}>
-        <div className={styles.summaryCard}>
+        <div className={styles.summaryMain}>
           <ShiftStatusCard
             totalLeafTasks={totalLeafTasks}
             doneCount={doneCount}
@@ -91,48 +105,52 @@ export function ExecutionBoardPage({
           />
         </div>
 
-        <aside className={styles.parentSnapshot}>
-          <div className={styles.parentSnapshotTop}>
-            <div>
-              <div className={styles.eyebrow}>Aktiver Bereich</div>
-              <h2 className={styles.snapshotTitle}>
-                {selectedParent?.nameSnapshot ?? "Kein Bereich gewählt"}
-              </h2>
+        <aside className={styles.summarySide}>
+          <div className={styles.contextCard}>
+            <div className={styles.contextTop}>
+              <div>
+                <div className={styles.eyebrow}>Aktiver Bereich</div>
+                <h2 className={styles.contextTitle}>
+                  {selectedParent?.nameSnapshot ?? "Kein Bereich gewählt"}
+                </h2>
+              </div>
+
+              <div className={styles.contextPercent}>
+                {selectedParentStats.percent}%
+              </div>
             </div>
 
-            <div className={styles.snapshotPercent}>{shiftProgressPercent}%</div>
-          </div>
+            <div className={styles.contextGrid}>
+              <article className={styles.contextMetric}>
+                <div className={styles.contextLabel}>Gesamt</div>
+                <div className={styles.contextValue}>{selectedParentStats.total}</div>
+              </article>
 
-          <div className={styles.snapshotGrid}>
-            <article className={styles.snapshotMetric}>
-              <div className={styles.snapshotLabel}>Erledigt</div>
-              <div className={styles.snapshotValue}>{doneCount}</div>
-            </article>
+              <article className={styles.contextMetric}>
+                <div className={styles.contextLabel}>Erledigt</div>
+                <div className={styles.contextValue}>{selectedParentStats.done}</div>
+              </article>
 
-            <article className={styles.snapshotMetric}>
-              <div className={styles.snapshotLabel}>Offen</div>
-              <div className={styles.snapshotValue}>{openCount}</div>
-            </article>
+              <article className={styles.contextMetric}>
+                <div className={styles.contextLabel}>Offen</div>
+                <div className={styles.contextValue}>{selectedParentStats.open}</div>
+              </article>
 
-            <article className={styles.snapshotMetric}>
-              <div className={styles.snapshotLabel}>Blockiert</div>
-              <div className={styles.snapshotValue}>{blockedCount}</div>
-            </article>
+              <article className={styles.contextMetric}>
+                <div className={styles.contextLabel}>Blockiert</div>
+                <div className={styles.contextValue}>{selectedParentStats.blocked}</div>
+              </article>
 
-            <article className={styles.snapshotMetric}>
-              <div className={styles.snapshotLabel}>Übersprungen</div>
-              <div className={styles.snapshotValue}>{skippedCount}</div>
-            </article>
-
-            <article className={styles.snapshotMetric}>
-              <div className={styles.snapshotLabel}>Gesamt</div>
-              <div className={styles.snapshotValue}>{totalLeafTasks}</div>
-            </article>
+              <article className={styles.contextMetric}>
+                <div className={styles.contextLabel}>Übersprungen</div>
+                <div className={styles.contextValue}>{selectedParentStats.skipped}</div>
+              </article>
+            </div>
           </div>
         </aside>
       </section>
 
-      <section className={styles.workboard}>
+      <section className={styles.boardGrid}>
         <aside className={styles.sidebar}>
           <section className={styles.sidebarCard}>
             <div className={styles.sidebarHead}>
@@ -140,7 +158,7 @@ export function ExecutionBoardPage({
                 <div className={styles.eyebrow}>Board-Modus</div>
                 <h2 className={styles.sectionTitle}>Primär / Sekundär</h2>
                 <p className={styles.sectionText}>
-                  Wähle den Modus und springe danach direkt in den passenden Bereich.
+                  Wähle den passenden Modus für die aktuelle Bearbeitung.
                 </p>
               </div>
 
@@ -154,25 +172,18 @@ export function ExecutionBoardPage({
             </div>
 
             <div className={styles.modeTabs}>
-              <button
-                type="button"
-                className={`${styles.modeTab} ${
-                  selectedMode === "Primary" ? styles.modeTabActive : ""
-                }`}
-                onClick={() => setSelectedMode("Primary")}
-              >
-                Primär
-              </button>
-
-              <button
-                type="button"
-                className={`${styles.modeTab} ${
-                  selectedMode === "Secondary" ? styles.modeTabActive : ""
-                }`}
-                onClick={() => setSelectedMode("Secondary")}
-              >
-                Sekundär
-              </button>
+              {availableModes.map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  className={`${styles.modeTab} ${
+                    selectedMode === mode ? styles.modeTabActive : ""
+                  }`}
+                  onClick={() => setSelectedMode(mode)}
+                >
+                  {mode === "Primary" ? "Primär" : "Sekundär"}
+                </button>
+              ))}
             </div>
           </section>
 
@@ -182,18 +193,16 @@ export function ExecutionBoardPage({
                 <div className={styles.eyebrow}>Bereiche</div>
                 <h2 className={styles.sectionTitle}>Top Parent</h2>
                 <p className={styles.sectionText}>
-                  Wähle den gewünschten Bereich, um die Aufgaben rechts zu filtern.
+                  Wähle links einen Bereich, um die Aufgaben rechts zu filtern.
                 </p>
               </div>
             </div>
 
             {parentGroups.length === 0 ? (
-              <div className={styles.emptyMini}>
-                Keine Elternpunkte vorhanden.
-              </div>
+              <div className={styles.emptyMini}>Keine Elternpunkte vorhanden.</div>
             ) : (
               <div className={styles.parentList}>
-                {parentGroups.map((parent) => {
+                {parentGroups.map((parent: ShiftActivity) => {
                   const latest = latestEventByShiftActivityId.get(parent.id) ?? null;
                   const isActive = selectedParentId === parent.id;
 
@@ -219,44 +228,42 @@ export function ExecutionBoardPage({
             )}
           </section>
 
-          <div className={styles.notesCard}>
+          <div className={styles.notesWrap}>
             <ShiftNotesPanel
               notes={shift.notes}
               noteText={noteText}
               noteKind={noteKind}
               onNoteTextChange={setNoteText}
               onNoteKindChange={setNoteKind}
-              onSubmit={handleShiftNoteSubmit}
+              onSubmit={addShiftNote}
             />
           </div>
         </aside>
 
         <section className={styles.workspace}>
-          <div className={styles.workspaceHeader}>
+          <div className={styles.workspaceHead}>
             <div>
               <div className={styles.eyebrow}>Aufgabenbereich</div>
               <h2 className={styles.workspaceTitle}>
                 {selectedParent?.nameSnapshot ?? "Top Parent"}
               </h2>
               <p className={styles.sectionText}>
-                Bearbeite die Aufgaben direkt im Board und öffne bei Bedarf den Verlauf.
+                Bearbeite Aufgaben direkt im Board und prüfe bei Bedarf den Verlauf.
               </p>
             </div>
 
-            <div className={styles.workspaceBadge}>
-              {visibleTasks.length} Aufgaben
-            </div>
+            <div className={styles.workspaceBadge}>{visibleTasks.length} Aufgaben</div>
           </div>
 
           {!selectedParent ? (
-            <div className={styles.emptyWorkspace}>
+            <div className={styles.emptyState}>
               <h3 className={styles.emptyTitle}>Kein Bereich gewählt</h3>
               <p className={styles.emptyText}>
-                Wähle links einen Bereich aus, um die passenden Aufgaben anzuzeigen.
+                Wähle links einen Bereich aus, um Aufgaben anzuzeigen.
               </p>
             </div>
           ) : visibleTasks.length === 0 ? (
-            <div className={styles.emptyWorkspace}>
+            <div className={styles.emptyState}>
               <h3 className={styles.emptyTitle}>Keine Aufgaben vorhanden</h3>
               <p className={styles.emptyText}>
                 Für diesen Bereich sind aktuell keine Aufgaben sichtbar.
@@ -269,12 +276,9 @@ export function ExecutionBoardPage({
                   key={task.id}
                   task={task}
                   latest={latestEventByShiftActivityId.get(task.id) ?? null}
-                  history={getTaskHistory(task.id)}
-                  description={getTaskDescription(task)}
+                  history={getHistory(task.id)}
                   isCompact
-                  onSaveStatus={(status: TaskStatus) =>
-                    handleTaskStatusSave(task.id, status)
-                  }
+                  onSaveStatus={(status: TaskStatus) => saveStatus(task, status)}
                 />
               ))}
             </div>

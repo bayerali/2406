@@ -62,7 +62,12 @@ export function ExecutionBoardPage({
   if (!shift) {
     return (
       <main className={styles.page}>
-        <div className={styles.emptyCard}>Schicht nicht gefunden.</div>
+        <section className={styles.emptyState}>
+          <h2 className={styles.emptyTitle}>Schicht nicht gefunden</h2>
+          <p className={styles.emptyText}>
+            Die angeforderte Schicht konnte nicht geladen werden.
+          </p>
+        </section>
       </main>
     );
   }
@@ -71,21 +76,19 @@ export function ExecutionBoardPage({
 
   return (
     <main className={styles.page} style={boardThemeStyle}>
-      <div className={styles.executionBoard}>
-        <div className={styles.boardHeaderShell}>
-          <BoardHeader
-            title={selectedParent?.nameSnapshot ?? "Ausführungsboard"}
-            subtitle={`${shift.operator} · ${shift.line}`}
-            onBack={onBackToShifts}
-            mode={selectedMode === "Secondary" ? "secondary" : "primary"}
-            shiftType={shift.shiftType}
-            shiftLabel={shiftLabel}
-            operator={shift.operator}
-            line={shift.line}
-          />
-        </div>
+      <BoardHeader
+        title={selectedParent?.nameSnapshot ?? "Ausführungsboard"}
+        subtitle={`${shift.operator} · ${shift.line}`}
+        onBack={onBackToShifts}
+        mode={selectedMode === "Secondary" ? "secondary" : "primary"}
+        shiftType={shift.shiftType}
+        operator={shift.operator}
+        line={shift.line}
+        shiftLabel={shiftLabel}
+      />
 
-        <section className={styles.statusShell}>
+      <section className={styles.summaryRow}>
+        <div className={styles.summaryCard}>
           <ShiftStatusCard
             totalLeafTasks={totalLeafTasks}
             doneCount={doneCount}
@@ -94,38 +97,93 @@ export function ExecutionBoardPage({
             openCount={openCount}
             shiftProgressPercent={shiftProgressPercent}
           />
-        </section>
+        </div>
 
-        <section className={styles.selectionShell}>
-          <div className={styles.selectionHeader}>
+        <div className={styles.parentSnapshot}>
+          <div className={styles.parentSnapshotTop}>
             <div>
-              <h2 className={styles.cardTitle}>Bereiche</h2>
-              <p className={styles.cardSubtitle}>
-                Wähle Modus und Teilbereich für die aktuelle Bearbeitung.
-              </p>
+              <div className={styles.eyebrow}>Aktiver Bereich</div>
+              <h2 className={styles.snapshotTitle}>
+                {selectedParent?.nameSnapshot ?? "Kein Bereich gewählt"}
+              </h2>
             </div>
 
-            <button
-              type="button"
-              className={styles.secondaryAction}
-              onClick={onDashboardClick}
-            >
-              Zur Schichtübersicht
-            </button>
+            <div className={styles.snapshotPercent}>
+              {selectedParentStats.percent}%
+            </div>
           </div>
 
-          <div className={styles.modeTabsWrap}>
+          <div className={styles.snapshotGrid}>
+            <article className={styles.snapshotMetric}>
+              <span className={styles.snapshotLabel}>Gesamt</span>
+              <span className={styles.snapshotValue}>
+                {selectedParentStats.total}
+              </span>
+            </article>
+
+            <article className={styles.snapshotMetric}>
+              <span className={styles.snapshotLabel}>Erledigt</span>
+              <span className={styles.snapshotValue}>
+                {selectedParentStats.done}
+              </span>
+            </article>
+
+            <article className={styles.snapshotMetric}>
+              <span className={styles.snapshotLabel}>Offen</span>
+              <span className={styles.snapshotValue}>
+                {selectedParentStats.open}
+              </span>
+            </article>
+
+            <article className={styles.snapshotMetric}>
+              <span className={styles.snapshotLabel}>Blockiert</span>
+              <span className={styles.snapshotValue}>
+                {selectedParentStats.blocked}
+              </span>
+            </article>
+
+            <article className={styles.snapshotMetric}>
+              <span className={styles.snapshotLabel}>Übersprungen</span>
+              <span className={styles.snapshotValue}>
+                {selectedParentStats.skipped}
+              </span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.workboard}>
+        <aside className={styles.sidebar}>
+          <div className={styles.sidebarCard}>
+            <div className={styles.sidebarHead}>
+              <div>
+                <div className={styles.eyebrow}>Steuerung</div>
+                <h2 className={styles.sectionTitle}>Bereiche</h2>
+                <p className={styles.sectionText}>
+                  Wähle zuerst Modus und Teilbereich.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className={styles.overviewButton}
+                onClick={onDashboardClick}
+              >
+                Schichtübersicht
+              </button>
+            </div>
+
             <div
               className={styles.modeTabs}
               role="tablist"
-              aria-label="Auswahl der Arbeitsbereiche"
+              aria-label="Modus auswählen"
             >
               <button
                 type="button"
                 role="tab"
                 aria-selected={selectedMode === "Primary"}
-                className={`${styles.modeTab} ${styles.modeTabPrimary} ${
-                  selectedMode === "Primary" ? styles.modeTabPrimaryActive : ""
+                className={`${styles.modeTab} ${
+                  selectedMode === "Primary" ? styles.modeTabActive : ""
                 }`}
                 onClick={() => setSelectedMode("Primary")}
               >
@@ -136,117 +194,86 @@ export function ExecutionBoardPage({
                 type="button"
                 role="tab"
                 aria-selected={selectedMode === "Secondary"}
-                className={`${styles.modeTab} ${styles.modeTabSecondary} ${
-                  selectedMode === "Secondary"
-                    ? styles.modeTabSecondaryActive
-                    : ""
+                className={`${styles.modeTab} ${
+                  selectedMode === "Secondary" ? styles.modeTabActive : ""
                 }`}
                 onClick={() => setSelectedMode("Secondary")}
               >
                 Sekundär
               </button>
             </div>
+
+            {parentGroups.length === 0 ? (
+              <div className={styles.emptyMini}>
+                Keine Bereiche für diese Auswahl vorhanden.
+              </div>
+            ) : (
+              <div className={styles.parentList}>
+                {parentGroups.map((group) => {
+                  const isActive = selectedParentId === group.id;
+                  const latest =
+                    latestEventByShiftActivityId.get(group.id) ?? null;
+
+                  return (
+                    <button
+                      key={group.id}
+                      type="button"
+                      className={`${styles.parentItem} ${
+                        isActive ? styles.parentItemActive : ""
+                      }`}
+                      onClick={() => setSelectedParentId(group.id)}
+                    >
+                      <span className={styles.parentItemTitle}>
+                        {group.nameSnapshot}
+                      </span>
+                      <span className={styles.parentItemMeta}>
+                        {latest ? "Status vorhanden" : "Noch keine Rückmeldung"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {parentGroups.length === 0 ? (
-            <div className={styles.emptyCard}>
-              Keine Teilbereiche für diese Auswahl vorhanden.
-            </div>
-          ) : (
-            <div className={styles.subParentList}>
-              {parentGroups.map((group) => {
-                const isActive = selectedParentId === group.id;
-                const latest = latestEventByShiftActivityId.get(group.id) ?? null;
-
-                return (
-                  <button
-                    key={group.id}
-                    type="button"
-                    className={`${styles.subParentItem} ${
-                      isActive ? styles.subParentItemActive : ""
-                    }`}
-                    onClick={() => setSelectedParentId(group.id)}
-                  >
-                    <span className={styles.subParentTitle}>
-                      {group.nameSnapshot}
-                    </span>
-                    <span className={styles.subParentMeta}>
-                      {latest ? "Status vorhanden" : "Noch keine Rückmeldung"}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        <section className={styles.parentStatsShell}>
-          <div className={styles.sectionHeadCompact}>
-            <h2 className={styles.cardTitle}>
-              {selectedParent?.nameSnapshot ?? "Ausgewählter Bereich"}
-            </h2>
-            <span className={styles.parentStatsBadge}>
-              {selectedParentStats.percent}%
-            </span>
+          <div className={styles.notesCard}>
+            <ShiftNotesPanel
+              notes={shift.notes}
+              noteText={noteText}
+              noteKind={noteKind}
+              onNoteTextChange={setNoteText}
+              onNoteKindChange={setNoteKind}
+              onSubmit={addShiftNote}
+            />
           </div>
+        </aside>
 
-          <div className={styles.parentStatsGrid}>
-            <article className={styles.parentStatItem}>
-              <span className={styles.parentStatLabel}>Gesamt</span>
-              <span className={styles.parentStatValue}>
-                {selectedParentStats.total}
-              </span>
-            </article>
-
-            <article className={styles.parentStatItem}>
-              <span className={styles.parentStatLabel}>Erledigt</span>
-              <span className={styles.parentStatValue}>
-                {selectedParentStats.done}
-              </span>
-            </article>
-
-            <article className={styles.parentStatItem}>
-              <span className={styles.parentStatLabel}>Offen</span>
-              <span className={styles.parentStatValue}>
-                {selectedParentStats.open}
-              </span>
-            </article>
-
-            <article className={styles.parentStatItem}>
-              <span className={styles.parentStatLabel}>Blockiert</span>
-              <span className={styles.parentStatValue}>
-                {selectedParentStats.blocked}
-              </span>
-            </article>
-
-            <article className={styles.parentStatItem}>
-              <span className={styles.parentStatLabel}>Übersprungen</span>
-              <span className={styles.parentStatValue}>
-                {selectedParentStats.skipped}
-              </span>
-            </article>
-          </div>
-        </section>
-
-        <section className={styles.detailPane}>
-          <div className={styles.paneHead}>
+        <div className={styles.workspace}>
+          <div className={styles.workspaceHeader}>
             <div>
-              <h2 className={styles.cardTitle}>
+              <div className={styles.eyebrow}>Ausführung</div>
+              <h2 className={styles.workspaceTitle}>
                 {selectedParent?.nameSnapshot ?? "Aufgaben"}
               </h2>
-              <p className={styles.cardSubtitle}>
-                Bearbeite die Aufgaben dieses Teilbereichs. Verlauf ist pro
-                Aufgabe einklappbar.
+              <p className={styles.sectionText}>
+                Aufgaben bearbeiten, Status setzen und Verlauf prüfen.
               </p>
+            </div>
+
+            <div className={styles.workspaceBadge}>
+              {visibleTasks.length} Aufgaben
             </div>
           </div>
 
           {visibleTasks.length === 0 ? (
-            <div className={styles.emptyCard}>
-              Keine Aufgaben für diesen Teilbereich vorhanden.
+            <div className={styles.emptyWorkspace}>
+              <h3 className={styles.emptyTitle}>Keine Aufgaben vorhanden</h3>
+              <p className={styles.emptyText}>
+                Für den gewählten Bereich sind aktuell keine Aufgaben hinterlegt.
+              </p>
             </div>
           ) : (
-            <div className={styles.taskList}>
+            <div className={styles.taskGrid}>
               {visibleTasks.map((task) => (
                 <TaskCard
                   key={task.id}
@@ -258,19 +285,8 @@ export function ExecutionBoardPage({
               ))}
             </div>
           )}
-        </section>
-
-        <aside className={styles.notesShell}>
-          <ShiftNotesPanel
-            notes={shift.notes}
-            noteText={noteText}
-            noteKind={noteKind}
-            onNoteTextChange={setNoteText}
-            onNoteKindChange={setNoteKind}
-            onSubmit={addShiftNote}
-          />
-        </aside>
-      </div>
+        </div>
+      </section>
     </main>
   );
 }

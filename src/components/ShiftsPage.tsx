@@ -240,6 +240,18 @@ export function ShiftsPage({
               </p>
             </div>
           </div>
+
+          <div className={styles.heroAside}>
+            <div className={styles.heroChip}>
+              <span className={styles.heroChipLabel}>Schicht</span>
+              <span className={styles.heroChipValue}>{SHIFT_LABEL[shiftType]}</span>
+            </div>
+
+            <div className={styles.heroChip}>
+              <span className={styles.heroChipLabel}>Linie</span>
+              <span className={styles.heroChipValue}>{line}</span>
+            </div>
+          </div>
         </section>
 
         <section className={styles.kpiGrid}>
@@ -269,6 +281,13 @@ export function ShiftsPage({
                 <p className={styles.cardSubtitle}>
                   Erstelle eine neue Schicht und öffne direkt das Ausführungsboard.
                 </p>
+              </div>
+
+              <div className={styles.composerAccent}>
+                <span className={styles.composerAccentLabel}>Aktiv</span>
+                <span className={styles.composerAccentValue}>
+                  {SHIFT_LABEL[shiftType]}
+                </span>
               </div>
             </div>
 
@@ -345,7 +364,7 @@ export function ShiftsPage({
           </article>
 
           <article className={`${styles.card} ${styles.shiftHistoryCard}`}>
-            <div className={styles.row}>
+            <div className={styles.cardHead}>
               <div>
                 <h2 className={styles.cardTitle}>Letzte Schichten</h2>
                 <p className={styles.cardSubtitle}>{sortedShifts.length} Einträge</p>
@@ -368,11 +387,17 @@ export function ShiftsPage({
                       className={styles.shiftCardMain}
                       onClick={() => onOpenShiftBoard(s.id)}
                     >
-                      <div className={styles.shiftMeta}>
-                        <div className={styles.shiftDate}>{formatDate(s.date)}</div>
-                        <div className={styles.shiftSub}>
-                          {s.line} · {SHIFT_LABEL[s.shiftType]} · {s.operator}
+                      <div className={styles.shiftCardTop}>
+                        <div className={styles.shiftMeta}>
+                          <div className={styles.shiftDate}>{formatDate(s.date)}</div>
+                          <div className={styles.shiftSub}>
+                            {s.line} · {SHIFT_LABEL[s.shiftType]} · {s.operator}
+                          </div>
                         </div>
+
+                        <span className={styles.shiftArrow} aria-hidden="true">
+                          ↗
+                        </span>
                       </div>
                     </button>
 

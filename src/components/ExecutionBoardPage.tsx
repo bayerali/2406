@@ -80,13 +80,10 @@ export function ExecutionBoardPage({
 
   return (
     <main className={`main ${styles.page}`} style={boardThemeStyle}>
-      <BoardHeader
+         <BoardHeader
         title="Ausführungsboard"
         subtitle={boardSubtitle}
         onBack={onBackToShifts}
-        modeClassName={
-          selectedMode === "Primary" ? styles.headerPrimary : styles.headerSecondary
-        }
         shiftType={shift.shiftType}
         operator={shift.operator}
         line={shift.line}

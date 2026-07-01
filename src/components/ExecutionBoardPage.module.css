@@ -17,7 +17,7 @@
   min-width: 0;
 }
 
-.summaryCard {
+.summaryMain {
   min-width: 0;
   overflow: hidden;
   border-radius: 22px;
@@ -30,11 +30,16 @@
     0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
-.parentSnapshot {
+.summarySide {
+  min-width: 0;
+}
+
+.contextCard {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: 100%;
   padding: 18px;
   border-radius: 22px;
   border: 1px solid var(--board-panel-border-strong, var(--shift-border-strong));
@@ -46,7 +51,7 @@
     0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
-.parentSnapshotTop {
+.contextTop {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -61,7 +66,7 @@
   color: var(--board-muted-text, #b7c7d5);
 }
 
-.snapshotTitle {
+.contextTitle {
   margin: 6px 0 0;
   font-size: 24px;
   line-height: 1.08;
@@ -69,7 +74,7 @@
   color: #f8fafc;
 }
 
-.snapshotPercent {
+.contextPercent {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -88,13 +93,13 @@
   box-shadow: 0 12px 24px var(--shift-glow);
 }
 
-.snapshotGrid {
+.contextGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
 }
 
-.snapshotMetric {
+.contextMetric {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -107,7 +112,7 @@
     rgba(11, 34, 48, 0.72);
 }
 
-.snapshotLabel {
+.contextLabel {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -115,14 +120,14 @@
   color: #b7c7d5;
 }
 
-.snapshotValue {
+.contextValue {
   font-size: 30px;
   line-height: 1;
   font-weight: 900;
   color: #f8fafc;
 }
 
-.workboard {
+.boardGrid {
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
   gap: 18px;
@@ -152,14 +157,14 @@
     0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
-.notesCard {
+.notesWrap {
   min-width: 0;
   border-radius: 22px;
   overflow: hidden;
 }
 
 .sidebarHead,
-.workspaceHeader {
+.workspaceHead {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -353,7 +358,7 @@
   font-size: 13px;
 }
 
-.emptyWorkspace {
+.emptyState {
   padding: 26px;
   border-radius: 18px;
   border: 1px dashed var(--board-panel-border);
@@ -378,12 +383,15 @@
   color: #c7d3df;
 }
 
+.headerPrimary {}
+.headerSecondary {}
+
 @media (max-width: 1280px) {
   .page {
     --board-max-width: 1220px;
   }
 
-  .snapshotGrid {
+  .contextGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -394,7 +402,7 @@
 
 @media (max-width: 980px) {
   .summaryRow,
-  .workboard {
+  .boardGrid {
     grid-template-columns: 1fr;
   }
 
@@ -402,13 +410,13 @@
     position: static;
   }
 
-  .snapshotGrid {
+  .contextGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .parentSnapshotTop,
+  .contextTop,
   .sidebarHead,
-  .workspaceHeader {
+  .workspaceHead {
     flex-direction: column;
     align-items: stretch;
   }
@@ -423,27 +431,27 @@
     gap: 14px;
   }
 
-  .summaryCard,
-  .parentSnapshot,
+  .summaryMain,
+  .contextCard,
   .sidebarCard,
   .workspace,
-  .emptyWorkspace {
+  .emptyState {
     border-radius: 18px;
   }
 
-  .parentSnapshot,
+  .contextCard,
   .sidebarCard,
   .workspace,
-  .emptyWorkspace {
+  .emptyState {
     padding: 14px;
   }
 
   .modeTabs,
-  .snapshotGrid {
+  .contextGrid {
     grid-template-columns: 1fr;
   }
 
-  .snapshotTitle,
+  .contextTitle,
   .sectionTitle,
   .workspaceTitle,
   .emptyTitle {

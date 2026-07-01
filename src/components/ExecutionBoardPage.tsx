@@ -12,6 +12,7 @@ import { BoardHeader } from "./execution-board/BoardHeader";
 import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
 import { ShiftNotesPanel } from "./execution-board/ShiftNotesPanel";
 import { TaskCard } from "./execution-board/TaskCard";
+import { getBoardTheme } from "../utils/executionBoard";
 import styles from "./ExecutionBoardPage.module.css";
 
 type ExecutionBoardPageProps = {
@@ -213,6 +214,7 @@ export function ExecutionBoardPage({
   }, [effectiveTopParentId]);
 
   const subtitle = `${formattedDate}`;
+  const boardTheme = getBoardTheme(selectedMode, shift.shiftType);
 
   const saveTaskStatus = (task: ShiftActivity, status: TaskStatus) => {
     const event = createTaskEvent(task, status);
@@ -264,7 +266,7 @@ export function ExecutionBoardPage({
   };
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} style={boardTheme}>
       <div className={styles.executionBoard}>
         <div className={styles.boardHeaderShell}>
           <BoardHeader

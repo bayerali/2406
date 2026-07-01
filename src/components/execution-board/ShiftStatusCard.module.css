@@ -12,18 +12,25 @@
   flex-wrap: wrap;
 }
 
-.title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-  color: #f8fafc;
+.progressMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
-.subtitle {
-  margin: 6px 0 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-muted);
+.progressEyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--board-muted-text, #b7c7d5);
+}
+
+.progressSummary {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--board-soft-text, #dce7ef);
 }
 
 .progressValue {
@@ -41,20 +48,18 @@
 
 .kpiCard {
   padding: 14px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--board-panel-border);
   border-radius: var(--radius);
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.72),
-    rgba(2, 6, 23, 0.72)
-  );
+  background:
+    radial-gradient(circle at top right, var(--shift-surface), transparent 32%),
+    linear-gradient(180deg, rgba(11, 34, 48, 0.86), rgba(7, 26, 38, 0.92));
   box-shadow: var(--shadow-card);
 }
 
 .kpiLabel {
   font-size: 12px;
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--board-muted-text, #b7c7d5);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -72,8 +77,8 @@
   overflow: hidden;
   height: 12px;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid var(--border);
+  background: rgba(11, 34, 48, 0.9);
+  border: 1px solid var(--board-panel-border);
 }
 
 .progressBarFill {
@@ -81,12 +86,7 @@
   inset: 0 auto 0 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-2));
-}
-
-.progressLabel {
-  font-size: 13px;
-  color: var(--text-soft);
+  background: linear-gradient(180deg, var(--shift-solid), color-mix(in srgb, var(--shift-solid) 68%, #ffffff 32%));
 }
 
 @media (max-width: 1080px) {
@@ -105,24 +105,4 @@
   .kpiGrid {
     grid-template-columns: 1fr;
   }
-}
-.progressMeta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.progressEyebrow {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.progressSummary {
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--text-soft);
 }

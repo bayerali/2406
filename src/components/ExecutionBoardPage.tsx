@@ -1,5 +1,5 @@
 import React from "react";
-import type { DB } from "../types";
+import type { DB, TaskStatus } from "../types";
 import { useExecutionBoard } from "../hooks/useExecutionBoard";
 import { BoardHeader } from "./execution-board/BoardHeader";
 import { ShiftStatusCard } from "./execution-board/ShiftStatusCard";
@@ -28,6 +28,12 @@ export function ExecutionBoardPage({
   onBackToShifts,
   onDashboardClick,
 }: ExecutionBoardPageProps) {
+  const board = useExecutionBoard({
+    db,
+    setDB,
+    shiftId,
+  });
+
   const {
     shift,
     selectedMode,
@@ -48,27 +54,20 @@ export function ExecutionBoardPage({
     skippedCount,
     openCount,
     shiftProgressPercent,
-    boardTheme,
+    boardThemeStyle,
     boardSubtitle,
-    submitNote,
-    addChildTask,
-    updateTaskStatus,
-    removeAutoDoneFromParent,
-  } = useExecutionBoard({
-    db,
-    setDB,
-    shiftId,
-  });
+    handleShiftNoteSubmit,
+    handleTaskStatusSave,
+    getTaskHistory,
+    getTaskDescription,
+  } = board;
 
   if (!shift) {
     return null;
   }
 
-  const activeParentGroup =
-    parentGroups.find((group) => group.parent.id === selectedParentId) ?? null;
-
   return (
-    <main className={`main ${styles.page}`} style={boardTheme}>
+    <main className={`main ${styles.page}`} style={boardThemeStyle}>
       <BoardHeader
         title="Ausführungsboard"
         subtitle={boardSubtitle}
@@ -190,27 +189,28 @@ export function ExecutionBoardPage({
 
             {parentGroups.length === 0 ? (
               <div className={styles.emptyMini}>
-                Keine Bereiche für diesen Modus vorhanden.
+                Keine Elternpunkte vorhanden.
               </div>
             ) : (
               <div className={styles.parentList}>
-                {parentGroups.map((group) => {
-                  const isActive = group.parent.id === selectedParentId;
+                {parentGroups.map((parent) => {
+                  const latest = latestEventByShiftActivityId.get(parent.id) ?? null;
+                  const isActive = selectedParentId === parent.id;
 
                   return (
                     <button
-                      key={group.parent.id}
+                      key={parent.id}
                       type="button"
                       className={`${styles.parentItem} ${
                         isActive ? styles.parentItemActive : ""
                       }`}
-                      onClick={() => setSelectedParentId(group.parent.id)}
+                      onClick={() => setSelectedParentId(parent.id)}
                     >
                       <span className={styles.parentItemTitle}>
-                        {group.parent.nameSnapshot}
+                        {parent.nameSnapshot}
                       </span>
                       <span className={styles.parentItemMeta}>
-                        {group.children.length} Aufgaben
+                        {latest ? "Mit Rückmeldung" : "Noch keine Rückmeldung"}
                       </span>
                     </button>
                   );
@@ -226,7 +226,7 @@ export function ExecutionBoardPage({
               noteKind={noteKind}
               onNoteTextChange={setNoteText}
               onNoteKindChange={setNoteKind}
-              onSubmit={submitNote}
+              onSubmit={handleShiftNoteSubmit}
             />
           </div>
         </aside>
@@ -268,10 +268,13 @@ export function ExecutionBoardPage({
                 <TaskCard
                   key={task.id}
                   task={task}
-                  latestEvent={latestEventByShiftActivityId[task.id] ?? null}
-                  onStatusChange={(status) => updateTaskStatus(task.id, status)}
-                  onAddChildTask={(label) => addChildTask(task, label)}
-                  onRemoveAutoDone={() => removeAutoDoneFromParent(task.id)}
+                  latest={latestEventByShiftActivityId.get(task.id) ?? null}
+                  history={getTaskHistory(task.id)}
+                  description={getTaskDescription(task)}
+                  isCompact
+                  onSaveStatus={(status: TaskStatus) =>
+                    handleTaskStatusSave(task.id, status)
+                  }
                 />
               ))}
             </div>

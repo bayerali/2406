@@ -1,11 +1,13 @@
 .card {
   padding: 18px;
-  border: 1px solid var(--context-accent-border);
+  border: 1px solid var(--board-panel-border-strong, var(--shift-border-strong));
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(2, 6, 23, 0.96));
+  background:
+    radial-gradient(circle at top right, var(--shift-surface), transparent 30%),
+    linear-gradient(180deg, rgba(16, 56, 79, 0.95), rgba(6, 32, 48, 0.98));
   box-shadow:
     var(--shadow-card),
-    0 0 0 1px var(--context-accent-soft);
+    0 0 0 1px var(--shift-surface);
 }
 
 .title {
@@ -19,7 +21,7 @@
   margin: 6px 0 0;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--text-muted);
+  color: var(--board-muted-text, #b7c7d5);
 }
 
 .form {
@@ -38,7 +40,7 @@
 .label {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text-soft);
+  color: var(--board-soft-text, #dce7ef);
 }
 
 .select,
@@ -46,9 +48,9 @@
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid var(--board-panel-border);
+  color: #f8fafc;
+  background: rgba(11, 34, 48, 0.8);
 }
 
 .textarea {
@@ -57,14 +59,14 @@
 }
 
 .textarea::placeholder {
-  color: var(--text-muted);
+  color: var(--board-muted-text, #b7c7d5);
 }
 
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--context-accent-border);
-  box-shadow: 0 0 0 3px var(--context-accent-soft);
+  border-color: var(--board-panel-border-strong, var(--shift-border-strong));
+  box-shadow: 0 0 0 3px var(--shift-surface);
 }
 
 .actions {
@@ -79,12 +81,12 @@
   min-height: 40px;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid transparent;
-  color: #f8fafc;
+  border: 1px solid rgba(137, 211, 41, 0.4);
+  color: #062334;
   font-size: 13px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-2));
-  box-shadow: 0 10px 18px rgba(14, 165, 233, 0.22);
+  background: linear-gradient(180deg, #89d329, #6fc61b);
+  box-shadow: 0 10px 18px rgba(137, 211, 41, 0.22);
   transition:
     transform 0.12s ease,
     border-color 0.15s ease,
@@ -109,8 +111,8 @@
   margin-top: 16px;
   padding: 12px;
   text-align: center;
-  color: var(--text-muted);
-  border: 1px dashed var(--border);
+  color: var(--board-muted-text, #b7c7d5);
+  border: 1px dashed var(--board-panel-border);
   border-radius: 12px;
 }
 
@@ -123,22 +125,31 @@
 
 .noteCard {
   padding: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  border: 1px solid var(--board-panel-border);
   border-radius: 12px;
-  background: rgba(15, 23, 42, 0.58);
+  background: rgba(11, 34, 48, 0.56);
   box-shadow: var(--shadow-card);
 }
 
 .noteHandover {
-  border-color: rgba(34, 211, 238, 0.3);
+  border-color: rgba(0, 188, 255, 0.34);
+  background:
+    radial-gradient(circle at top right, rgba(0, 188, 255, 0.08), transparent 30%),
+    rgba(11, 34, 48, 0.64);
 }
 
 .noteWarning {
-  border-color: rgba(251, 146, 60, 0.34);
+  border-color: rgba(255, 186, 8, 0.38);
+  background:
+    radial-gradient(circle at top right, rgba(255, 186, 8, 0.08), transparent 30%),
+    rgba(11, 34, 48, 0.64);
 }
 
 .noteInfo {
-  border-color: rgba(148, 163, 184, 0.3);
+  border-color: rgba(188, 231, 132, 0.32);
+  background:
+    radial-gradient(circle at top right, rgba(188, 231, 132, 0.08), transparent 30%),
+    rgba(11, 34, 48, 0.64);
 }
 
 .noteTopline {
@@ -159,13 +170,13 @@
 
 .noteTime {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--board-muted-text, #b7c7d5);
 }
 
 .noteText {
   margin-top: 8px;
   font-size: 13px;
   line-height: 1.55;
-  color: var(--text-soft);
+  color: var(--board-soft-text, #dce7ef);
   white-space: pre-wrap;
 }
